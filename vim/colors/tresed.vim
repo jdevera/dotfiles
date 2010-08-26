@@ -1,0 +1,1 @@
+/home/jadevera/devel/myforge/non-projects/tresed-vim-color/tresed.vim

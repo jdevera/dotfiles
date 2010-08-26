@@ -1,0 +1,21 @@
+# Jacobo de Vera's Dot Files
+
+These are the configuration files I want to have in every Linux box I use.
+
+## Contents
+
+My bash configuration files live in a _.bash.d_ directory. All the contents in this directory are sourced by _.bashrc_.
+
+My Vim configuration directory includes all the plug-ins I have installed.
+
+Some configuration files, like .gitconfig, are generated from a Ruby _.erb_ template. I have copied this idea from [Ryan Bates](http://github.com/ryanb/dotfiles), together with an initial version of my _Rakefile_.
+
+## Installation
+
+    git clone git://github.com/jdevera/dotfiles ~/.dotfiles
+    cd ~/.dotfiles
+    rake install
+
+<!--
+vim:linebreak:textwidth=78:spell:
+-->

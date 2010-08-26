@@ -1,0 +1,16 @@
+# TO DO or Wishlist
+
+ * Try to minimize absolute paths everywhere
+
+ * By default in `.profile` (at least in Ubuntu), `~/bin` is added to the
+   path, consider putting scripts in that directory
+
+ * Add a `.profile` that sources the original profile
+
+ * Replace the `Rakefile` with an install script written in Bash (need to find
+   a way to replace the `.erb` templates).
+
+
+<!--
+vim:linebreak:textwidth=78:spell:
+-->

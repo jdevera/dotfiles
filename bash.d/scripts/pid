@@ -1,0 +1,45 @@
+#!/bin/bash
+##############################################################################
+#
+# FUNCTION:     pid
+#
+# DESCRIPTION:  Show all the processes owned by me that match certain name
+#               criteria.
+#
+# PARAMETERS:   1 (r): Directory that is to be inserted in $PATH
+#               2 (r): Position for insertion, accepted values are:
+#                      - "beg" to insert at the beginning
+#                      - "end" to insert at the end
+#
+# DEPENDS-ON:   myrmlistitems
+#
+##############################################################################
+#
+# TODO: Convert to script
+    
+if [[ $1 = -n ]]; then
+    showheader=0
+    shift
+else
+    showheader=1
+fi
+ps aux | nawk -v user="$USER" -v proc="$1" -v showheader="$showheader" '
+    BEGIN {
+        userpat="^" user;
+    }
+    {
+        if ( showheader==1 && NR==1 ) {
+            header = $0;
+        }
+        if (($0 ~ userpat) && ($0 ~ proc) && ($11 !~ /^nawk/))
+        {
+            if (showheader == 1) {
+                showheader = 0;
+                print header;
+            }
+            print $0;
+        }
+    }'
+###########################################################################
+
+# vim: se fdm=marker
