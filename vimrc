@@ -414,15 +414,18 @@ if v:progname == "vimm"
     color morning
 endif
 
-" This should only be set for rst or text files
+" TODO: This should only be set for rst or text files
 nmap <Leader>ti yyPVr=yyjpo<CR>
 nmap <Leader>h1 yypVr=o<CR>
 nmap <Leader>h2 yypVr-o<CR>
 nmap <Leader>h3 yypVr~o<CR>
 
-"This should probably be set somewhere else.
+"TODO: This should probably be set somewhere else.
 autocmd FileType python compiler pylint
 
+" When opening a file, go to the last known position when the file was last
+" open.
+au BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g`\"" | endif
 endif
 " ----------------------------------------------------------------------------
 " }}}
