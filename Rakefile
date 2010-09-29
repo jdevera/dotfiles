@@ -34,7 +34,7 @@ task :install_home do
     dest_dir = ENV['HOME']
     replace_all = false
     Dir['*'].each do |file|
-        next if %w[Rakefile README.mkd LICENSE TODO.txt config].include? file
+        next if %w[Rakefile README.mkd LICENSE TODO.mkd config].include? file
         dest_file_path = File.join(dest_dir, ".#{file.sub('.erb', '')}") 
         replace_all = install_file(file, dest_file_path, replace_all)
     end
