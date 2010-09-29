@@ -28,6 +28,9 @@ set wildignore=*.class,*.swp,*.o,*.pyc
 
 "Look in parent directories for tag files
 set tags=./tags,tags,../tags,../../tags,../../../tags,../../../../tags
+if $TAGS_DB != "" && filereadable($TAGS_DB)
+    set tags+=$TAGS_DB
+endif
 
 "Keep cursor in same column when jumping from file to file
 set nostartofline
@@ -157,8 +160,14 @@ set laststatus=2
 
 
 " Control what information is shown in the status line
-" -----------------------------------------------
+" ----------------------------------------------------
+" Short version for diffs, to make sure the file name is visible:
+"   - Cursor position within the file (row, column)
+"   - Percentage of the file where the cursor is now
+"   - File length in lines
 "   - Path to file
+"
+" Long version for regular editing:
 "   - Newline format (Unix, Windows, Mac)
 "   - File type (as recognised by vim, e.g. for syntax highlight)
 "   - The ASCII value of the character under the cursor (only in normal mode)
@@ -166,7 +175,13 @@ set laststatus=2
 "   - Cursor position within the file (row, column)
 "   - Percentage of the file where the cursor is now
 "   - File length in lines
-set statusline=%F%m%r%h%w\ [FORMAT=%{&ff}]\ [TYPE=%Y]\ [ASCII=\%03.3b]\ [HEX=\%02.2B]\ [POS=%04l,%04v][%p%%]\ [LEN=%L]
+" ----------------------------------------------------
+if &diff
+    set statusline=[POS=%04l,%04v][%p%%]\ [LEN=%L]\ [F=%F%m%r%h%w]
+else
+    "set statusline=%F%m%r%h%w\ [FORMAT=%{&ff}]\ [TYPE=%Y]\ [ASCII=\%03.3b]\ [HEX=\%02.2B]\ [POS=%04l,%04v][%p%%]\ [LEN=%L]
+    set statusline=%F%m%r%h%w\ [F=%{&ff}][T=%Y][C=%04v][R=%04l/%04L][%p%%]
+endif
 " -----------------------------------------------
 
 
@@ -230,7 +245,9 @@ if has("cscope")
         cs add cscope.out
     " else add database pointed to by environment
     elseif $CSCOPE_DB != ""
-        cs add $CSCOPE_DB
+        if filereadable($CSCOPE_DB)
+            cs add $CSCOPE_DB
+        endif
     endif
     set csverb
 
@@ -337,6 +354,26 @@ iab Whould      Should
 " ---------------------------
 " }}}
 
+" ----------------------------------------------------------------------------
+" }}}
+" {{{ Plugin configuration
+" ----------------------------------------------------------------------------
+
+
+" tasklist: List of markers for tasks
+let g:tlTokenList = ['\<TODO\>', '\<FIXME\>', '\<QUESTION\>', '\<HACK\>']
+
+" NERDCommenter: Add a space after the comment symbol
+let NERDSpaceDelims=1
+
+" TagList: Generate tags even if the TList window is closed.
+let Tlist_Process_File_Always = 1
+
+" TagList: Display tags defined only in the current buffer.
+let Tlist_Show_One_File = 1
+
+" TagList: Close Vim if the taglist is the only window.
+let Tlist_Exit_OnlyWindow = 1
 " ----------------------------------------------------------------------------
 " }}}
 " {{{ Experimental area

@@ -32,7 +32,7 @@
 "                 2. Setup any variables need in your vimrc file
 "                 3. Copy 'tasklist.vim' to your plugin directory.
 "
-"    Mapped Keys: <Leader>t   Display list.
+"    Mapped Keys: <Leader>p   Display list.
 "
 "          Usage: Start the script with the mapped key, a new window appears
 "                 with the matches found, moving around the window will also
