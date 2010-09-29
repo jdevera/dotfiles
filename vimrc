@@ -114,6 +114,8 @@ endif
 " Note: These colours are set in an after plug-in called colorschemesetter
 let g:my_gui_colorscheme = 'asu1dark'
 let g:my_terminal_colorscheme = 'torte'
+let g:my_gui_diff_colorscheme = 'rainbow_fruit'
+let g:my_terminal_diff_colorscheme = 'rainbow_fruit'
 " -----------------------------------------------
 
 
@@ -206,7 +208,7 @@ if &diff
     nnoremap <Leader>du  :diffupdate<cr>
     nnoremap <Leader>dg  :diffget<cr>
     nnoremap <Leader>dp  :diffput<cr>
-    nnoremap <Leader>dg1 :diffget 2<cr>
+    nnoremap <Leader>dg1 :diffget 1<cr>
     nnoremap <Leader>dg2 :diffget 2<cr>
     nnoremap <Leader>dg3 :diffget 3<cr>
 endif

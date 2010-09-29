@@ -30,18 +30,33 @@ endif
 if !exists('g:my_terminal_colorscheme')
     let g:my_terminal_colorscheme = 'default'
 endif
+
+if !exists('g:my_gui_diff_colorscheme')
+   let g:my_gui_diff_colorscheme = g:my_gui_colorscheme
+endif
+
+if !exists('g:my_terminal_diff_colorscheme')
+   let g:my_terminal_diff_colorscheme = g:my_gui_colorscheme
+endif
 " -----------------------------------------------------------------------------
     
-
 if has("gui_running") || 
     \ (&t_Co >= 88 && exists('g:CSApprox_loaded'))
     " Even when Vim is running on a terminal, GUI colorschemes might still
     " look good if the terminal supports enough colours and the CSApprox
     " plug-in is installed.
-    exe 'colorscheme' g:my_gui_colorscheme
+    if &diff
+       exe 'colorscheme' g:my_gui_diff_colorscheme
+    else
+       exe 'colorscheme' g:my_gui_colorscheme
+    endif
 else
     " Set a colour scheme suitable for dark backgrounds
     " since my terminals always have dark backgrounds.
-    exe 'colorscheme' g:my_terminal_colorscheme
+    if &diff
+       exe 'colorscheme' g:my_terminal_diff_colorscheme
+    else
+       exe 'colorscheme' g:my_terminal_colorscheme
+    endif
     set background=dark
 endif
