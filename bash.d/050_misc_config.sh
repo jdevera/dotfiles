@@ -38,11 +38,11 @@ export FILOG=$DSYSDATA/install.log
 export DIFF=vimdiff
 export EDITOR=vim
 
-if which most > /dev/null
+if which most > /dev/null 2>&1
 then
    export PAGER=most
 else
-   export PAGER=less
+   export PAGER='less -R'
 fi
 
 # Make less more friendly for non-text input files, see lesspipe(1)
