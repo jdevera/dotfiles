@@ -193,8 +193,10 @@ endif
 " Set , as the map leader (The default \ is hard to type in Spanish keyboards)
 let mapleader = ","
 
-" Ctrl+F3 toggles the TagList window (plugin needed)
-silent nnoremap <C-F3> :TlistToggle<CR>
+" F5 toggles the TagList window (plugin needed)
+" N.B.: Although I'd prefer to use C-F3 for this, this key cobination doesn't
+"       work when vim is run in gnome-terminal.
+silent nnoremap <F5> :TlistToggle<CR>
 
 " Shift+Tab shows the list of jumps in the tag stack.
 nmap  <C-Tab>  :ts<CR>
