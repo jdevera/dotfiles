@@ -1,0 +1,54 @@
+[submodule "vim/pathogen"]
+	path = vim/pathogen
+	url = http://github.com/Raimondi/vim-pathogen.git
+[submodule "vim/bundle/csapprox"]
+	path = vim/bundle/csapprox
+	url = http://github.com/godlygeek/csapprox.git
+[submodule "vim/bundle/nerdcommenter"]
+	path = vim/bundle/nerdcommenter
+	url = http://github.com/scrooloose/nerdcommenter.git
+[submodule "vim/bundle/nerdtree"]
+	path = vim/bundle/nerdtree
+	url = http://github.com/scrooloose/nerdtree.git
+[submodule "vim/bundle/taglist"]
+	path = vim/bundle/taglist
+	url = http://github.com/clones/vim-taglist.git
+[submodule "vim/bundle/tasklist"]
+	path = vim/bundle/tasklist
+	url = http://github.com/nowk/vim-tasklist.git
+[submodule "vim/bundle/todo.txt"]
+	path = vim/bundle/todo.txt
+	url = http://github.com/davidoc/todo.txt-vim.git
+[submodule "vim/bundle/surround"]
+	path = vim/bundle/surround
+	url = http://github.com/tpope/vim-surround.git
+[submodule "vim/bundle/fugitive"]
+	path = vim/bundle/fugitive
+	url = http://github.com/tpope/vim-fugitive.git
+[submodule "vim/bundle/align"]
+	path = vim/bundle/align
+	url = http://github.com/vim-scripts/Align.git
+[submodule "vim/bundle/conqueshell"]
+	path = vim/bundle/conqueshell
+	url = http://github.com/vim-scripts/Conque-Shell.git
+[submodule "vim/bundle/colorschemeexplorer"]
+	path = vim/bundle/colorschemeexplorer
+	url = http://github.com/vim-scripts/Color-Scheme-Explorer.git
+[submodule "vim/bundle/camelcasemotion"]
+	path = vim/bundle/camelcasemotion
+	url = http://github.com/vim-scripts/camelcasemotion.git
+[submodule "vim/bundle/stlsyntax"]
+	path = vim/bundle/stlsyntax
+	url = http://github.com/vim-scripts/STL-improved.git
+[submodule "vim/bundle/markdownsyntax"]
+	path = vim/bundle/markdownsyntax
+	url = http://github.com/hallison/vim-markdown.git
+[submodule "vim/bundle/snipmate"]
+	path = vim/bundle/snipmate
+	url = http://github.com/MarcWeber/snipmate.vim.git
+[submodule "vim/bundle/marcwebberutils"]
+	path = vim/bundle/marcwebberutils
+	url = http://github.com/MarcWeber/vim-addon-mw-utils.git
+[submodule "vim/bundle/tlib"]
+	path = vim/bundle/tlib
+	url = http://github.com/tomtom/tlib_vim.git

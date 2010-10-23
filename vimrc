@@ -5,6 +5,13 @@
 " Website:     http://blog.jacobodevera.com
 " ---------------------------------------------------------------------------
 
+" {{{ Pathogen configuration (must precede others)
+
+filetype off
+call pathogen#helptags()
+call pathogen#runtime_append_all_bundles()
+
+" }}}
 " {{{ Behaviour?
 " ----------------------------------------------------------------------------
 
