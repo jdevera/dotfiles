@@ -10,10 +10,19 @@ My Vim configuration directory includes all the plug-ins I have installed.
 
 Some configuration files, like .gitconfig, are generated from a Ruby _.erb_ template. I have copied this idea from [Ryan Bates](http://github.com/ryanb/dotfiles), together with an initial version of my _Rakefile_.
 
+
+### Vim configuration
+
+I am using the great [pathogen plug-in](http://www.vim.org/scripts/script.php?script\_id=2332) for Vim, which allows for a convenient way of organising Vim addons. It makes every directory under ~/.vim/bundle part of Vim's runtime path. Plug-ins are contained within their private directory and can be deleted easily by simply removing their directory.
+
+All add-ons in the official Vim's website are actively mirrored in github by the [Vim-Scripts.org](http://vim-scripts.org/) project. They can be added as git submodules within the bundle directory and thus easily be kept up to date.
+
 ## Installation
 
     git clone git://github.com/jdevera/dotfiles ~/.dotfiles
     cd ~/.dotfiles
+    git submodule init
+    git submodule update
     rake install
 
 <!--
