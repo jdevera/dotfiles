@@ -52,3 +52,9 @@
 [submodule "vim/bundle/tlib"]
 	path = vim/bundle/tlib
 	url = http://github.com/tomtom/tlib_vim.git
+[submodule "vim/bundle/pylint"]
+	path = vim/bundle/pylint
+	url = http://github.com/vim-scripts/pylint.vim.git
+[submodule "vim/bundle/pythonsyntax"]
+	path = vim/bundle/pythonsyntax
+	url = http://github.com/vim-scripts/python.vim--Vasiliev.git
