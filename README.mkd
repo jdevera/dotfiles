@@ -23,7 +23,7 @@ All add-ons in the official Vim's website are actively mirrored in github by the
     cd ~/.dotfiles
     git submodule init
     git submodule update
-    rake install
+    bash install
 
 <!--
 vim:linebreak:textwidth=78:spell:

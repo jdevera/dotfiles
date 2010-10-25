@@ -1,0 +1,114 @@
+#!/bin/bash
+
+
+
+# Install the dot files into user's home directory
+install_home()
+{
+    local dest_dir="$HOME"
+    local excluded=(`basename $0` README.mkd LICENSE TODO.mkd)
+    replace_all=false
+
+    local file
+    for file in *
+    do
+        if ! element_exists "$file" "${excluded[@]}"
+        then
+            local dest_file_name=`basename "$file" .tpl`
+            local dest_file_path="$dest_dir/.$dest_file_name"
+            install_file "$file" "$dest_file_path"
+        fi
+    done
+}
+
+
+install_file()
+{
+    local file="$1"
+    local dest_file_path="$2"
+
+    if [[ -e $dest_file_path ]]
+    then
+        if diff -q "$file" "$dest_file_path" > /dev/null
+        then
+            echo "identical $dest_file_path"
+        elif $replace_all
+        then
+            replace_file "$file" "$dest_file_path"
+        else
+            read -p "overwrite ${dest_file_path}? [ynaq] "
+            case $REPLY in
+                'y') replace_file "$file" "$dest_file_path" ;;
+                'q') exit 1 ;;
+                'a') replace_all=true
+                     replace_file "$file" "$dest_file_path" ;;
+                *)   echo "skipping $dest_file_path" ;;
+            esac
+        fi
+    else
+        link_file "$file" "$dest_file_path"
+    fi
+}
+
+
+replace_file()
+{
+    local file="$1"
+    local dest_file_path="$2"
+
+    remove "$dest_file_path"
+    link_file "$file" "$dest_file_path"
+}
+
+
+link_file()
+{
+    local file="$1"
+    local dest_file_path="$2"
+
+    if [[ $file =~ \.tpl$ ]]
+    then
+        echo "generating $dest_file_path"
+        bash "$file" > "$dest_file_path"
+    else
+        echo "linking $dest_file_path"
+        ln -s "`pwd`/$file" "$dest_file_path"
+    fi
+}
+
+
+element_exists()
+{
+    local elem="$1"
+    shift
+    local arr=( "$@" )
+    local i
+
+    for i in ${arr[@]}
+    do
+        if [[ $i == $elem ]]
+        then
+            return 0
+        fi
+    done
+    return 1
+}
+
+
+remove()
+{
+    local file="$1"
+    
+    # Don't recursively remove symbolic links to directories,
+    # just real directories.
+    if [[ -d $file ]] && [[ ! -h $file ]]
+    then
+        rm -rf "$file"
+    else
+        rm -f "$file"
+    fi
+}
+
+
+# Install all configuration files
+install_home
