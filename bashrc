@@ -3,16 +3,23 @@
 # If not running interactively, don't do anything
 [ -z "$PS1" ] && return
 
-# Source all files under ~/.bash.d
-if [[ -d ~/.bash.d ]]
-then
-    for conf_file in ~/.bash.d/*
-    do
-        if [[ -f $conf_file ]]
-        then
-            source "$conf_file"
-        fi
-    done
-fi
+source_dir()
+{
+    local dir="$1"
+    if [[ -d $dir ]]
+    then
+        local conf_file
+        for conf_file in "$dir"/*
+        do
+            if [[ -f $conf_file && ! $(basename $conf_file) != 'README' ]]
+            then
+                source "$conf_file"
+            fi
+        done
+    fi
+}
 
+# Source all files under ~/.bash.d
+source_dir ~/.bash.d
+source_dir ~/.bash.d/local
 

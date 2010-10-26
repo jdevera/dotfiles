@@ -1,0 +1,20 @@
+# The local Directory
+
+This directory is intended to contain bash configuration files that are
+specific for the local machine.
+
+All the files within this directory are sourced by bash upon start up *after*
+the ones in the parent directory. However, the files in this directory are not
+tracked by git.
+
+This can be used for configurations that depend on a particular piece of
+hardware being available, or to have a different shell prompt for different
+machines, etc. I use it to store all my work-specific configuration so that I
+can keep a common base environment in all my home and work computers.
+
+Since the local directory is ignored, you can also initialise a different git
+repository in it.
+
+<!--
+vim: filetype=markdown :
+-->

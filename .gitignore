@@ -1,2 +1,4 @@
 vim/.netrwhist
 vim/bundled_plugins
+bash.d/local/*
+*.swp
