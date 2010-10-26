@@ -11,7 +11,7 @@ source_dir()
         local conf_file
         for conf_file in "$dir"/*
         do
-            if [[ -f $conf_file && ! $(basename $conf_file) != 'README' ]]
+            if [[ -f $conf_file && $(basename $conf_file) != 'README' ]]
             then
                 source "$conf_file"
             fi
@@ -19,7 +19,7 @@ source_dir()
     fi
 }
 
-# Source all files under ~/.bash.d
+source_dir ~/.bash.d/local/before
 source_dir ~/.bash.d
-source_dir ~/.bash.d/local
+source_dir ~/.bash.d/local/after
 
