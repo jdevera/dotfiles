@@ -19,6 +19,8 @@ install_home()
             install_file "$file" "$dest_file_path"
         fi
     done
+
+    exclude_vim_doc_tags
 }
 
 
@@ -109,6 +111,20 @@ remove()
     fi
 }
 
+# Add 'tags' to the exclude list of the vim plug-in submodules so they are not
+# reported as dirty when pathogen generates doc tags.
+exclude_vim_doc_tags()
+{
+    for plugin in vim/bundle/*
+    do
+        exclude_file="${plugin}/.git/info/exclude"
+
+        if [[ -f $exclude_file ]] && ! grep -q '^tags$' "$exclude_file"
+        then
+            echo 'tags' >> "$exclude_file"
+        fi
+    done
+}
 
 # Install all configuration files
 install_home

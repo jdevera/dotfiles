@@ -19,10 +19,8 @@ All add-ons in the official Vim's website are actively mirrored in github by the
 
 ## Installation
 
-    git clone git://github.com/jdevera/dotfiles ~/.dotfiles
+    git clone --recursive git://github.com/jdevera/dotfiles ~/.dotfiles
     cd ~/.dotfiles
-    git submodule init
-    git submodule update
     bash install
 
 <!--
