@@ -6,11 +6,16 @@
 " ---------------------------------------------------------------------------
 
 " {{{ Pathogen configuration (must precede others)
-
-filetype off
-call pathogen#runtime_append_all_bundles()
-call pathogen#helptags()
-
+if !exists("g:called_pathogen")
+    " For some reason, unknown to me yet, calling these pathogen functions
+    " twice screws up my configuration completely. I'm wrapping the calls
+    " here to make sure they are only made once even if I reload this file.
+    filetype off
+    call pathogen#runtime_append_all_bundles()
+    call pathogen#helptags()
+    filetype on
+    let g:called_pathogen = 1
+endif
 " }}}
 " {{{ Behaviour?
 " ----------------------------------------------------------------------------
@@ -469,13 +474,26 @@ nmap <Leader>h2 yypVr-o<CR>
 nmap <Leader>h3 yypVr~o<CR>
 
 "TODO: This should probably be set somewhere else.
-autocmd FileType python compiler pylint
+augroup experiment
 
-" When opening a file, go to the last known position when the file was last
-" open.
-au BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g`\"" | endif
+    au!
+    autocmd FileType python compiler pylint
+
+    " When opening a file, go to the last known position when the file was last
+    " open.
+    au BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g`\"" | endif
+
+augroup END
+
+" Reload this configuration file automatically when it is changed within Vim
+" Currently commented since this vimrc is not ready for realoding; TODO
+augroup myvimrc
+    au!
+    au BufWritePost .vimrc,_vimrc,vimrc,.gvimrc,_gvimrc,gvimrc so $MYVIMRC | if has('gui_running') | so $MYGVIMRC | endif
+augroup END
+
+
 endif
 " ----------------------------------------------------------------------------
 " }}}
-
 " vim:fdm=marker:et:ts=4:
