@@ -13,9 +13,6 @@
 [submodule "vim/bundle/taglist"]
 	path = vim/bundle/taglist
 	url = http://github.com/clones/vim-taglist.git
-[submodule "vim/bundle/tasklist"]
-	path = vim/bundle/tasklist
-	url = http://github.com/nowk/vim-tasklist.git
 [submodule "vim/bundle/todo.txt"]
 	path = vim/bundle/todo.txt
 	url = http://github.com/davidoc/todo.txt-vim.git
@@ -58,3 +55,6 @@
 [submodule "vim/bundle/pythonsyntax"]
 	path = vim/bundle/pythonsyntax
 	url = http://github.com/vim-scripts/python.vim--Vasiliev.git
+[submodule "vim/bundle/tasklist"]
+	path = vim/bundle/tasklist
+	url = https://github.com/vim-scripts/TaskList.vim.git
