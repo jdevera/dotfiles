@@ -118,6 +118,8 @@ pathprepend "$DOTHER/run/bin"
 # Add user's Cabal binaries to the path
 pathprepend "$HOME/.cabal/bin/"
 
+pathprepend "$DDROPBOX/todo"
+
 
 # an argument to the cd builtin command that is not a directory is assumed to
 # be the name of a variable whose value is the directory to change to.
