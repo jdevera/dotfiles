@@ -105,7 +105,7 @@ syntax on
 if has('win32') || has('win64')
     set guifont=Lucida\ Console:h12
 elseif has('unix')
-    let &guifont="Monaco 10"
+    set guifont="Monaco 10"
 endif
 " -----------------------------------------------
 
