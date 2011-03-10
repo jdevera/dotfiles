@@ -213,6 +213,12 @@ silent nnoremap <F5> :TlistToggle<CR>
 " Shift+Tab shows the list of jumps in the tag stack.
 nmap  <C-Tab>  :ts<CR>
 
+" Open the definition in a new tab
+nmap <C-/> :tab split<CR>:exec("tag ".expand("<cword>"))<CR>
+
+" Open the definition in a vertical split
+nmap <A-]> :vsp <CR>:exec("tag ".expand("<cword>"))<CR>
+
 " Create Blank Newlines and stay in Normal mode
 nnoremap <silent> on o<Esc>
 nnoremap <silent> On O<Esc>
@@ -252,7 +258,7 @@ if has("cscope")
         set csprg=$CSCOPE_BIN
     endif
     set csto=0
-    set cst
+    " set cst  " Map all the tag lookups to cscope
     set nocsverb
     " add any database in current directory
     if filereadable("cscope.out")
