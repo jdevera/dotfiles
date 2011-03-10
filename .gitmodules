@@ -55,6 +55,9 @@
 [submodule "vim/bundle/tasklist"]
 	path = vim/bundle/tasklist
 	url = https://github.com/vim-scripts/TaskList.vim.git
+[submodule "vim/bundle/showmarks"]
+	path = vim/bundle/showmarks
+	url = https://github.com/vim-scripts/ShowMarks.git
 [submodule "vim/bundle/taglist"]
 	path = vim/bundle/taglist
 	url = git://github.com/jdevera/taglist.vim.git
