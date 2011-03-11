@@ -12,7 +12,7 @@ alias vish='vim $DBASH'
 alias gvish='gvim $DBASH'
 alias reloadsh='source $HOME/.bashrc'
 
-alias myalias='showaliases $DBASH/*'
+alias myalias='showaliases $DBASH/* $DBASH/local/after/* $DBASH/local/before/*'
 
 alias vivi='vim $HOME/.vimrc'
 alias gvivi='gvim $HOME/.vimrc'
