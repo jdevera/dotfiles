@@ -13,7 +13,7 @@
 
 # Directories
 export DDOC=$HOME/doc
-export DMEDIA=$HOME/multimedia
+export DMEDIA=$HOME/media
 export DBACKUP=$HOME/backup
 export DDOWN=$HOME/comms/downloads
 export DOTHER=$HOME/other

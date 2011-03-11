@@ -29,6 +29,9 @@ alias ..4='cd ../../../..'
 alias ..5='cd ../../../../..'
 alias ..?='show_parent_dirs'
 
+alias du1='du --max-depth 1'
+alias dumd='du --max-depth'
+
 
 
 # vim: ft=bash fdm=marker expandtab ts=3 sw=3 :
