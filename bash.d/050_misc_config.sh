@@ -76,7 +76,7 @@ fi
 #   $debian_chroot  Current chroot (if any)
 #   `__git_ps1`     Current git branch if any
 #
-PS1='\033[0m${debian_chroot:+($debian_chroot)}\u@\h:\w`__git_ps1`\$ '
+PS1='\[\033[0m\]${debian_chroot:+($debian_chroot)}\u@\h:\w`__git_ps1`\$ '
 
 # If this is an xterm set the title to user@host:dir
 case "$TERM" in
