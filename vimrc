@@ -214,7 +214,7 @@ silent nnoremap <F5> :TlistToggle<CR>
 nmap  <C-Tab>  :ts<CR>
 
 " Open the definition in a new tab
-nmap <C-/> :tab split<CR>:exec("tag ".expand("<cword>"))<CR>
+nmap <A-/> :tab split<CR>:exec("tag ".expand("<cword>"))<CR>
 
 " Open the definition in a vertical split
 nmap <A-]> :vsp <CR>:exec("tag ".expand("<cword>"))<CR>
@@ -394,6 +394,12 @@ let Tlist_Show_One_File = 1
 
 " TagList: Close Vim if the taglist is the only window.
 let Tlist_Exit_OnlyWindow = 1
+
+" sqlCompletion: disable generated maps, they are annoying!
+let g:omni_sql_no_default_maps = 1
+
+" Disable ShowMArks on startup (will use it on demand)
+let g:showmarks_enable = 0
 " ----------------------------------------------------------------------------
 " }}}
 " {{{ Experimental area
@@ -495,7 +501,7 @@ augroup END
 " Currently commented since this vimrc is not ready for realoding; TODO
 augroup myvimrc
     au!
-    au BufWritePost .vimrc,_vimrc,vimrc,.gvimrc,_gvimrc,gvimrc so $MYVIMRC | if has('gui_running') | so $MYGVIMRC | endif
+    au BufWritePost .vimrc,_vimrc,vimrc,.gvimrc,_gvimrc,gvimrc so $MYVIMRC | if has('gui_running') && !empty($MYGVIMRC) | so $MYGVIMRC | endif
 augroup END
 
 
