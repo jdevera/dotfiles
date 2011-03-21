@@ -214,10 +214,14 @@ silent nnoremap <F5> :TlistToggle<CR>
 nmap  <C-Tab>  :ts<CR>
 
 " Open the definition in a new tab
-nmap <A-/> :tab split<CR>:exec("tag ".expand("<cword>"))<CR>
+nmap <A-/> :tab split<CR>:exec("tjump ".expand("<cword>"))<CR>
 
 " Open the definition in a vertical split
-nmap <A-]> :vsp <CR>:exec("tag ".expand("<cword>"))<CR>
+nmap <A-]> :vsp <CR>:exec("tjump ".expand("<cword>"))<CR>
+
+" Offer a choice of tags when several match, jump directly if there is only
+" one match.
+noremap <C-]> g<C-]>
 
 " Create Blank Newlines and stay in Normal mode
 nnoremap <silent> on o<Esc>
