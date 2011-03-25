@@ -1,14 +1,14 @@
 #!/bin/bash
 
-read -p "Your Name: " NAME
-read -p "Your Email: " EMAIL
-read -p "GitHub Username: " GITHUB_USER
-read -p "GitHub API Token: " GITHUB_API_TOKEN
+[[ -z ${GIT_NAME+x}         ]] && read -p "Your Name: " GIT_NAME
+[[ -z ${GIT_EMAIL+x}        ]] && read -p "Your Email: " GIT_EMAIL
+[[ -z ${GITHUB_USER+x}      ]] && read -p "GitHub Username: " GITHUB_USER
+[[ -z ${GITHUB_API_TOKEN+x} ]] && read -p "GitHub API Token: " GITHUB_API_TOKEN
 
 cat <<EOF
 [user]
-    name = $NAME
-    email = $EMAIL
+    name = $GIT_NAME
+    email = $GIT_EMAIL
 [color]
     diff = auto
     status = auto
