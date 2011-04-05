@@ -407,6 +407,10 @@ let g:omni_sql_no_default_maps = 1
 
 " Disable ShowMArks on startup (will use it on demand)
 let g:showmarks_enable = 0
+
+" Disable calling pylint automatically when saving
+let g:pylint_onwrite = 0
+
 " ----------------------------------------------------------------------------
 " }}}
 " {{{ Experimental area
