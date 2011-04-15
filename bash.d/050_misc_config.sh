@@ -38,8 +38,9 @@ export FILOG=$DSYSDATA/install.log
 export DIFF=vimdiff
 export EDITOR=vim
 
-if which most > /dev/null 2>&1
-then
+if which vimpager > /dev/null 2>&1; then
+   export PAGER=vimpager
+elif which most > /dev/null 2>&1; then
    export PAGER=most
 else
    export PAGER='less -R'
