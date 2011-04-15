@@ -213,6 +213,9 @@ let mapleader = ","
 "       work when vim is run in gnome-terminal.
 silent nnoremap <F5> :TlistToggle<CR>
 
+" <F4> toggles the directory listing window
+silent nnoremap <F4> :NERDTreeToggle<CR>
+
 " Shift+Tab shows the list of jumps in the tag stack.
 nmap  <C-Tab>  :ts<CR>
 
@@ -515,6 +518,14 @@ augroup myvimrc
     au BufWritePost .vimrc,_vimrc,vimrc,.gvimrc,_gvimrc,gvimrc so $MYVIMRC | if has('gui_running') && !empty($MYGVIMRC) | so $MYGVIMRC | endif
 augroup END
 
+" Function and command to open a tag in a new tab (I'm always doing this
+" manually).
+function! Tabtag(word)
+    echo a:word
+    tab split
+    exec "tjump " . a:word
+endfunction
+command! -nargs=1 -complete=tag Tag call Tabtag("<args>")
 
 endif
 " ----------------------------------------------------------------------------
