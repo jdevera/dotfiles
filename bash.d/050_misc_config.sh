@@ -77,16 +77,50 @@ fi
 #   $debian_chroot  Current chroot (if any)
 #   `__git_ps1`     Current git branch if any
 #
-PS1='\[\033[0m\]${debian_chroot:+($debian_chroot)}\u@\h:\w`__git_ps1`\$ '
+PS1NOCOLOR='\[\033[0m\]${debian_chroot:+($debian_chroot)}\u@\h:\w`__git_ps1`\$ '
+PS1NOCOLOR='\u@\h:\w`__git_ps1`\$ '
+PS1="\[\033[0m\]$PS1NOCOLOR"
 
-# If this is an xterm set the title to user@host:dir
-case "$TERM" in
-xterm*|rxvt*)
-    PS1="\[\e]0;${debian_chroot:+($debian_chroot)}\u@\h: \w\a\]$PS1"
-    ;;
-*)
-    ;;
-esac
+# # If this is an xterm set the title to user@host:dir
+# case "$TERM" in
+# xterm*|rxvt*)
+#     PS1="\[\e]0;${debian_chroot:+($debian_chroot)}\u@\h: \w\a\]$PS1"
+#     ;;
+# *)
+#     ;;
+# esac
+
+COLOR_BLACK="\[\033[0;30m\]"
+COLOR_RED="\[\033[0;31m\]"
+COLOR_GREEN="\[\033[0;32m\]"
+COLOR_BROWN="\[\033[0;33m\]"
+COLOR_BLUE="\[\033[0;34m\]"
+COLOR_PURPLE="\[\033[0;35m\]"
+COLOR_CYAN="\[\033[0;36m\]"
+COLOR_LIGHT_GRAY="\[\033[0;37m\]"
+COLOR_DARK_GRAY="\[\033[1;30m\]"
+COLOR_LIGHT_RED="\[\033[1;31m\]"
+COLOR_LIGHT_GREEN="\[\033[1;32m\]"
+COLOR_YELLOW="\[\033[1;33m\]"
+COLOR_LIGHT_BLUE="\[\033[1;34m\]"
+COLOR_LIGHT_PURPLE="\[\033[1;35m\]"
+COLOR_LIGHT_CYAN="\[\033[1;36m\]"
+COLOR_WHITE="\[\033[1;37m\]"
+COLOR_NONE="\[\033[m\]"
+
+
+set_prompt_color()
+{
+   local COLOR=${1:-$COLOR_NONE}
+   # [[ -z $COLOR ]] && COLOR=$COLOR_NONE
+   PS1BAK="$PS1"
+   PS1="${COLOR}${PS1NOCOLOR}${COLOR_NONE}"
+}  
+
+default_prompt_color()
+{
+   PS1='\[\033[0m\]$PS1NOCOLOR'
+}
 
 
 #############################################################################
