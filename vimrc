@@ -30,6 +30,8 @@ filetype plugin on
 set wildmenu
 
 "Completion list settings
+" First time tab is hit, complete the longest common string
+" Second time tab is hit, list all possible matches
 set wildmode=longest,list
 
 "Add additional suffixes to the default (to be ignored)
@@ -195,7 +197,7 @@ if &diff
     set statusline=[POS=%04l,%04v][%p%%]\ [LEN=%L]\ [F=%F%m%r%h%w]
 else
     "set statusline=%F%m%r%h%w\ [FORMAT=%{&ff}]\ [TYPE=%Y]\ [ASCII=\%03.3b]\ [HEX=\%02.2B]\ [POS=%04l,%04v][%p%%]\ [LEN=%L]
-    set statusline=%F%m%r%h%w\ [F=%{&ff}][T=%Y][C=%04v][R=%04l/%04L][%p%%]
+    set statusline=%F%m%r%h%w\ [F=%{&ff}][T=%Y][C=%04v][L=%04l/%04L][%p%%]
 endif
 " -----------------------------------------------
 
@@ -512,11 +514,10 @@ augroup experiment
 augroup END
 
 " Reload this configuration file automatically when it is changed within Vim
-" Currently commented since this vimrc is not ready for realoding; TODO
-augroup myvimrc
-    au!
-    au BufWritePost .vimrc,_vimrc,vimrc,.gvimrc,_gvimrc,gvimrc so $MYVIMRC | if has('gui_running') && !empty($MYGVIMRC) | so $MYGVIMRC | endif
-augroup END
+" augroup myvimrc
+"     au!
+"     au BufWritePost .vimrc,_vimrc,vimrc,.gvimrc,_gvimrc,gvimrc so $MYVIMRC | if has('gui_running') && !empty($MYGVIMRC) | so $MYGVIMRC | endif
+" augroup END
 
 " Function and command to open a tag in a new tab (I'm always doing this
 " manually).
