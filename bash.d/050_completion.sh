@@ -14,8 +14,20 @@ _rabitvcs_opts()
         END{
             for (e in arr) { print arr[e] }
         }' | 
-    grep "$2.*";
+    grep "^$2.*";
 }
 complete -C _rabitvcs_opts -o default rabbitvcs
 
+# ---------------------------------------------------------------------------
+
+
+# ANSI colours
+# ---------------------------------------------------------------------------
+_complete_ansi_color()
+{
+   echo "black red green brown blue purple cyan light_gray dark_gray light_red light_green yellow light_blue light_purple light_cyan white none" | 
+   tr ' ' '\n' | grep "^$2.*"
+}
+complete -C _complete_ansi_color -o default set_prompt_color
+complete -C _complete_ansi_color -o default ansi_color
 # ---------------------------------------------------------------------------
