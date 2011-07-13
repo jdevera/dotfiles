@@ -132,7 +132,7 @@ endif
 " Set a nice colorscheme for GUI and terminal.
 " -----------------------------------------------
 " Note: These colours are set in an after plug-in called colorschemesetter
-let g:my_gui_colorscheme = 'asu1dark'
+let g:my_gui_colorscheme = 'mymorning'
 let g:my_terminal_colorscheme = 'torte'
 let g:my_gui_diff_colorscheme = 'rainbow_fruit'
 let g:my_terminal_diff_colorscheme = 'rainbow_fruit'
@@ -153,11 +153,11 @@ set showcmd
 
 
 
-" Highlight lines larger than 80 characters
+" Highlight lines larger than 120 characters
 " -----------------------------------------------
 highlight rightMargin term=bold ctermfg=red guifg=red guibg=yellow 
-match rightMargin /\%<82v.\%>81v/ " Only the 80th char
-"match rightMargin /.\%>81v/      " All chars after the 80th
+match rightMargin /\%<122v.\%>121v/ " Only the 120th char
+" match rightMargin /.\%>121v/        " All chars after the 120th
 " TODO: Turn this into a map, since changing the colorscheme
 "       turns this highlighting off.
 " -----------------------------------------------
@@ -393,7 +393,7 @@ iab Whould      Should
 
 
 " tasklist: List of markers for tasks
-let g:tlTokenList = ['\<TODO\>', '\<FIXME\>', '\<QUESTION\>', '\<HACK\>']
+let g:tlTokenList = ['\<TODO\>', '\<FIXME\>', '\<QUESTION\>', '\<HACK\>', '\<XXXJDV\>']
 
 " NERDCommenter: Add a space after the comment symbol
 let NERDSpaceDelims=1
