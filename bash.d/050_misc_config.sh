@@ -137,9 +137,10 @@ ansi_color()
 set_prompt_color()
 {
    local colorname=${1:-none}
-   local COLOR="\[$(ansi_color "$colorname")\]"
+   local promptcolor="\[$(ansi_color "$colorname")\]"
+   local nocolor="\[$(ansi_color none)\]"
    PS1BAK="$PS1"
-   PS1="${COLOR}${PS1NOCOLOR}${COLOR_NONE}"
+   PS1="${promptcolor}${PS1NOCOLOR}${nocolor}"
 }  
 
 default_prompt_color()
