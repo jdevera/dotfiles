@@ -5,25 +5,58 @@
 " Website:     http://blog.jacobodevera.com
 " ---------------------------------------------------------------------------
 
-" {{{ Pathogen configuration (must precede others)
-if !exists("g:called_pathogen")
-    " For some reason, unknown to me yet, calling these pathogen functions
-    " twice screws up my configuration completely. I'm wrapping the calls
-    " here to make sure they are only made once even if I reload this file.
-    filetype off
-    call pathogen#runtime_append_all_bundles()
-    call pathogen#helptags()
-    filetype on
-    let g:called_pathogen = 1
-endif
-" }}}
-" {{{ Behaviour?
-" ----------------------------------------------------------------------------
+" {{{ Bundle configuration (must precede others)
 
 " Vim behaves like vim, not like Vi
 set nocompatible
 
-" Enables file type specific plugins
+" Temprarily turn off filetype detection (vundle requirement)
+filetype off
+
+" Add vundle to the runtime path
+set rtp+=~/.vim/bundle/vundle/
+
+" Call Vundle
+call vundle#rc()
+
+" Bundle specs
+" ------------
+Bundle 'gmarik/vundle'
+Bundle 'MarcWeber/snipmate.vim'   , {'name': 'snipmate'}
+Bundle 'MarcWeber/vim-addon-mw-utils' , {'name': 'markweber-utils'}
+Bundle 'davidoc/todo.txt-vim'     , {'name': 'todo-txt'}
+Bundle 'godlygeek/csapprox'
+Bundle 'hallison/vim-markdown'    , {'name': 'markdown'}
+Bundle 'jdevera/taglist.vim'      , {'name': 'taglist'}
+Bundle 'scrooloose/nerdcommenter'
+Bundle 'scrooloose/nerdtree'
+Bundle 'tomtom/tlib_vim'          , {'name': 'tlib'}
+Bundle 'tpope/vim-fugitive'       , {'name': 'fugitive'}
+Bundle 'tpope/vim-surround'       , {'name': 'surround'}
+Bundle 'Align'                    , {'name': 'align'}
+Bundle 'Color-Scheme-Explorer'    , {'name': 'cs-explorer'}
+Bundle 'Conque-Shell'             , {'name': 'conque-shell'}
+Bundle 'STL-improved'             , {'name': 'stl-syntax'}
+Bundle 'ShowMarks'                , {'name': 'showmarks'}
+Bundle 'TaskList.vim'             , {'name': 'tasklist'}
+Bundle 'camelcasemotion'
+Bundle 'pylint.vim'               , {'name': 'pylint'}
+Bundle 'python.vim--Vasiliev'     , {'name': 'python-syntax'}
+Bundle 'xolox/vim-notes'
+Bundle! 'bashsyntax'
+Bundle! 'colorsetter'
+Bundle! 'keywordrulessyntax'
+
+augroup user#stl-syntax
+  au!
+  au User BundleInstallPost ! mkdir -p after/syntax && ln -s syntax/stl.vim after/syntax/cpp.vim
+augroup end
+
+" }}}
+" {{{ Behaviour?
+" ----------------------------------------------------------------------------
+
+" Enables file type specific plugins (with specific indentation)
 filetype plugin on
 
 " Shows autocomplete menu for commands

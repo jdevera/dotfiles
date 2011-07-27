@@ -1,6 +1,22 @@
 #!/bin/bash
 
 
+## Clone Vundle to manage all plugins (use the events branch)
+clone_vundle()
+{
+    [[ -d vim/bundle/vundle/.git ]] && return 1
+    git clone git://github.com/gmarik/vundle.git vim/bundle/vundle
+    ( cd vim/bundle/vundle && git checkout events )
+    return 0
+}
+
+
+## Use vundle to download all vim plug-ins
+get_vim_bundles()
+{
+    vim +BundleInstall +q
+}
+
 
 # Install the dot files into user's home directory
 install_home()
@@ -20,10 +36,12 @@ install_home()
         fi
     done
 
-    exclude_vim_doc_tags
+    clone_vundle    || ( echo "Vundle is already installed"; return 1 )
+    get_vim_bundles || ( echo "Could not clone vim bundles"; return 1 )
 }
 
 
+## Install a file (with replacement confirmation)
 install_file()
 {
     local file="$1"
@@ -109,21 +127,6 @@ remove()
     else
         rm -f "$file"
     fi
-}
-
-# Add 'tags' to the exclude list of the vim plug-in submodules so they are not
-# reported as dirty when pathogen generates doc tags.
-exclude_vim_doc_tags()
-{
-    for plugin in vim/bundle/*
-    do
-        exclude_file="${plugin}/.git/info/exclude"
-
-        if [[ -f $exclude_file ]] && ! grep -q '^tags$' "$exclude_file"
-        then
-            echo 'tags' >> "$exclude_file"
-        fi
-    done
 }
 
 # Install all configuration files
