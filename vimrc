@@ -36,7 +36,7 @@ Bundle 'tpope/vim-surround'       , {'name': 'surround'}
 Bundle 'Align'                    , {'name': 'align'}
 Bundle 'Color-Scheme-Explorer'    , {'name': 'cs-explorer'}
 Bundle 'Conque-Shell'             , {'name': 'conque-shell'}
-Bundle 'STL-improved'             , {'name': 'stl-syntax'}
+Bundle 'jdevera/vim-stl-syntax'   , {'name': 'stl-syntax'}
 Bundle 'ShowMarks'                , {'name': 'showmarks'}
 Bundle 'TaskList.vim'             , {'name': 'tasklist'}
 Bundle 'camelcasemotion'
@@ -46,11 +46,6 @@ Bundle 'xolox/vim-notes'
 Bundle! 'bashsyntax'
 Bundle! 'colorsetter'
 Bundle! 'keywordrulessyntax'
-
-augroup user#stl-syntax
-  au!
-  au User BundleInstallPost ! mkdir -p after/syntax && ln -s syntax/stl.vim after/syntax/cpp.vim
-augroup end
 
 " }}}
 " {{{ Behaviour?
