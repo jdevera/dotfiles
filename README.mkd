@@ -2,26 +2,63 @@
 
 These are the configuration files I want to have in every Linux box I use.
 
+## Installation
+
+Installation instructions come first because it is what I need most of the
+time, but if you are not me, please read on :) 
+
+    git clone git://github.com/jdevera/dotfiles ~/.dotfiles
+    cd ~/.dotfiles
+    bash install
+
+
 ## Contents
 
-My bash configuration files live in a _.bash.d_ directory. All the contents in this directory are sourced by _.bashrc_.
+Most files handle Bash or Vim configuration, but I also share my settings for
+GNU Screen and Git.
+
+My git configuration file is actually a generator (more on this below).
 
 My Vim configuration directory includes all the plug-ins I have installed.
 
-Some configuration files, like .gitconfig, are generated from a Ruby _.erb_ template. I have copied this idea from [Ryan Bates](http://github.com/ryanb/dotfiles), together with an initial version of my _Rakefile_.
+### Configuration file generators
 
+There are some configuration files, such as _.gitconfig_ that might contain
+sensitive data or that have contents that vary across different machines. For
+these cases, I don't directly store the configuration file, but a generator
+for it.
+
+These generators very are simple bash scripts that contain a template for the
+file they generate. The values for variable fields are requested during
+execution or they can be provided with environment variables for unattended
+installation.
+
+### Bash configuration
+
+My bash configuration files live in the _.bash.d_ directory.
+
+My _.bashrc_. sources configuration files in this order:
+
+ * Every file under _.bash.d/local/before_
+ * Every file under _.bash.d_
+ * Every file under _.bash.d/local/after_
+
+Contents of _.bash.d/local_ are not tracked by git, so this is the place to
+add configuration files that are specific for the current machine.
 
 ### Vim configuration
 
-I am using the great [pathogen plug-in](http://www.vim.org/scripts/script.php?script\_id=2332) for Vim, which allows for a convenient way of organising Vim addons. It makes every directory under ~/.vim/bundle part of Vim's runtime path. Plug-ins are contained within their private directory and can be deleted easily by simply removing their directory.
+I am using [Gmarik's Vundle](https://github.com/gmarik/vundle) Vim plug-in to
+manage my Vim add-ons and keep them up to date.
 
-All add-ons in the official Vim's website are actively mirrored in github by the [Vim-Scripts.org](http://vim-scripts.org/) project. They can be added as git submodules within the bundle directory and thus easily be kept up to date.
+With Vundle, I only have to point, in my _.vimrc_ file, to the git
+repositories of all the Vim add-ons I want to have installed and it takes care
+or the rest. Vundle clones each add-on under its own directory and adds it to
+Vim's runtime path.
 
-## Installation
-
-    git clone --recursive git://github.com/jdevera/dotfiles ~/.dotfiles
-    cd ~/.dotfiles
-    bash install
+All add-ons in the official Vim's website are actively mirrored in github by
+the [Vim-Scripts.org](http://vim-scripts.org/) project. This means Vundle can
+be used to install any add-on published in the official site.
 
 <!--
 vim:linebreak:textwidth=78:spell:
