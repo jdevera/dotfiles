@@ -27,7 +27,7 @@ Bundle 'MarcWeber/vim-addon-mw-utils' , {'name': 'markweber-utils'}
 Bundle 'davidoc/todo.txt-vim'     , {'name': 'todo-txt'}
 Bundle 'godlygeek/csapprox'
 Bundle 'hallison/vim-markdown'    , {'name': 'markdown'}
-Bundle 'jdevera/taglist.vim'      , {'name': 'taglist'}
+Bundle 'majutsushi/tagbar'
 Bundle 'scrooloose/nerdcommenter'
 Bundle 'scrooloose/nerdtree'
 Bundle 'tomtom/tlib_vim'          , {'name': 'tlib'}
