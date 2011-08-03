@@ -31,32 +31,58 @@ set rtp+=~/.vim/bundle/vundle/
 " Call Vundle
 call vundle#rc()
 
-" Bundle specs
-" ------------
+" ===========================================================================
+" General bundles
+" ===========================================================================
+
+" Manage vundle with vundle, oh yeah!
 Bundle 'gmarik/vundle'
-Bundle 'MarcWeber/snipmate.vim'   , {'name': 'snipmate'}
+
+" Snipmate, dependencies and snippets
+Bundle 'tomtom/tlib_vim'          , {'name': 'tlib'}
 Bundle 'MarcWeber/vim-addon-mw-utils' , {'name': 'markweber-utils'}
+Bundle "garbas/snipmate.vim"      , {'name': 'snipmate'}
+Bundle 'honza/snipmate-snippets'
+
+" Surround and repeat (to make the former repeatable)
+Bundle 'tpope/vim-repeat'         , {'name': 'repeat'}
+Bundle 'tpope/vim-surround'       , {'name': 'surround'}
+
+Bundle 'Align'                    , {'name': 'align'}
+Bundle 'camelcasemotion'
+Bundle 'Color-Scheme-Explorer'    , {'name': 'cs-explorer'}
+Bundle 'Conque-Shell'             , {'name': 'conque-shell'}
 Bundle 'davidoc/todo.txt-vim'     , {'name': 'todo-txt'}
 Bundle 'godlygeek/csapprox'
 Bundle 'hallison/vim-markdown'    , {'name': 'markdown'}
-Bundle 'majutsushi/tagbar'
-Bundle 'scrooloose/nerdcommenter'
-Bundle 'scrooloose/nerdtree'
-Bundle 'tomtom/tlib_vim'          , {'name': 'tlib'}
-Bundle 'tpope/vim-fugitive'       , {'name': 'fugitive'}
-Bundle 'tpope/vim-surround'       , {'name': 'surround'}
-Bundle 'Align'                    , {'name': 'align'}
-Bundle 'Color-Scheme-Explorer'    , {'name': 'cs-explorer'}
-Bundle 'Conque-Shell'             , {'name': 'conque-shell'}
 Bundle 'jdevera/vim-stl-syntax'   , {'name': 'stl-syntax'}
-Bundle 'ShowMarks'                , {'name': 'showmarks'}
-Bundle 'TaskList.vim'             , {'name': 'tasklist'}
-Bundle 'camelcasemotion'
+Bundle 'majutsushi/tagbar'
 Bundle 'pylint.vim'               , {'name': 'pylint'}
 Bundle 'python.vim--Vasiliev'     , {'name': 'python-syntax'}
+Bundle 'scrooloose/nerdcommenter'
+Bundle 'scrooloose/nerdtree'
+Bundle 'ShowMarks'                , {'name': 'showmarks'}
+Bundle 'TaskList.vim'             , {'name': 'tasklist'}
+Bundle 'tpope/vim-fugitive'       , {'name': 'fugitive'}
 Bundle 'xolox/vim-notes'
+
+" ===========================================================================
+" Colorschemes
+" ===========================================================================
+
+Bundle 'tomasr/molokai'           , {'name' : 'color-molokai'}
+
+" ===========================================================================
+" Addons tracked with my dotfiles repository
+" ===========================================================================
+
+" Real bash syntax
 Bundle! 'bashsyntax'
+
+" Delay colorscheme setting until we know if csapprox is loaded
 Bundle! 'colorsetter'
+
+" Syntax for a WIP little project, shouldn't be here, I guess
 Bundle! 'keywordrulessyntax'
 
 " }}}
@@ -172,7 +198,7 @@ endif
 " Set a nice colorscheme for GUI and terminal.
 " -----------------------------------------------
 " Note: These colours are set in an after plug-in called colorschemesetter
-let g:my_gui_colorscheme = 'mymorning'
+let g:my_gui_colorscheme = 'molokai'
 let g:my_terminal_colorscheme = 'torte'
 let g:my_gui_diff_colorscheme = 'rainbow_fruit'
 let g:my_terminal_diff_colorscheme = 'rainbow_fruit'
@@ -195,7 +221,7 @@ set showcmd
 
 " Highlight lines larger than 120 characters
 " -----------------------------------------------
-highlight rightMargin term=bold ctermfg=red guifg=red guibg=yellow 
+highlight rightMargin term=bold ctermfg=red guifg=red guibg=yellow
 match rightMargin /\%<122v.\%>121v/ " Only the 120th char
 " match rightMargin /.\%>121v/        " All chars after the 120th
 " TODO: Turn this into a map, since changing the colorscheme
@@ -359,18 +385,18 @@ if has("cscope")
     " To do the first type of search, hit 'CTRL-\', followed by one of the
     " cscope search types above (s,g,c,t,e,f,i,d).  The result of your cscope
     " search will be displayed in the current window.  You can use CTRL-T to
-    " go back to where you were before the search.  
+    " go back to where you were before the search.
     "
 
 
-    nmap <C-\>s :cs find s <C-R>=expand("<cword>")<CR><CR>      
-    nmap <C-\>g :cs find g <C-R>=expand("<cword>")<CR><CR>      
-    nmap <C-\>c :cs find c <C-R>=expand("<cword>")<CR><CR>      
-    nmap <C-\>t :cs find t <C-R>=expand("<cword>")<CR><CR>      
-    nmap <C-\>e :cs find e <C-R>=expand("<cword>")<CR><CR>      
-    nmap <C-\>f :cs find f <C-R>=expand("<cfile>")<CR><CR>      
+    nmap <C-\>s :cs find s <C-R>=expand("<cword>")<CR><CR>
+    nmap <C-\>g :cs find g <C-R>=expand("<cword>")<CR><CR>
+    nmap <C-\>c :cs find c <C-R>=expand("<cword>")<CR><CR>
+    nmap <C-\>t :cs find t <C-R>=expand("<cword>")<CR><CR>
+    nmap <C-\>e :cs find e <C-R>=expand("<cword>")<CR><CR>
+    nmap <C-\>f :cs find f <C-R>=expand("<cfile>")<CR><CR>
     nmap <C-\>i :cs find i ^<C-R>=expand("<cfile>")<CR>$<CR>
-    nmap <C-\>d :cs find d <C-R>=expand("<cword>")<CR><CR>      
+    nmap <C-\>d :cs find d <C-R>=expand("<cword>")<CR><CR>
 
 
     " Using 'CTRL-spacebar' (interpreted as CTRL-@ by vim) then a search type
@@ -379,19 +405,19 @@ if has("cscope")
     "
     " (Note: earlier versions of vim may not have the :scs command, but it
     " can be simulated roughly via:
-    "    nmap <C-@>s <C-W><C-S> :cs find s <C-R>=expand("<cword>")<CR><CR>      
+    "    nmap <C-@>s <C-W><C-S> :cs find s <C-R>=expand("<cword>")<CR><CR>
 
-    nmap <C-@>s :scs find s <C-R>=expand("<cword>")<CR><CR>     
-    nmap <C-@>g :scs find g <C-R>=expand("<cword>")<CR><CR>     
-    nmap <C-@>c :scs find c <C-R>=expand("<cword>")<CR><CR>     
-    nmap <C-@>t :scs find t <C-R>=expand("<cword>")<CR><CR>     
-    nmap <C-@>e :scs find e <C-R>=expand("<cword>")<CR><CR>     
-    nmap <C-@>f :scs find f <C-R>=expand("<cfile>")<CR><CR>     
-    nmap <C-@>i :scs find i ^<C-R>=expand("<cfile>")<CR>$<CR>   
-    nmap <C-@>d :scs find d <C-R>=expand("<cword>")<CR><CR>     
+    nmap <C-@>s :scs find s <C-R>=expand("<cword>")<CR><CR>
+    nmap <C-@>g :scs find g <C-R>=expand("<cword>")<CR><CR>
+    nmap <C-@>c :scs find c <C-R>=expand("<cword>")<CR><CR>
+    nmap <C-@>t :scs find t <C-R>=expand("<cword>")<CR><CR>
+    nmap <C-@>e :scs find e <C-R>=expand("<cword>")<CR><CR>
+    nmap <C-@>f :scs find f <C-R>=expand("<cfile>")<CR><CR>
+    nmap <C-@>i :scs find i ^<C-R>=expand("<cfile>")<CR>$<CR>
+    nmap <C-@>d :scs find d <C-R>=expand("<cword>")<CR><CR>
 
 
-    " Hitting CTRL-space *twice* before the search type does a vertical 
+    " Hitting CTRL-space *twice* before the search type does a vertical
     " split instead of a horizontal one (vim 6 and up only)
     "
     " (Note: you may wish to put a 'set splitright' in your .vimrc
@@ -402,8 +428,8 @@ if has("cscope")
     nmap <C-@><C-@>c :vert scs find c <C-R>=expand("<cword>")<CR><CR>
     nmap <C-@><C-@>t :vert scs find t <C-R>=expand("<cword>")<CR><CR>
     nmap <C-@><C-@>e :vert scs find e <C-R>=expand("<cword>")<CR><CR>
-    nmap <C-@><C-@>f :vert scs find f <C-R>=expand("<cfile>")<CR><CR>   
-    nmap <C-@><C-@>i :vert scs find i ^<C-R>=expand("<cfile>")<CR>$<CR> 
+    nmap <C-@><C-@>f :vert scs find f <C-R>=expand("<cfile>")<CR><CR>
+    nmap <C-@><C-@>i :vert scs find i ^<C-R>=expand("<cfile>")<CR>$<CR>
     nmap <C-@><C-@>d :vert scs find d <C-R>=expand("<cword>")<CR><CR>
 else
     echo "No cscope"
@@ -432,7 +458,7 @@ iab Whould      Should
 " ----------------------------------------------------------------------------
 
 
-" tasklist: List of markers for tasks
+" Tasklist: List of markers for tasks
 let g:tlTokenList = ['\<TODO\>', '\<FIXME\>', '\<QUESTION\>', '\<HACK\>', '\<XXXJDV\>']
 
 " NERDCommenter: Add a space after the comment symbol
@@ -447,13 +473,13 @@ let Tlist_Show_One_File = 1
 " TagList: Close Vim if the taglist is the only window.
 let Tlist_Exit_OnlyWindow = 1
 
-" sqlCompletion: disable generated maps, they are annoying!
+" SqlCompletion: disable generated maps, they are annoying!
 let g:omni_sql_no_default_maps = 1
 
-" Disable ShowMArks on startup (will use it on demand)
+" ShowMarks: Disable on startup (will use it on demand)
 let g:showmarks_enable = 0
 
-" Disable calling pylint automatically when saving
+" Pylint: Disable calling pylint automatically when saving
 let g:pylint_onwrite = 0
 
 " ----------------------------------------------------------------------------
@@ -480,7 +506,7 @@ if v:progname != "vine" && v:progname != "gvine"
 
 " {{{ HEX mode function and command
 " ----------------------------------------------------------------------------
-" 
+"
 " helper function to toggle hex mode
 function! ToggleHex()
     " ---------------------------------------------------------------
@@ -504,10 +530,10 @@ function! ToggleHex()
         " set new options
         setlocal binary " make sure it overrides any textwidth, etc.
         let &ft="xxd"
-        
+
         " set status
         let b:editHex=1
-        
+
         " switch to hex editor
         %!xxd
 
