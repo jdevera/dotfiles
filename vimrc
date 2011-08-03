@@ -5,10 +5,22 @@
 " Website:     http://blog.jacobodevera.com
 " ---------------------------------------------------------------------------
 
-" {{{ Bundle configuration (must precede others)
+" {{{ One setting to rule them all
 
-" Vim behaves like vim, not like Vi
+" This is Vim, not Vi. If I were to use only one setting this would b it.
 set nocompatible
+
+" }}}
+" {{{ Multiplatform compatibility
+
+if has('win32') || has('win64')
+
+    " Make windows use ~/.vim too, I don't want to use _vimfiles
+    set runtimepath^=~/.vim
+endif
+
+" }}}
+" {{{ Bundle configuration (must precede others)
 
 " Temprarily turn off filetype detection (vundle requirement)
 filetype off
@@ -445,6 +457,19 @@ let g:showmarks_enable = 0
 let g:pylint_onwrite = 0
 
 " ----------------------------------------------------------------------------
+" }}}
+" {{{ Local configuration
+
+" Load local settings. The local settings file is untracked and it is the
+" source of configuration settings that only make sense in some of the
+" machines I use, e.g., I could have some extra settings for work machines or
+" some overrides for remote headless boxes.
+" This should also work on Windows, since ~.vim is added to the runtimepath at
+" the top of this file.
+if filereadable('~/.vim/local.vim')
+    source ~/.vim/local.vim
+endif
+
 " }}}
 " {{{ Experimental area
 " ----------------------------------------------------------------------------
