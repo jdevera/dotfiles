@@ -481,6 +481,21 @@ let g:showmarks_enable = 0
 
 " Pylint: Disable calling pylint automatically when saving
 let g:pylint_onwrite = 0
+"
+" Tagbar: show the tag corresponding to the current cursor position
+let g:tagbar_autoshowtag = 1
+
+" Tagbar: map <F9> to toggle tagbar
+nnoremap <silent> <F9> :TagbarToggle<CR>
+
+" VimNotes: Set notes dir in dropbox
+if $DDROPBOX != "" && isdirectory($DDROPBOX)
+    let g:notes_directory=$DDROPBOX . "/vimnotes"
+    let g:notes_shadowdir=g:notes_directory . "/shadow"
+endif
+
+" Doxygen: Autoload doxygen highlighting
+let g:load_doxygen_syntax = 1
 
 " ----------------------------------------------------------------------------
 " }}}
