@@ -22,7 +22,7 @@ endif
 " }}}
 " {{{ Bundle configuration (must precede others)
 
-" Temprarily turn off filetype detection (vundle requirement)
+" Temporarily turn off filetype detection (vundle requirement)
 filetype off
 
 " Add vundle to the runtime path
@@ -90,7 +90,7 @@ Bundle! 'keywordrulessyntax'
 " ----------------------------------------------------------------------------
 
 " Enables file type specific plugins (with specific indentation)
-filetype plugin on
+filetype plugin indent on
 
 " Shows autocomplete menu for commands
 set wildmenu
