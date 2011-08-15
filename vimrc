@@ -317,6 +317,24 @@ nmap <Leader>rc :bot split ~/.vimrc<CR>
 nmap <F6> :bot split ~/.vimrc<CR>G?LAST_SPELL<CR>zRkoiab<Space>
 nmap <C-F6> :let tmp=@f<CR>"fyaw<Esc>:bot split ~/.vimrc<CR>G?LAST_SPELL<CR>zRkoiab<Space><Esc>"fp<Esc>:let @f=tmp<CR>a<Space>
 
+" Try to stop using the arrows, use hjkl instead
+nnoremap <up>    <nop>
+nnoremap <down>  <nop>
+nnoremap <left>  <nop>
+nnoremap <right> <nop>
+inoremap <up>    <nop>
+inoremap <down>  <nop>
+inoremap <left>  <nop>
+inoremap <right> <nop>
+vnoremap <up>    <nop>
+vnoremap <down>  <nop>
+vnoremap <left>  <nop>
+vnoremap <right> <nop>
+
+" I get capitalised commands all the time, will try to avoid it with this
+" mapping.
+nnoremap ; :
+
 " Diff operations made shorter (Great for merges)
 if &diff
     nnoremap <Leader>du  :diffupdate<cr>
