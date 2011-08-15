@@ -508,8 +508,8 @@ let g:load_doxygen_syntax = 1
 " some overrides for remote headless boxes.
 " This should also work on Windows, since ~.vim is added to the runtimepath at
 " the top of this file.
-if filereadable('~/.vim/local.vim')
-    source ~/.vim/local.vim
+if filereadable(expand('~/.vim/local.vim'))
+    execute 'source ' . expand('~/.vim/local.vim')
 endif
 
 " }}}
