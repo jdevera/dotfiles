@@ -41,7 +41,7 @@ Bundle 'gmarik/vundle'
 " Snipmate, dependencies and snippets
 Bundle 'tomtom/tlib_vim'          , {'name': 'tlib'}
 Bundle 'MarcWeber/vim-addon-mw-utils' , {'name': 'markweber-utils'}
-Bundle "garbas/snipmate.vim"      , {'name': 'snipmate'}
+Bundle "garbas/vim-snipmate"      , {'name': 'snipmate'}
 Bundle 'honza/snipmate-snippets'
 
 " Surround and repeat (to make the former repeatable)
@@ -65,6 +65,7 @@ Bundle 'ShowMarks'                , {'name': 'showmarks'}
 Bundle 'TaskList.vim'             , {'name': 'tasklist'}
 Bundle 'tpope/vim-fugitive'       , {'name': 'fugitive'}
 Bundle 'xolox/vim-notes'
+Bundle 'matchit.zip'              , {'name': 'matchit'}
 
 " ===========================================================================
 " Colorschemes
