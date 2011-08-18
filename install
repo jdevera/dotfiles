@@ -47,9 +47,11 @@ install_file()
     local file="$1"
     local dest_file_path="$2"
 
-    if [[ -e $dest_file_path ]]
+    if [[ -e $dest_file_path ]] || \
+       [[ -L $dest_file_path ]]		  # Can be a broken symlink
     then
-        if diff -q "$file" "$dest_file_path" > /dev/null
+        if [[ -e $dest_file_path ]] && 
+           diff -q "$file" "$dest_file_path" > /dev/null
         then
             echo "identical $dest_file_path"
         elif $replace_all
