@@ -516,6 +516,11 @@ endif
 " Doxygen: Autoload doxygen highlighting
 let g:load_doxygen_syntax = 1
 
+" Snipmate: My name for Snippets
+if $MYFULLNAME != ""
+    let g:snips_author=$MYFULLNAME
+endif
+
 " ----------------------------------------------------------------------------
 " }}}
 " {{{ Local configuration
