@@ -170,7 +170,9 @@ HISTIGNORE="ls:cd:pwd"
 #############################################################################
 # }}}   
 
-
+# Get my name from the system to make it easily available everywhere I might
+# need it
+export MYFULLNAME=$(getent passwd $(whoami) | cut -d ':' -f 5 | cut -d ',' -f 1)
 
 # Add my admin scripts to the path
 pathprepend "$DADMIN/scripts"
