@@ -21,6 +21,8 @@ cat <<EOF
     df = diff
     lg = log -p
     who = shortlog -s --
+    slog  = !git --no-pager log --format=oneline --abbrev-commit
+    dfnp  = !git --no-pager diff
 [github]
     user = $GITHUB_USER
     token = $GITHUB_API_TOKEN
