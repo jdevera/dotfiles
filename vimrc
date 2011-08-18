@@ -83,9 +83,6 @@ Bundle! 'bashsyntax'
 " Delay colorscheme setting until we know if csapprox is loaded
 Bundle! 'colorsetter'
 
-" Syntax for a WIP little project, shouldn't be here, I guess
-Bundle! 'keywordrulessyntax'
-
 " }}}
 " {{{ Behaviour?
 " ----------------------------------------------------------------------------
