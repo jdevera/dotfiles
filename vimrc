@@ -64,8 +64,10 @@ Bundle 'scrooloose/nerdtree'
 Bundle 'ShowMarks'                , {'name': 'showmarks'}
 Bundle 'TaskList.vim'             , {'name': 'tasklist'}
 Bundle 'tpope/vim-fugitive'       , {'name': 'fugitive'}
+Bundle 'tpope/vim-abolish'        , {'name': 'abolish'}
 Bundle 'xolox/vim-notes'
 Bundle 'matchit.zip'              , {'name': 'matchit'}
+Bundle 'mrmargolis/dogmatic.vim'  , {'name': 'dogmatic'}
 
 " ===========================================================================
 " Colorschemes
