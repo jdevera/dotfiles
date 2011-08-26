@@ -1,0 +1,9 @@
+Local Configurations Directory
+==============================
+
+This directory can contain local, untracked configuration files.
+
+Files in this directory are NOT sourced automatically by Vim, they must be
+sourced explicitly in the vimrc file.
+
+The contents of this directory are ignored by git.

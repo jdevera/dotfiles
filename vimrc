@@ -83,6 +83,14 @@ Bundle! 'bashsyntax'
 " Delay colorscheme setting until we know if csapprox is loaded
 Bundle! 'colorsetter'
 
+" Load additional local bundles. The local/bundles.vim file, if it exists,
+" contains Bundle specs that make sense only in the current machine. That file
+" is not tracked. See also the *Local configurations* section below.
+if filereadable(expand('~/.vim/local/bundles.vim'))
+    execute 'source ' . expand('~/.vim/local/bundles.vim')
+endif
+
+
 " }}}
 " {{{ Behaviour?
 " ----------------------------------------------------------------------------
@@ -534,8 +542,10 @@ endif
 " some overrides for remote headless boxes.
 " This should also work on Windows, since ~.vim is added to the runtimepath at
 " the top of this file.
-if filereadable(expand('~/.vim/local.vim'))
-    execute 'source ' . expand('~/.vim/local.vim')
+" Warning: Additional Bundles should not be included in this file, use the
+"          local/bundles.vim file instead.
+if filereadable(expand('~/.vim/local/config.vim'))
+    execute 'source ' . expand('~/.vim/local/config.vim')
 endif
 
 " }}}
