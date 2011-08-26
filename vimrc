@@ -348,6 +348,12 @@ nnoremap <C-j> <C-W>j
 nnoremap <C-k> <C-W>k
 nnoremap <C-l> <C-W>l
 
+
+" Make shift insert work in the gui as it does in the shell.
+if has('gui_running')
+    silent inoremap <S-Insert> <MiddleMouse>
+endif
+
 " Diff operations made shorter (Great for merges)
 if &diff
     nnoremap <Leader>du  :diffupdate<cr>
