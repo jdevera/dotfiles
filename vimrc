@@ -332,6 +332,12 @@ vnoremap <right> <nop>
 " mapping.
 nnoremap ; :
 
+" Easily move through windows
+nnoremap <C-h> <C-W>h
+nnoremap <C-j> <C-W>j
+nnoremap <C-k> <C-W>k
+nnoremap <C-l> <C-W>l
+
 " Diff operations made shorter (Great for merges)
 if &diff
     nnoremap <Leader>du  :diffupdate<cr>
