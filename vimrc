@@ -293,7 +293,7 @@ silent nnoremap <F5> :TlistToggle<CR>
 silent nnoremap <F4> :NERDTreeToggle<CR>
 
 " Shift+Tab shows the list of jumps in the tag stack.
-nmap  <C-Tab>  :ts<CR>
+nmap  <C-Tab>  :tags<CR>
 
 " Open the definition in a new tab
 nmap <A-/> :tab split<CR>:exec("tjump ".expand("<cword>"))<CR>
