@@ -34,5 +34,7 @@ alias dumd='du --max-depth'
 
 alias clearcache='sudo sync; sudo echo 3 | sudo tee /proc/sys/vm/drop_caches > /dev/null'
 
+alias xff='export TERM=xterm-256color'
+
 # vim: ft=bash fdm=marker expandtab ts=3 sw=3 :
 
