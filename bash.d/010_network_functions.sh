@@ -30,7 +30,5 @@ getip4()
 }
 ##############################################################################
 
-alias ip0='getip4 eth0'
-
 # vim: ft=bash fdm=marker expandtab ts=4 sw=4 :
 
