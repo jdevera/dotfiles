@@ -25,10 +25,10 @@
 #
 mysplit()
 {
-    DEFAULT_DELIMITER=" "
+    local DEFAULT_DELIMITER=" "
 
-    a_delimiter="${1:-$DEFAULT_DELIMITER}"
-    a_inputfile="$2"
+    local a_delimiter="${1:-$DEFAULT_DELIMITER}"
+    local a_inputfile="$2"
 
     awk -F "$a_delimiter" \
     '{  for(i = 1; i <= NF; i++) {
@@ -59,10 +59,10 @@ mysplit()
 #
 myjoin()
 {
-    DEFAULT_DELIMITER=" "
+    local DEFAULT_DELIMITER=" "
 
-    a_delimiter="${1:-$DEFAULT_DELIMITER}"
-    a_inputfile="$2"
+    local a_delimiter="${1:-$DEFAULT_DELIMITER}"
+    local a_inputfile="$2"
 
 	awk -v usersep="$a_delimiter" '
 	BEGIN{
@@ -99,11 +99,11 @@ myjoin()
 #
 myrmlistitems()
 {
-    DEFAULT_DELIMITER=" "
+    local DEFAULT_DELIMITER=" "
 
-    a_element="$1"
-    a_delimiter="${2:-$DEFAULT_DELIMITER}"
-    a_inputfile="$3"
+    local a_element="$1"
+    local a_delimiter="${2:-$DEFAULT_DELIMITER}"
+    local a_inputfile="$3"
 
     [[ -z $a_element ]] && return 1
 

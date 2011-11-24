@@ -32,10 +32,10 @@
 #
 addtopath()
 {
-    a_directory="$1"
-    a_position="$2"
+    local a_directory="$1"
+    local a_position="$2"
 
-    a_directory=`echo "$a_directory" | sed 's#/$##'`  # remove trailing slash
+    local a_directory=`echo "$a_directory" | sed 's#/$##'`  # remove trailing slash
 
     # Add only existing directories
     [[ ! -d $a_directory ]] && return 1
@@ -43,7 +43,7 @@ addtopath()
     # If the directory is already in the path, remove it so that
     # it can be inserted in the desired position without
     # poluting $PATH with duplicates
-    newpath=`echo $PATH | myrmlistitems "$a_directory" ':'`
+    local newpath=`echo $PATH | myrmlistitems "$a_directory" ':'`
 
     if [[ $a_position == beg ]]; then    # Prefix to $PATH
         export PATH=$a_directory:$newpath
@@ -84,7 +84,7 @@ pathprepend() { addtopath $1 beg; return $?; }
 #
 delfrompath()
 {
-    a_directory="$1"
+    local a_directory="$1"
 
     export PATH=`echo $PATH | myrmlistitems "$a_directory" ':'`
 }

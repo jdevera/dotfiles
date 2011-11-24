@@ -23,7 +23,7 @@
 #
 getip4()
 {
-    a_interface=${1:?"network interface argument missing"}
+    local a_interface=${1:?"network interface argument missing"}
 
     ip -o -f inet addr show "$a_interface"     |
         awk '{gsub("/.*", "", $4); print $4}'

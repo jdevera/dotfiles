@@ -27,8 +27,7 @@ show_parent_dirs()
 
 function_exists()
 {
-   FUNCTION_NAME=$1
-   a_function_name="$1"
+   local a_function_name="$1"
 
    [[ -z $a_function_name ]] && return 1
 
