@@ -32,6 +32,16 @@ export FILOG=$DSYSDATA/install.log
 #############################################################################
 # }}}
 
+# Add my admin scripts to the path
+pathprepend "$DADMIN/scripts"
+pathprepend "$DOTHER/run/bin"
+
+# Add user's Cabal binaries to the path
+pathprepend "$HOME/.cabal/bin/"
+
+pathprepend "$DDROPBOX/todo"
+
+
 # Section: Apps {{{
 #############################################################################
 
@@ -173,16 +183,6 @@ HISTIGNORE="ls:cd:pwd"
 # Get my name from the system to make it easily available everywhere I might
 # need it
 export MYFULLNAME=$(getent passwd $(whoami) | cut -d ':' -f 5 | cut -d ',' -f 1)
-
-# Add my admin scripts to the path
-pathprepend "$DADMIN/scripts"
-pathprepend "$DOTHER/run/bin"
-
-# Add user's Cabal binaries to the path
-pathprepend "$HOME/.cabal/bin/"
-
-pathprepend "$DDROPBOX/todo"
-
 
 # Check the window size after each command and, if necessary, update the
 # values of LINES and COLUMNS.
