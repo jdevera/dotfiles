@@ -36,7 +36,10 @@ function_exists()
    return $?
 }
 
-
+stripe()
+{
+   perl -pe '$_ = "\033[1;34m$_\033[0m" if($. % 2)'
+}
 
 # vim: ft=bash fdm=marker expandtab ts=3 sw=3 :
 
