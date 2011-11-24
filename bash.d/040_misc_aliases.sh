@@ -10,7 +10,7 @@
 
 alias vish='vim $DBASH'
 alias gvish='gvim $DBASH'
-alias reloadsh='source $HOME/.bashrc'
+alias reloadsh='KEEP_PROMPT=1 source $HOME/.bashrc'
 
 alias myalias='showaliases $DBASH/* $DBASH/local/after/* $DBASH/local/before/*'
 
