@@ -653,10 +653,17 @@ augroup experiment
 augroup END
 
 " Reload this configuration file automatically when it is changed within Vim
-" augroup myvimrc
-"     au!
-"     au BufWritePost .vimrc,_vimrc,vimrc,.gvimrc,_gvimrc,gvimrc so $MYVIMRC | if has('gui_running') && !empty($MYGVIMRC) | so $MYGVIMRC | endif
-" augroup END
+augroup myvimrc
+    au!
+    au BufWritePost .vimrc,_vimrc,vimrc,.gvimrc,_gvimrc,gvimrc
+        \ so $MYVIMRC |
+        \ if has('gui_running') && !empty($MYGVIMRC) |
+        \     so $MYGVIMRC |
+        \ endif |
+        \ so <sfile>:p |
+        \ filetype detect |
+        \ echo '<sfile>:t has been reloaded after saving it'
+augroup END
 
 " Function and command to open a tag in a new tab (I'm always doing this
 " manually).
