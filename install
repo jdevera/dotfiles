@@ -4,9 +4,13 @@
 ## Clone Vundle to manage all plugins (use the events branch)
 clone_vundle()
 {
-    [[ -d vim/bundle/vundle/.git ]] && return 1
-    git clone git://github.com/gmarik/vundle.git vim/bundle/vundle
-    ( cd vim/bundle/vundle && git checkout events )
+    [[ -d vim/bundle/vundle/.git ]] ||
+        { echo "Vundle is already installed"; return 0; }
+    git clone git://github.com/gmarik/vundle.git vim/bundle/vundle ||
+        { echo "Could not clone Vundle"; return 1; }
+
+    ( cd vim/bundle/vundle && git checkout events ) ||
+        { echo "Could not checkout Vundle's events branch"; return 1; }
     return 0
 }
 
@@ -14,9 +18,14 @@ clone_vundle()
 ## Use vundle to download all vim plug-ins
 get_vim_bundles()
 {
-    vim +BundleInstall +q
+    clone_vundle || return 1
+    vim +BundleInstall +q || (echo "Error installing bundles"; return 1 )
 }
 
+post_install_actions()
+{
+    get_vim_bundles
+}
 
 # Install the dot files into user's home directory
 install_home()
@@ -36,8 +45,7 @@ install_home()
         fi
     done
 
-    clone_vundle    || ( echo "Vundle is already installed"; return 1 )
-    get_vim_bundles || ( echo "Could not clone vim bundles"; return 1 )
+    post_install_actions
 }
 
 
