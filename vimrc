@@ -270,8 +270,7 @@ set laststatus=2
 if &diff
     set statusline=[POS=%04l,%04v][%p%%]\ [LEN=%L]\ [F=%F%m%r%h%w]
 else
-    "set statusline=%F%m%r%h%w\ [FORMAT=%{&ff}]\ [TYPE=%Y]\ [ASCII=\%03.3b]\ [HEX=\%02.2B]\ [POS=%04l,%04v][%p%%]\ [LEN=%L]
-    set statusline=%F%m%r%h%w\ [F=%{&ff}][T=%Y][C=%04v][L=%04l/%04L][%p%%]
+    set statusline=%F%m%r%h%w\ %y\ ff:%{(&ff[0])}\ c:%v\ l:%l\ (%p%%\ of\ %L)
 endif
 " -----------------------------------------------
 
