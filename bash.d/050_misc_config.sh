@@ -68,6 +68,9 @@ if [ -x /usr/bin/dircolors ]; then
     alias egrep='egrep --color=auto'
 fi
 
+# Use a python init file
+[[ -e ~/.pystartup ]] && export PYTHONSTARTUP=~/.pystartup
+
 #############################################################################
 # }}}   
 
