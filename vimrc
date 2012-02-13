@@ -189,10 +189,11 @@ endif
 " -----------------------------------------------
 
 
-" Remove the GUI tool bar (I can't recall having ever used it)
+" Remove the GUI tool bar and menubar
 " -----------------------------------------------
 if has("gui_running")
     set guioptions-=T
+    set guioptions-=m
 endif
 
 
