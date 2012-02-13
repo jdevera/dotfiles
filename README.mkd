@@ -15,7 +15,7 @@ time, but if you are not me, please read on :)
 ## Contents
 
 Most files handle Bash or Vim configuration, but I also share my settings for
-GNU Screen and Git.
+GNU Screen, Tmux, Git and the Python interpreter.
 
 My git configuration file is actually a generator (more on this below).
 
