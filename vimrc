@@ -540,6 +540,15 @@ if $MYFULLNAME != ""
     let g:snips_author=$MYFULLNAME
 endif
 
+" Dogmatic: Time in milliseconds before a next arrow key press is counted
+let g:dogmatic_timeout = 120
+
+" XML: Enable folding based on syntax
+let g:xml_syntax_folding = 1
+
+" PythonSyntax: Highlight everything
+let python_highlight_all=1
+
 " ----------------------------------------------------------------------------
 " }}}
 " {{{ Local configuration
