@@ -4,7 +4,7 @@
 ## Clone Vundle to manage all plugins (use the events branch)
 clone_vundle()
 {
-    [[ -d vim/bundle/vundle/.git ]] ||
+    [[ -d vim/bundle/vundle/.git ]] &&
         { echo "Vundle is already installed"; return 0; }
     git clone git://github.com/gmarik/vundle.git vim/bundle/vundle ||
         { echo "Could not clone Vundle"; return 1; }
