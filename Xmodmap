@@ -1,0 +1,13 @@
+! =--------------------------------------------------------------------------
+!                             Custom Key Bindings
+!                             ===================
+!
+! xmodmap ~/.Xmodmap is normally run when entering the user's session
+!
+! Use xev to find keycodes
+! Keysyms are listed in /usr/include/X11/keysymdef.h.
+! ---------------------------------------------------------------------------
+
+! Turn Caps Lock into an additional Esc key
+clear lock
+keycode 66 = Escape

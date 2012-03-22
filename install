@@ -18,13 +18,22 @@ clone_vundle()
 ## Use vundle to download all vim plug-ins
 get_vim_bundles()
 {
+    echo "Updating Vim Bundles"
     clone_vundle || return 1
-    vim +BundleInstall +q || (echo "Error installing bundles"; return 1 )
+    vim +BundleInstall +qa || (echo "Error installing bundles"; return 1 )
+}
+
+## Run xmodmap with the customisations in ~/.Xmodmap
+apply_xmodmap()
+{
+    echo "Applying custom key bindings"
+    [[ -e ~/.Xmodmap ]] && has_program xmodmap && xmodmap ~/.Xmodmap
 }
 
 post_install_actions()
 {
     get_vim_bundles
+    apply_xmodmap
 }
 
 # Install the dot files into user's home directory
@@ -137,6 +146,12 @@ remove()
     else
         rm -f "$file"
     fi
+}
+
+
+has_program()
+{
+    type -t "$1" > /dev/null
 }
 
 # Install all configuration files
