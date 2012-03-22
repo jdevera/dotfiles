@@ -284,10 +284,8 @@ endif
 " Set , as the map leader (The default \ is hard to type in Spanish keyboards)
 let mapleader = ","
 
-" F5 toggles the TagList window (plugin needed)
-" N.B.: Although I'd prefer to use C-F3 for this, this key cobination doesn't
-"       work when vim is run in gnome-terminal.
-silent nnoremap <F5> :TlistToggle<CR>
+" F5 toggles the QickFix window
+silent nnoremap <F5> :botright cwindow<CR>
 
 " <F4> toggles the directory listing window
 silent nnoremap <F4> :NERDTreeToggle<CR>
