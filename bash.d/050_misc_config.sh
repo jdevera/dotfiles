@@ -242,6 +242,20 @@ export MYFULLNAME=$(getent passwd $(whoami) | cut -d ':' -f 5 | cut -d ',' -f 1)
 # values of LINES and COLUMNS.
 shopt -s checkwinsize
 
+
+# cdspell
+# -------
+#
+# If set, minor errors in the spelling of a directory component in a cd command
+# will be corrected. The errors checked for are transposed characters, a
+# missing character, and a character too many. If a correction is found, the
+# corrected path is printed, and the command proceeds. This option is only used
+# by interactive shells.
+shopt -s cdspell
+
+# CTRL-D must be used twice to exit the shell
+export IGNOREEOF=1
+
 # enable programmable completion features (you don't need to enable
 # this, if it's already enabled in /etc/bash.bashrc and /etc/profile
 # sources /etc/bash.bashrc).
