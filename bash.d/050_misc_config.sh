@@ -242,5 +242,7 @@ if [ -f /etc/bash_completion ] && ! shopt -oq posix; then
 fi
 
 
+call_if check_home_purity
+
 # vim: ft=bash fdm=marker expandtab ts=3 sw=3 :
 
