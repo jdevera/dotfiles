@@ -353,13 +353,16 @@ if has('gui_running')
 endif
 
 " Diff operations made shorter (Great for merges)
-if &diff
+function! SetDiffMappings()
     nnoremap <Leader>du  :diffupdate<cr>
     nnoremap <Leader>dg  :diffget<cr>
     nnoremap <Leader>dp  :diffput<cr>
     nnoremap <Leader>dg1 :diffget 1<cr>
     nnoremap <Leader>dg2 :diffget 2<cr>
     nnoremap <Leader>dg3 :diffget 3<cr>
+endfunction
+if &diff
+    call SetDiffMappings()
 endif
 
 " ----------------------------------------------------------------------------
