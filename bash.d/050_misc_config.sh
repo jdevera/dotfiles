@@ -32,6 +32,14 @@ export FILOG=$DSYSDATA/install.log
 #############################################################################
 # }}}
 
+if [[ -z $TMUX ]]; then
+   case $COLORTERM in
+      (Terminal|gnome-256color)
+         TERM=gnome-256color tput colors > /dev/null 2>&1  &&  export TERM='gnome-256color'
+         ;;
+   esac
+fi
+
 # Add my admin scripts to the path
 pathprepend "$DADMIN/scripts"
 pathprepend "$DOTHER/run/bin"
