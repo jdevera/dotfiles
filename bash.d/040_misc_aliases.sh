@@ -11,6 +11,7 @@
 alias vish='vim $DBASH'
 alias gvish='gvim $DBASH'
 alias reloadsh='KEEP_PROMPT=1 source $HOME/.bashrc'
+alias rlsh='reloadsh'
 
 alias myalias='showaliases $DBASH/* $DBASH/local/after/* $DBASH/local/before/*'
 
@@ -37,6 +38,10 @@ alias clearcache='sudo sync; sudo echo 3 | sudo tee /proc/sys/vm/drop_caches > /
 alias xff='export TERM=xterm-256color'
 
 alias ip0='getip4 eth0'
+
+alias ud='export DISPLAY=:0.0'
+
+alias agi='sudo apt-get install'
 
 # vim: ft=bash fdm=marker expandtab ts=3 sw=3 :
 
