@@ -476,8 +476,18 @@ endif
 
 " ----------------------------------------------------------------------------
 " }}}
-" {{{ Abbreviations
+" {{{ Language (spelling)
 " ----------------------------------------------------------------------------
+
+" USe the current system list of words as dictionary for completion with
+" C-X C-K  ( :he i_CTRL-X_CTRL-K )
+if filereadable("/usr/share/dict/words")
+    set dictionary+=/usr/share/dict/words
+endif
+
+" Set British English as the language for spelling corrections
+set spelllang=en_gb
+
 
 " {{{ Usual spelling mistakes
 " ---------------------------
@@ -487,6 +497,9 @@ iab defualt     default
 iab Defualt     Default
 iab whould      should
 iab Whould      Should
+iab summaires   summaries
+iab redered     rendered
+
 " LAST_SPELL (this is a marker for quick search)
 " ---------------------------
 " }}}
