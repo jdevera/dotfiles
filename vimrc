@@ -74,6 +74,9 @@ Bundle 'mrmargolis/dogmatic.vim'  , {'name': 'dogmatic'}
 " ===========================================================================
 
 Bundle 'tomasr/molokai'           , {'name' : 'color-molokai'}
+Bundle 'Mustang2'                 , {'name' : 'color-mustang2'}
+Bundle 'DarkOcean.vim'            , {'name' : 'color-darkocean'}
+Bundle 'obxhdx/vim-github-theme'  , {'name' : 'color-github' }
 
 " ===========================================================================
 " Addons tracked with my dotfiles repository
