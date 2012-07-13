@@ -566,6 +566,9 @@ let g:xml_syntax_folding = 1
 " PythonSyntax: Highlight everything
 let python_highlight_all=1
 
+" Sh: Assume sh is bash
+let g:is_bash = 1
+
 " ----------------------------------------------------------------------------
 " }}}
 " {{{ Local configuration
