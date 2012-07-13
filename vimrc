@@ -50,7 +50,7 @@ Bundle 'tpope/vim-surround'       , {'name': 'surround'}
 
 Bundle 'Align'                    , {'name': 'align'}
 Bundle 'camelcasemotion'
-Bundle 'Color-Scheme-Explorer'    , {'name': 'cs-explorer'}
+Bundle 'jdevera/vim-cs-explorer'  , {'name': 'cs-explorer'}
 Bundle 'Conque-Shell'             , {'name': 'conque-shell'}
 Bundle 'davidoc/todo.txt-vim'     , {'name': 'todo-txt'}
 Bundle 'godlygeek/csapprox'
