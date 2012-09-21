@@ -30,5 +30,10 @@ getip4()
 }
 ##############################################################################
 
+
+function download()
+{
+    wget --no-use-server-timestamps --no-clobber --directory-prefix="$DDOWN" "$@"
+}
 # vim: ft=sh fdm=marker expandtab ts=4 sw=4 :
 
