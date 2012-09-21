@@ -16,5 +16,5 @@ alias getvncstr='echo `hostname -f`::`ps aux | sed -n "s/$USER.*Xvnc.*rfbport \(
 
 
 
-# vim: ft=bash fdm=marker expandtab ts=3 sw=3 :
+# vim: ft=sh fdm=marker expandtab ts=3 sw=3 :
 

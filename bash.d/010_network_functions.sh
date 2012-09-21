@@ -30,5 +30,5 @@ getip4()
 }
 ##############################################################################
 
-# vim: ft=bash fdm=marker expandtab ts=4 sw=4 :
+# vim: ft=sh fdm=marker expandtab ts=4 sw=4 :
 

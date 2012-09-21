@@ -27,5 +27,5 @@ alias ta='todo.sh add'
 
 
 
-# vim: ft=bash fdm=marker expandtab ts=3 sw=3 :
+# vim: ft=sh fdm=marker expandtab ts=3 sw=3 :
 
