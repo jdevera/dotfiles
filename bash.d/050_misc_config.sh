@@ -85,38 +85,6 @@ fi
 # Section: Prompt {{{
 #############################################################################
 
-# Set variable identifying the chroot you work in (used in the prompt below)
-if [ -z "$debian_chroot" ] && [ -r /etc/debian_chroot ]; then
-   debian_chroot=$(cat /etc/debian_chroot)
-fi
-
-# Prompt Items:
-# 
-#   \u              Username of the current user
-#   \h              Hostname up to the first '.'
-#   \w              Current working directory
-#   $debian_chroot  Current chroot (if any)
-#   `__git_ps1`     Current git branch if any
-#
-if [[ -z $KEEP_PROMPT ]]; then # KEEP_PROMPT=1 reloadsh will reload without affecting the prompt
-
-PS1NOCOLOR='\[\033[0m\]${debian_chroot:+($debian_chroot)}\u@\h:\w`__git_ps1`\$ '
-PS1NOCOLOR='\u@\h:\w`__git_ps1`\$ '
-PS1="\[\033[0m\]$PS1NOCOLOR"
-
-fi
-
-# # If this is an xterm set the title to user@host:dir
-# case "$TERM" in
-# xterm*|rxvt*)
-#     PS1="\[\e]0;${debian_chroot:+($debian_chroot)}\u@\h: \w\a\]$PS1"
-#     ;;
-# *)
-#     ;;
-# esac
-
-
-
 ansi_color()
 {
    local COLOR_BLACK="\033[0;30m"
@@ -159,20 +127,30 @@ ansi_color()
    echo "$color"
 }
 
-set_prompt_color()
-{
-   local colorname=${1:-none}
-   local promptcolor="\[$(ansi_color "$colorname")\]"
-   local nocolor="\[$(ansi_color none)\]"
-   PS1BAK="$PS1"
-   PS1="${promptcolor}${PS1NOCOLOR}${nocolor}"
-}  
+#THEMES
 
-default_prompt_color()
+# THEME: simple prompt {{{
+function theme_simple_prompt_cmd()
 {
-   PS1='\[\033[0m\]$PS1NOCOLOR'
+   local rc=$?
+   local prompt_symbol=${PROMPT_SYMBOL:-"$ "}
+   local color=yellow
+   [[ $rc -ne 0 ]] && color=light_red
+   PS1="\[$(ansi_color $color)\]$prompt_symbol\[$(ansi_color none)\] "
 }
 
+theme_simple()
+{
+   export PROMPT_COMMAND=theme_simple_prompt_cmd
+}
+# }}}
+
+if [[ -z $KEEP_PROMPT ]]; then # KEEP_PROMPT=1 reloadsh will reload without affecting the prompt
+
+PROMPT_SYMBOL=' ⇶ '
+theme_simple
+
+fi
 
 #############################################################################
 # }}}
