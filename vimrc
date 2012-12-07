@@ -68,6 +68,19 @@ Bundle 'tpope/vim-abolish'        , {'name': 'abolish'}
 Bundle 'xolox/vim-notes'
 Bundle 'matchit.zip'              , {'name': 'matchit'}
 Bundle 'mrmargolis/dogmatic.vim'  , {'name': 'dogmatic'}
+Bundle 'vim-creole'               , {'name': 'syntax-creole'}
+Bundle 'toggle_words.vim'         , {'name': 'togglewords' }
+Bundle 'mileszs/ack.vim'          , {'name': 'ack'}
+Bundle 'bufexplorer.zip'          , {'name': 'bufexplorer'}
+Bundle 'sjl/gundo.vim'            , {'name': 'gundo'}
+Bundle 'vimoutliner/vimoutliner'
+Bundle 'vcscommand.vim'           , {'name': 'vcscommand'}
+Bundle 'OmniCppComplete'          , {'name': 'omnicppcomplete'}
+Bundle 'SwapHeader'               , {'name': 'swapheader'}
+Bundle 'DoxygenToolkit.vim'       , {'name': 'doxygen-toolkit'}
+
+Bundle 'jdevera/vim-protobuf-syntax' , {'name' : 'protobuf' }
+Bundle 'kevinw/pyflakes-vim'
 
 " ===========================================================================
 " Colorschemes
@@ -292,6 +305,9 @@ silent nnoremap <F5> :botright cwindow<CR>
 
 " <F4> toggles the directory listing window
 silent nnoremap <F4> :NERDTreeToggle<CR>
+
+" ,gut Toggles Gundo
+silent noremap <Leader>gut :GundoToggle<CR>
 
 " Shift+Tab shows the list of jumps in the tag stack.
 nmap  <C-Tab>  :tags<CR>
