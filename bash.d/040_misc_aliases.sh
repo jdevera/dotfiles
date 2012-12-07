@@ -43,5 +43,9 @@ alias ud='export DISPLAY=:0.0'
 
 alias agi='sudo apt-get install'
 
+alias l=ls
+alias sl=ls
+alias sls=ls
+
 # vim: ft=sh fdm=marker expandtab ts=3 sw=3 :
 
