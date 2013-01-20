@@ -28,6 +28,8 @@ cat <<EOF
 [github]
     user = $GITHUB_USER
     token = $GITHUB_API_TOKEN
+[push]
+	default = simple
 EOF
 
 # vim: filetype=bash :
