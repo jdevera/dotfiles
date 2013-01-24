@@ -15,11 +15,11 @@ time, but if you are not me, please read on :)
 ## Contents
 
 Most files handle Bash or Vim configuration, but I also share my settings for
-GNU Screen, Tmux, Git and the Python interpreter.
+GNU Screen, Tmux, Git, Emacs, and the Python interpreter.
 
 My git configuration file is actually a generator (more on this below).
 
-My Vim configuration directory includes all the plug-ins I have installed.
+My Vim configuration will install all the plug-ins I have installed.
 
 ### Configuration file generators
 
@@ -59,6 +59,14 @@ Vim's runtime path.
 All add-ons in the official Vim's website are actively mirrored in github by
 the [Vim-Scripts.org](http://vim-scripts.org/) project. This means Vundle can
 be used to install any add-on published in the official site.
+
+### Emacs configuration
+
+I use [el-get](https://github.com/dimitri/el-get) to manage all the Emacs
+packages that I want installed.
+
+With the right configuration, I simply have to open Emacs and the packages
+will be installed if they are not already.
 
 <!--
 vim:linebreak:textwidth=78:spell:
