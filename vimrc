@@ -310,6 +310,9 @@ silent nnoremap <F4> :NERDTreeToggle<CR>
 " ,gut Toggles Gundo
 silent noremap <Leader>gut :GundoToggle<CR>
 
+" ,ack uses Ack to search the word under the cursor
+silent noremap <Leader>ack :exec 'Ack '.expand("<cword>")<CR>
+
 " Shift+Tab shows the list of jumps in the tag stack.
 nmap  <C-Tab>  :tags<CR>
 
