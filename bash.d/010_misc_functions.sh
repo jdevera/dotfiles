@@ -56,7 +56,7 @@ function check_home_purity()
    [[ -z $diff ]] && return 0
    local rubbish=$(echo "$diff" | grep '^<' | cut -c 3-)
    local missing=$(echo "$diff" | grep '^>' | cut -c 3-)
-   [[ -z $rubbish ]] && [[ -z $missing ]] || echo "You home is not pure!"
+   [[ -z $rubbish ]] && [[ -z $missing ]] || echo "Your home is not pure!"
    [[ -n $missing ]] && echo " * Missing:" $missing
    [[ -n $rubbish ]] && echo " * Superfluous:" $rubbish
 }
