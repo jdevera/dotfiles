@@ -80,7 +80,7 @@ Bundle 'SwapHeader'               , {'name': 'swapheader'}
 Bundle 'DoxygenToolkit.vim'       , {'name': 'doxygen-toolkit'}
 
 Bundle 'jdevera/vim-protobuf-syntax' , {'name' : 'protobuf' }
-Bundle 'kevinw/pyflakes-vim'
+Bundle 'scrooloose/syntastic'
 
 " ===========================================================================
 " Colorschemes
@@ -90,6 +90,7 @@ Bundle 'tomasr/molokai'           , {'name' : 'color-molokai'}
 Bundle 'Mustang2'                 , {'name' : 'color-mustang2'}
 Bundle 'DarkOcean.vim'            , {'name' : 'color-darkocean'}
 Bundle 'obxhdx/vim-github-theme'  , {'name' : 'color-github' }
+Bundle 'altercation/vim-colors-solarized' , {'name' : 'color-solarized'}
 
 " ===========================================================================
 " Addons tracked with my dotfiles repository
