@@ -127,6 +127,11 @@ ansi_color()
    echo "$color"
 }
 
+ansi_color256()
+{
+   echo "\033[38;5;$1m"
+}
+
 #THEMES
 
 # THEME: simple prompt {{{
