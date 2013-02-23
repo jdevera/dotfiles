@@ -695,7 +695,7 @@ augroup END
 " Reload this configuration file automatically when it is changed within Vim
 augroup myvimrc
     au!
-    au BufWritePost .vimrc,_vimrc,vimrc,.gvimrc,_gvimrc,gvimrc
+    au BufWritePost .vimrc,_vimrc,vimrc,.gvimrc,_gvimrc,gvimrc nested
         \ so $MYVIMRC |
         \ if has('gui_running') && !empty($MYGVIMRC) |
         \     so $MYGVIMRC |
