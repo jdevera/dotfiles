@@ -128,6 +128,11 @@
 (global-set-key "\C-ca" 'org-agenda)
 (global-set-key "\C-cb" 'org-iswitchb)
 
+(add-hook 'org-mode-hook
+          (lambda ()
+            (color-theme-leuven)
+            ))
+
 ;; }}}
 ;; Funniest part of the file {{{
 ;; --------------------------------------------------------------------------
