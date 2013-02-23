@@ -72,6 +72,9 @@ Bundle 'OmniCppComplete'          , {'name': 'omnicppcomplete'}
 Bundle 'SwapHeader'               , {'name': 'swapheader'}
 Bundle 'DoxygenToolkit.vim'       , {'name': 'doxygen-toolkit'}
 Bundle 'scrooloose/syntastic'
+Bundle 'jceb/vim-orgmode'
+Bundle 'helino/vim-json'
+Bundle 'davidhalter/jedi-vim'
 
 " My own plugins / forks
 Bundle 'jdevera/vim-stl-syntax'   , {'name': 'stl-syntax'}
