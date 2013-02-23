@@ -32,7 +32,7 @@ set rtp+=~/.vim/bundle/vundle/
 call vundle#rc()
 
 " ===========================================================================
-" General bundles
+" Bundles
 " ===========================================================================
 
 " Manage vundle with vundle, oh yeah!
@@ -50,14 +50,9 @@ Bundle 'tpope/vim-surround'       , {'name': 'surround'}
 
 Bundle 'Align'                    , {'name': 'align'}
 Bundle 'camelcasemotion'
-Bundle 'jdevera/vim-cs-explorer'  , {'name': 'cs-explorer'}
-Bundle 'Conque-Shell'             , {'name': 'conque-shell'}
-Bundle 'davidoc/todo.txt-vim'     , {'name': 'todo-txt'}
 Bundle 'godlygeek/csapprox'
 Bundle 'hallison/vim-markdown'    , {'name': 'markdown'}
-Bundle 'jdevera/vim-stl-syntax'   , {'name': 'stl-syntax'}
 Bundle 'majutsushi/tagbar'
-Bundle 'pylint.vim'               , {'name': 'pylint'}
 Bundle 'python.vim--Vasiliev'     , {'name': 'python-syntax'}
 Bundle 'scrooloose/nerdcommenter'
 Bundle 'scrooloose/nerdtree'
@@ -65,7 +60,6 @@ Bundle 'ShowMarks'                , {'name': 'showmarks'}
 Bundle 'TaskList.vim'             , {'name': 'tasklist'}
 Bundle 'tpope/vim-fugitive'       , {'name': 'fugitive'}
 Bundle 'tpope/vim-abolish'        , {'name': 'abolish'}
-Bundle 'xolox/vim-notes'
 Bundle 'matchit.zip'              , {'name': 'matchit'}
 Bundle 'mrmargolis/dogmatic.vim'  , {'name': 'dogmatic'}
 Bundle 'vim-creole'               , {'name': 'syntax-creole'}
@@ -73,34 +67,28 @@ Bundle 'toggle_words.vim'         , {'name': 'togglewords' }
 Bundle 'mileszs/ack.vim'          , {'name': 'ack'}
 Bundle 'bufexplorer.zip'          , {'name': 'bufexplorer'}
 Bundle 'sjl/gundo.vim'            , {'name': 'gundo'}
-Bundle 'vimoutliner/vimoutliner'
 Bundle 'vcscommand.vim'           , {'name': 'vcscommand'}
 Bundle 'OmniCppComplete'          , {'name': 'omnicppcomplete'}
 Bundle 'SwapHeader'               , {'name': 'swapheader'}
 Bundle 'DoxygenToolkit.vim'       , {'name': 'doxygen-toolkit'}
-
-Bundle 'jdevera/vim-protobuf-syntax' , {'name' : 'protobuf' }
 Bundle 'scrooloose/syntastic'
 
-" ===========================================================================
-" Colorschemes
-" ===========================================================================
+" My own plugins / forks
+Bundle 'jdevera/vim-stl-syntax'   , {'name': 'stl-syntax'}
+Bundle 'jdevera/vim-cs-explorer'  , {'name': 'cs-explorer'}
+Bundle 'jdevera/vim-protobuf-syntax' , {'name' : 'protobuf' }
 
+" Notetaking plugins I no longer use since I use org-mode
+" Bundle 'vimoutliner/vimoutliner'
+" Bundle 'xolox/vim-notes'
+
+" Colorschemes
 Bundle 'tomasr/molokai'           , {'name' : 'color-molokai'}
 Bundle 'Mustang2'                 , {'name' : 'color-mustang2'}
 Bundle 'DarkOcean.vim'            , {'name' : 'color-darkocean'}
 Bundle 'obxhdx/vim-github-theme'  , {'name' : 'color-github' }
 Bundle 'altercation/vim-colors-solarized' , {'name' : 'color-solarized'}
 
-" ===========================================================================
-" Addons tracked with my dotfiles repository
-" ===========================================================================
-
-" Real bash syntax
-Bundle! 'bashsyntax'
-
-" Delay colorscheme setting until we know if csapprox is loaded
-Bundle! 'colorsetter'
 
 " Load additional local bundles. The local/bundles.vim file, if it exists,
 " contains Bundle specs that make sense only in the current machine. That file
