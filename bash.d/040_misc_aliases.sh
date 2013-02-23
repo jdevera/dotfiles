@@ -47,5 +47,7 @@ alias l=ls
 alias sl=ls
 alias sls=ls
 
+alias kb='emacs $DDOC/PKB/notes.org'
+
 # vim: ft=sh fdm=marker expandtab ts=3 sw=3 :
 
