@@ -205,7 +205,7 @@ HISTFILESIZE=10000
 # backslash is removed before attempting a match. The second and subsequent
 # lines of a multi-line compound command are not tested, and are added to the
 # history regardless of the value of HISTIGNORE.
-HISTIGNORE="ls:cd:cd *:pwd:cdd *"
+HISTIGNORE="ls:cd:cd *:pwd:cdd *:p"
 
 # shopt: histappend
 # =================
