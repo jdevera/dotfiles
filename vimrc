@@ -714,6 +714,17 @@ function! Tabtag(word)
 endfunction
 command! -nargs=1 -complete=tag Tag call Tabtag("<args>")
 
+" A function to reload the contents of a buffer with the output of a command.
+" I use this to support custom tools that pipe their output to gview or view.
+function! ReloadCommandOutput(cmd)
+    se noro
+    %d
+    exec 'r !' . a:cmd
+    1d
+    se nomod
+    se ro
+endfunction
+
 endif
 " ----------------------------------------------------------------------------
 " }}}
