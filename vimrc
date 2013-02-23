@@ -278,6 +278,8 @@ set laststatus=2
 " ----------------------------------------------------
 if &diff
     set statusline=[POS=%04l,%04v][%p%%]\ [LEN=%L]\ [F=%F%m%r%h%w]
+elseif exists('*fugitive#statusline')
+    set statusline=%F%m%r%h%w%{fugitive#statusline()}\ %y\ ff:%{(&ff[0])}\ c:%v\ l:%l\ (%p%%\ of\ %L)
 else
     set statusline=%F%m%r%h%w\ %y\ ff:%{(&ff[0])}\ c:%v\ l:%l\ (%p%%\ of\ %L)
 endif
