@@ -214,8 +214,8 @@ endif
 " Note: These colours are set in an after plug-in called colorschemesetter
 let g:my_gui_colorscheme = 'molokai'
 let g:my_terminal_colorscheme = 'torte'
-let g:my_gui_diff_colorscheme = 'rainbow_fruit'
-let g:my_terminal_diff_colorscheme = 'rainbow_fruit'
+let g:my_gui_diff_colorscheme = 'github'
+let g:my_terminal_diff_colorscheme = 'github'
 " -----------------------------------------------
 
 
