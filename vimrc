@@ -94,7 +94,7 @@ Bundle 'altercation/vim-colors-solarized' , {'name' : 'color-solarized'}
 Bundle 'asu1dark.vim'
 Bundle 'Colorzone'
 Bundle 'lightcolors'
-Bundle 'print_bw'
+Bundle 'print_bw.zip'
 
 
 " Load additional local bundles. The local/bundles.vim file, if it exists,
