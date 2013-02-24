@@ -150,6 +150,21 @@ set splitbelow
 " Minimal number of screen lines to keep above and below the cursor.
 set scrolloff=4
 
+" Enable persistent undo
+set undofile
+
+" List of directory names for undo files, separated with commas. At least one
+" must exist or vim will silently not use persistent undo
+set undodir=~/.vim/tmp/undodir
+
+" Maximum number of changes that can be undone
+set undolevels=1000
+
+" Save the whole buffer for undo when reloading it if it has less than 10K
+" lines
+set undoreload=10000
+
+
 " ----------------------------------------------------------------------------
 " }}}
 " {{{ Spacing
