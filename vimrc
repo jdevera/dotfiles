@@ -551,23 +551,12 @@ let g:tlTokenList = ['\<TODO\>', '\<FIXME\>', '\<QUESTION\>', '\<HACK\>', '\<XXX
 " NERDCommenter: Add a space after the comment symbol
 let NERDSpaceDelims=1
 
-" TagList: Generate tags even if the TList window is closed.
-let Tlist_Process_File_Always = 1
-
-" TagList: Display tags defined only in the current buffer.
-let Tlist_Show_One_File = 1
-
-" TagList: Close Vim if the taglist is the only window.
-let Tlist_Exit_OnlyWindow = 1
-
 " SqlCompletion: disable generated maps, they are annoying!
 let g:omni_sql_no_default_maps = 1
 
 " ShowMarks: Disable on startup (will use it on demand)
 let g:showmarks_enable = 0
 
-" Pylint: Disable calling pylint automatically when saving
-let g:pylint_onwrite = 0
 "
 " Tagbar: show the tag corresponding to the current cursor position
 let g:tagbar_autoshowtag = 1
@@ -600,6 +589,23 @@ let python_highlight_all=1
 
 " Sh: Assume sh is bash
 let g:is_bash = 1
+
+" Syntastic: Set per-language checkers
+let g:syntastic_python_checkers = ['pyflakes']
+
+" Swapheader: Add mappings that don't clash with my spelling abbrevs
+let g:enableSwapHeaderMap = 0
+
+if ! g:enableSwapHeaderMap
+    noremap  <Leader>sw  :call        SwapHeaderFile(0)<CR>
+    vnoremap <Leader>sw  <C-C>:call   SwapHeaderFile(0)<CR>
+    inoremap <Leader>sw  <C-O>:call   SwapHeaderFile(0)<CR>
+    " Split window
+    noremap  <C-S-F7>  :call       SwapHeaderFile(1)<CR>
+    vnoremap <C-S-F7> <C-C>:call   SwapHeaderFile(1)<CR>
+    inoremap <C-S-F7> <C-O>:call   SwapHeaderFile(1)<CR>
+endif
+
 
 " ----------------------------------------------------------------------------
 " }}}
