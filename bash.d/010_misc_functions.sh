@@ -49,16 +49,7 @@ stripe()
 function check_home_purity()
 {
    [ -z "$PS1" ] && return
-   local diff=$( diff --suppress-common-lines -wB \
-      <( ls ~ | sort) \
-      <( echo -e "backup\ncomms\ndevel\ndoc\nmedia\nother") \
-      )
-   [[ -z $diff ]] && return 0
-   local rubbish=$(echo "$diff" | grep '^<' | cut -c 3-)
-   local missing=$(echo "$diff" | grep '^>' | cut -c 3-)
-   [[ -z $rubbish ]] && [[ -z $missing ]] || echo "Your home is not pure!"
-   [[ -n $missing ]] && echo " * Missing:" $missing
-   [[ -n $rubbish ]] && echo " * Superfluous:" $rubbish
+   purehome
 }
 
 # vim: ft=sh fdm=marker expandtab ts=3 sw=3 :
