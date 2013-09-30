@@ -250,11 +250,11 @@ shopt -s extglob
 # CTRL-D must be used twice to exit the shell
 export IGNOREEOF=1
 
-# enable programmable completion features (you don't need to enable
-# this, if it's already enabled in /etc/bash.bashrc and /etc/profile
-# sources /etc/bash.bashrc).
+# Enable programmable completion features asynchronously
+# See http://superuser.com/a/418112 for details
 if [ -f /etc/bash_completion ] && ! shopt -oq posix; then
-    . /etc/bash_completion
+   trap 'source /etc/bash_completion ; trap USR1' USR1
+   { sleep 0.1 ; builtin kill -USR1 $$ ; } & disown
 fi
 
 
