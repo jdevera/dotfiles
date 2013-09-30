@@ -72,5 +72,13 @@ function bashtimes()
    sort -k1 -n -r
 }
 
+function virtualenvwrapper_enable()
+{
+   VIRTUAL_ENV_WRAPPER="$(which virtualenvwrapper.sh 2>/dev/null)"
+
+   [[ -n $VIRTUAL_ENV_WRAPPER ]] && source "$VIRTUAL_ENV_WRAPPER" > /dev/null
+}
+
+
 # vim: ft=sh fdm=marker expandtab ts=3 sw=3 :
 
