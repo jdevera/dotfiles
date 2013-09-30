@@ -236,6 +236,17 @@ shopt -s checkwinsize
 # by interactive shells.
 shopt -s cdspell
 
+# extglob
+# -------
+#
+# If set, several extended pattern matching operators are recognized:
+#   ?(pattern-list) Matches zero or one occurrence of the given patterns
+#   *(pattern-list) Matches zero or more occurrences of the given patterns
+#   +(pattern-list) Matches one or more occurrences of the given patterns
+#   @(pattern-list) Matches one of the given patterns
+#   !(pattern-list) Matches anything except one of the given patterns
+shopt -s extglob
+
 # CTRL-D must be used twice to exit the shell
 export IGNOREEOF=1
 
