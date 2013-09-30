@@ -49,5 +49,7 @@ alias sls=ls
 
 alias kb='emacs $DDOC/PKB/notes.org'
 
+alias cp="rsync -avz"
+
 # vim: ft=sh fdm=marker expandtab ts=3 sw=3 :
 
