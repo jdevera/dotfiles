@@ -606,6 +606,26 @@ if ! g:enableSwapHeaderMap
     inoremap <C-S-F7> <C-O>:call   SwapHeaderFile(1)<CR>
 endif
 
+" Tagbar: Additional language support:
+"
+" Support for reStructuredText, if available.
+if executable("rst2ctags")
+    " tagbar settings
+    let g:tagbar_type_rst = {
+        \    'ctagstype': 'rst',
+        \    'ctagsbin' : 'rst2ctags',
+        \    'ctagsargs' : '-f - --sort=yes',
+        \    'kinds' : [
+        \        's:sections',
+        \        'i:images'
+        \    ],
+        \    'sro' : '|',
+        \    'kind2scope' : {
+        \        's' : 'section',
+        \    },
+        \}
+endif
+
 
 " ----------------------------------------------------------------------------
 " }}}
