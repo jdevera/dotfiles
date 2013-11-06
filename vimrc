@@ -95,6 +95,7 @@ Bundle 'asu1dark.vim'
 Bundle 'Colorzone'
 Bundle 'lightcolors'
 Bundle 'print_bw.zip'
+Bundle 'morhetz/gruvbox'
 
 
 " Load additional local bundles. The local/bundles.vim file, if it exists,
