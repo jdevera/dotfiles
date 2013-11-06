@@ -258,7 +258,9 @@ if [ -f /etc/bash_completion ] && ! shopt -oq posix; then
 fi
 
 
-call_if check_home_purity
+if [[ -z $TMUX ]]; then
+   call_if check_home_purity
+fi
 
 # vim: ft=sh fdm=marker expandtab ts=3 sw=3 :
 
