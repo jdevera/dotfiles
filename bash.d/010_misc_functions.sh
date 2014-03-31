@@ -79,6 +79,48 @@ function virtualenvwrapper_enable()
    [[ -n $VIRTUAL_ENV_WRAPPER ]] && source "$VIRTUAL_ENV_WRAPPER" > /dev/null
 }
 
+# ---------------------------------------------------------------------------
+# Find the type of executable "thing" that the shell will use and try to
+# describe it in its output:
+#
+# For an alias, print its definition
+# For a function, print its code
+# For a shell builtin, print its help text
+# For a script, print the source
+# For a binary executable file, print nothing.
+# ---------------------------------------------------------------------------
+function code()
+{
+   local type=$(builtin type -t $1);
+   case $type in
+      alias)
+         echo "$1 is an alias";
+         builtin alias $1 | sed 's/^[^=]\+=//'
+         ;;
+      function)
+         echo "$1 is a function";
+         builtin declare -f $1;
+         ;;
+      builtin | keyword)
+         echo "$1 is a shell $type";
+         builtin help $1
+         ;;
+      file)
+         local path=$(which $1);
+         if head -1 $path | grep -q "^#!"; then
+            echo "$1 is a script at $path";
+            cat $path;
+         else
+            echo "$1 is a binary at $path";
+         fi
+         ;;
+      *)
+         echo "I don't know what $1 is";
+         return 1
+         ;;
+   esac
+}
+
 
 # vim: ft=sh fdm=marker expandtab ts=3 sw=3 :
 
