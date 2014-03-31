@@ -20,7 +20,7 @@ if has('win32') || has('win64')
 endif
 
 " }}}
-" {{{ Bundle configuration (must precede others)
+" {{{ Vundle Plugins configuration (must precede others)
 
 " Temporarily turn off filetype detection (vundle requirement)
 filetype off
@@ -32,75 +32,75 @@ set rtp+=~/.vim/bundle/vundle/
 call vundle#rc()
 
 " ===========================================================================
-" Bundles
+" Vundle Plugins
 " ===========================================================================
 
 " Manage vundle with vundle, oh yeah!
-Bundle 'gmarik/vundle'
+Plugin 'gmarik/vundle'
 
 " Snipmate, dependencies and snippets
-Bundle 'tomtom/tlib_vim'          , {'name': 'tlib'}
-Bundle 'MarcWeber/vim-addon-mw-utils' , {'name': 'markweber-utils'}
-Bundle "garbas/vim-snipmate"      , {'name': 'snipmate'}
-Bundle 'honza/snipmate-snippets'
+Plugin 'tomtom/tlib_vim'          , {'name': 'tlib'}
+Plugin 'MarcWeber/vim-addon-mw-utils' , {'name': 'markweber-utils'}
+Plugin 'garbas/vim-snipmate'      , {'name': 'snipmate'}
+Plugin 'honza/vim-snippets'
 
 " Surround and repeat (to make the former repeatable)
-Bundle 'tpope/vim-repeat'         , {'name': 'repeat'}
-Bundle 'tpope/vim-surround'       , {'name': 'surround'}
+Plugin 'tpope/vim-repeat'         , {'name': 'repeat'}
+Plugin 'tpope/vim-surround'       , {'name': 'surround'}
 
-Bundle 'Align'                    , {'name': 'align'}
-Bundle 'camelcasemotion'
-Bundle 'godlygeek/csapprox'
-Bundle 'hallison/vim-markdown'    , {'name': 'markdown'}
-Bundle 'majutsushi/tagbar'
-Bundle 'python.vim--Vasiliev'     , {'name': 'python-syntax'}
-Bundle 'scrooloose/nerdcommenter'
-Bundle 'scrooloose/nerdtree'
-Bundle 'ShowMarks'                , {'name': 'showmarks'}
-Bundle 'TaskList.vim'             , {'name': 'tasklist'}
-Bundle 'tpope/vim-fugitive'       , {'name': 'fugitive'}
-Bundle 'tpope/vim-abolish'        , {'name': 'abolish'}
-Bundle 'matchit.zip'              , {'name': 'matchit'}
-Bundle 'mrmargolis/dogmatic.vim'  , {'name': 'dogmatic'}
-Bundle 'vim-creole'               , {'name': 'syntax-creole'}
-Bundle 'toggle_words.vim'         , {'name': 'togglewords' }
-Bundle 'mileszs/ack.vim'          , {'name': 'ack'}
-Bundle 'bufexplorer.zip'          , {'name': 'bufexplorer'}
-Bundle 'sjl/gundo.vim'            , {'name': 'gundo'}
-Bundle 'vcscommand.vim'           , {'name': 'vcscommand'}
-Bundle 'OmniCppComplete'          , {'name': 'omnicppcomplete'}
-Bundle 'SwapHeader'               , {'name': 'swapheader'}
-Bundle 'DoxygenToolkit.vim'       , {'name': 'doxygen-toolkit'}
-Bundle 'scrooloose/syntastic'
-Bundle 'jceb/vim-orgmode'
-Bundle 'helino/vim-json'
-Bundle 'davidhalter/jedi-vim'
+Plugin 'Align'                    , {'name': 'align'}
+Plugin 'camelcasemotion'
+Plugin 'godlygeek/csapprox'
+Plugin 'hallison/vim-markdown'    , {'name': 'markdown'}
+Plugin 'majutsushi/tagbar'
+Plugin 'python.vim--Vasiliev'     , {'name': 'python-syntax'}
+Plugin 'scrooloose/nerdcommenter'
+Plugin 'scrooloose/nerdtree'
+Plugin 'ShowMarks'                , {'name': 'showmarks'}
+Plugin 'TaskList.vim'             , {'name': 'tasklist'}
+Plugin 'tpope/vim-fugitive'       , {'name': 'fugitive'}
+Plugin 'tpope/vim-abolish'        , {'name': 'abolish'}
+Plugin 'matchit.zip'              , {'name': 'matchit'}
+Plugin 'vim-creole'               , {'name': 'syntax-creole'}
+Plugin 'toggle_words.vim'         , {'name': 'togglewords' }
+Plugin 'mileszs/ack.vim'          , {'name': 'ack'}
+Plugin 'bufexplorer.zip'          , {'name': 'bufexplorer'}
+Plugin 'sjl/gundo.vim'            , {'name': 'gundo'}
+Plugin 'vcscommand.vim'           , {'name': 'vcscommand'}
+Plugin 'OmniCppComplete'          , {'name': 'omnicppcomplete'}
+Plugin 'SwapHeader'               , {'name': 'swapheader'}
+Plugin 'DoxygenToolkit.vim'       , {'name': 'doxygen-toolkit'}
+Plugin 'scrooloose/syntastic'
+Plugin 'jceb/vim-orgmode'         , {'name': 'orgmode' }
+Plugin 'helino/vim-json'          , {'name': 'syntax-json'}
+Plugin 'davidhalter/jedi-vim'
 
 " My own plugins / forks
-Bundle 'jdevera/vim-stl-syntax'   , {'name': 'stl-syntax'}
-Bundle 'jdevera/vim-cs-explorer'  , {'name': 'cs-explorer'}
-Bundle 'jdevera/vim-protobuf-syntax' , {'name' : 'protobuf' }
+Plugin 'jdevera/vim-stl-syntax'   , {'name': 'jdv-stl-syntax'}
+Plugin 'jdevera/vim-cs-explorer'  , {'name': 'jdv-cs-explorer'}
+Plugin 'jdevera/vim-protobuf-syntax' , {'name' : 'jdv-protobuf' }
 
 " Notetaking plugins I no longer use since I use org-mode
-" Bundle 'vimoutliner/vimoutliner'
-" Bundle 'xolox/vim-notes'
+" Plugin 'vimoutliner/vimoutliner'
+" Plugin 'xolox/vim-notes'
 
 " Colorschemes
-Bundle 'tomasr/molokai'           , {'name' : 'color-molokai'}
-Bundle 'Mustang2'                 , {'name' : 'color-mustang2'}
-Bundle 'DarkOcean.vim'            , {'name' : 'color-darkocean'}
-Bundle 'obxhdx/vim-github-theme'  , {'name' : 'color-github' }
-Bundle 'altercation/vim-colors-solarized' , {'name' : 'color-solarized'}
-Bundle 'asu1dark.vim'
-Bundle 'Colorzone'
-Bundle 'lightcolors'
-Bundle 'print_bw.zip'
-Bundle 'morhetz/gruvbox'
+Plugin 'tomasr/molokai'           , {'name' : 'color-molokai'}
+Plugin 'Mustang2'                 , {'name' : 'color-mustang2'}
+Plugin 'DarkOcean.vim'            , {'name' : 'color-darkocean'}
+Plugin 'obxhdx/vim-github-theme'  , {'name' : 'color-github' }
+Plugin 'altercation/vim-colors-solarized' , {'name' : 'color-solarized'}
+Plugin 'asu1dark.vim'             , {'name' : 'color-asu1dark'}
+Plugin 'Colorzone'                , {'name' : 'color-colorzone' }
+Plugin 'lightcolors'              , {'name' : 'color-lightcolors' }
+Plugin 'print_bw.zip'             , {'name' : 'color-print_bw' }
+Plugin 'morhetz/gruvbox'          , {'name' : 'color-gruvbox' }
 
 
-" Load additional local bundles. The local/bundles.vim file, if it exists,
-" contains Bundle specs that make sense only in the current machine. That file
-" is not tracked. See also the *Local configurations* section below.
+" Load additional local vundle plugins. The local/bundles.vim file, if it
+" exists, contains Vundle's Plugin specs that make sense only in the current
+" machine. That file is not tracked. See also the *Local configurations*
+" section below.
 if filereadable(expand('~/.vim/local/bundles.vim'))
     execute 'source ' . expand('~/.vim/local/bundles.vim')
 endif
