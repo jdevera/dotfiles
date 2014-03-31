@@ -24,6 +24,9 @@ cat <<EOF
     who  = shortlog -s --
     slog = !git --no-pager log --format=oneline --abbrev-commit
     dfnp = !git --no-pager diff
+    clog = !git --no-pager log -n 20 --pretty=tformat:'%Cred%h%Creset %ai %Cblue%an%Creset %Cgreen->%Creset %s'
+    fuckoff = clean -fdx
+    see = !sh -c 'git show $1 | view - -c "set\\ fdm=syntax"' --
 [github]
     user = $GITHUB_USER
 [push]
