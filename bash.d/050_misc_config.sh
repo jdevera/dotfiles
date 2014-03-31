@@ -166,7 +166,7 @@ HISTCONTROL=ignorespace
 # ========
 # The number of commands to remember in the command history. The default value
 # is 500.
-HISTSIZE=2000
+HISTSIZE=5000
 
 # HISTFILESIZE
 # ============
@@ -175,7 +175,7 @@ HISTSIZE=2000
 # the oldest entries, to contain no more than that number of  lines. The
 # default value is 500. The history file is also truncated to this size after
 # writing it when an interactive shell exits.
-HISTFILESIZE=10000
+HISTFILESIZE=20000
 
 # HISTIGNORE
 # ==========
