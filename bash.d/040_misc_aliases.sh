@@ -9,6 +9,7 @@
 
 
 alias vish='vim $DBASH'
+alias vishaf='vim $DBASH/local/after'
 alias gvish='gvim $DBASH'
 alias reloadsh='KEEP_PROMPT=1 source $HOME/.bashrc'
 alias rlsh='reloadsh'
