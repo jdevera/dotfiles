@@ -31,6 +31,19 @@ cat <<EOF
     user = $GITHUB_USER
 [push]
 	default = simple
+[color "status"]
+    added = "green normal bold"
+    changed = "red normal bold"
+    untracked = "magenta normal bold"
+    header = "cyan normal dim"
+    branch = "normal normal bold"
+[color "grep"]
+	context = cyan normal dim
+	selected = normal normal bold
+	filename = magenta normal bold
+	linenumber = green
+	function = blue normal bold
+	match = black yellow dim
 EOF
 
 # vim: filetype=bash :
