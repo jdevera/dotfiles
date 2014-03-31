@@ -31,6 +31,8 @@ cat <<EOF
     user = $GITHUB_USER
 [push]
 	default = simple
+[hub]
+    protocol = https
 [status]
 	displayCommentPrefix = false
 [color "status"]
