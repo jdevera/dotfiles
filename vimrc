@@ -165,6 +165,9 @@ set undolevels=1000
 " lines
 set undoreload=10000
 
+" Do not wrap around when doing searches
+set nowrapscan
+
 
 " ----------------------------------------------------------------------------
 " }}}
