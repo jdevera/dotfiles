@@ -87,42 +87,25 @@ fi
 
 ansi_color()
 {
-   local COLOR_BLACK="\033[0;30m"
-   local COLOR_RED="\033[0;31m"
-   local COLOR_GREEN="\033[0;32m"
-   local COLOR_BROWN="\033[0;33m"
-   local COLOR_BLUE="\033[0;34m"
-   local COLOR_PURPLE="\033[0;35m"
-   local COLOR_CYAN="\033[0;36m"
-   local COLOR_LIGHT_GRAY="\033[0;37m"
-   local COLOR_DARK_GRAY="\033[1;30m"
-   local COLOR_LIGHT_RED="\033[1;31m"
-   local COLOR_LIGHT_GREEN="\033[1;32m"
-   local COLOR_YELLOW="\033[1;33m"
-   local COLOR_LIGHT_BLUE="\033[1;34m"
-   local COLOR_LIGHT_PURPLE="\033[1;35m"
-   local COLOR_LIGHT_CYAN="\033[1;36m"
-   local COLOR_WHITE="\033[1;37m"
-   local COLOR_NONE="\033[m"
-   local color=$COLOR_NONE
+   local color
    case "$1" in
-      black)        color=$COLOR_BLACK;;
-      red)          color=$COLOR_RED;;
-      green)        color=$COLOR_GREEN;;
-      brown)        color=$COLOR_BROWN;;
-      blue)         color=$COLOR_BLUE;;
-      purple)       color=$COLOR_PURPLE;;
-      cyan)         color=$COLOR_CYAN;;
-      light_gray)   color=$COLOR_LIGHT_GRAY;;
-      dark_gray)    color=$COLOR_DARK_GRAY;;
-      light_red)    color=$COLOR_LIGHT_RED;;
-      light_green)  color=$COLOR_LIGHT_GREEN;;
-      yellow)       color=$COLOR_YELLOW;;
-      light_blue)   color=$COLOR_LIGHT_BLUE;;
-      light_purple) color=$COLOR_LIGHT_PURPLE;;
-      light_cyan)   color=$COLOR_LIGHT_CYAN;;
-      white)        color=$COLOR_WHITE;;
-      none)         color=$COLOR_NONE;;
+      black)        color="\e[0;30m";;
+      red)          color="\e[0;31m";;
+      green)        color="\e[0;32m";;
+      brown)        color="\e[0;33m";;
+      blue)         color="\e[0;34m";;
+      purple)       color="\e[0;35m";;
+      cyan)         color="\e[0;36m";;
+      light_gray)   color="\e[0;37m";;
+      dark_gray)    color="\e[1;30m";;
+      light_red)    color="\e[1;31m";;
+      light_green)  color="\e[1;32m";;
+      yellow)       color="\e[1;33m";;
+      light_blue)   color="\e[1;34m";;
+      light_purple) color="\e[1;35m";;
+      light_cyan)   color="\e[1;36m";;
+      white)        color="\e[1;37m";;
+      none)         color="\e[0m";;
    esac
    echo "$color"
 }
