@@ -31,6 +31,8 @@ cat <<EOF
     user = $GITHUB_USER
 [push]
 	default = simple
+[status]
+	displayCommentPrefix = false
 [color "status"]
     added = "green normal bold"
     changed = "red normal bold"
