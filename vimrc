@@ -29,7 +29,7 @@ filetype off
 set rtp+=~/.vim/bundle/vundle/
 
 " Call Vundle
-call vundle#rc()
+call vundle#begin()
 
 " ===========================================================================
 " Vundle Plugins
@@ -105,6 +105,7 @@ if filereadable(expand('~/.vim/local/bundles.vim'))
     execute 'source ' . expand('~/.vim/local/bundles.vim')
 endif
 
+call vundle#end()
 
 " }}}
 " {{{ Behaviour?
