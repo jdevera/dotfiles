@@ -74,11 +74,15 @@ Plugin 'scrooloose/syntastic'
 Plugin 'jceb/vim-orgmode'         , {'name': 'orgmode' }
 Plugin 'helino/vim-json'          , {'name': 'syntax-json'}
 Plugin 'davidhalter/jedi-vim'
+Plugin 'tpope/vim-sleuth'         , {'name': 'sleuth'}
+Plugin 'sjl/splice.vim'           , {'name': 'splice'}
+Plugin 'luochen1990/rainbow'
 
 " My own plugins / forks
 Plugin 'jdevera/vim-stl-syntax'   , {'name': 'jdv-stl-syntax'}
 Plugin 'jdevera/vim-cs-explorer'  , {'name': 'jdv-cs-explorer'}
 Plugin 'jdevera/vim-protobuf-syntax' , {'name' : 'jdv-protobuf' }
+Plugin 'jdevera/qt-highlight-vim' , {'name': 'jdv-qt-syntax' }
 
 " Notetaking plugins I no longer use since I use org-mode
 " Plugin 'vimoutliner/vimoutliner'
@@ -326,6 +330,14 @@ silent nnoremap <F4> :NERDTreeToggle<CR>
 
 " ,gut Toggles Gundo
 silent noremap <Leader>gut :GundoToggle<CR>
+
+" ,t runs ToggleWord
+silent noremap <Leader>t :ToggleWord<CR>
+
+" ,tl for task list
+silent noremap <leader>#tl <Plug>TaskList
+silent noremap <leader>tl :TaskList<CR>
+
 
 " ,ack uses Ack to search the word under the cursor
 silent noremap <Leader>ack :exec 'Ack '.expand("<cword>")<CR>
@@ -616,6 +628,9 @@ if executable("rst2ctags")
         \    },
         \}
 endif
+
+" Rainbow: Activate
+let g:rainbow_active = 1
 
 
 " ----------------------------------------------------------------------------
