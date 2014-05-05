@@ -1,0 +1,62 @@
+[color]
+    diff = auto
+    status = auto
+    branch = auto
+    ui = auto
+    interactive = auto
+
+[alias]
+    st   = status
+    sts  = status --ignore-submodules
+    ci   = commit --verbose
+    br   = branch
+    co   = checkout
+    df   = diff
+    lg   = log -p
+    who  = shortlog -s --
+    slog = !git --no-pager log --format=oneline --abbrev-commit
+    clog = !git --no-pager log -n 20 --pretty=tformat:'%Cred%h%Creset %ai %Cblue%an%Creset %Cgreen->%Creset %s'
+    dlog = !git log --graph --decorate --oneline -n 20
+    dfnp = !git --no-pager diff
+    fuckoff = clean -fdx
+    see = !sh -c 'git show $1 | view - -c "set\\ fdm=syntax"' --
+    fixup = commit --amend -C HEAD
+    econf = !$EDITOR $HOME/.gitconfig
+
+[hub]
+    protocol = https
+
+[color "status"]
+    added = "green normal bold"
+    changed = "red normal bold"
+    untracked = "magenta normal bold"
+    header = "cyan normal dim"
+    branch = "normal normal bold"
+
+[status]
+    displayCommentPrefix = false
+
+[color "grep"]
+    context = cyan normal dim
+    selected = normal normal bold
+    filename = magenta normal bold
+    linenumber = green
+    function = blue normal bold
+    match = black yellow dim
+
+[push]
+    default = matching
+
+[mergetool "splice"]
+    cmd = "vim -f $BASE $LOCAL $REMOTE $MERGED -c 'SpliceInit'"
+    trustExitCode = true
+
+[mergetool "gsplice"]
+    cmd = "gvim -f $BASE $LOCAL $REMOTE $MERGED -c 'SpliceInit'"
+    trustExitCode = true
+
+[include]
+    path = ~/.gitconfig.user
+    path = ~/.gitconfig.local
+
+# vim: ft=gitconfig :
