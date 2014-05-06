@@ -3,7 +3,7 @@
 # If not running interactively, don't do anything
 [ -z "$PS1" ] && return
 
-BASH_TIME_STARTUP=${BASH_TIME_STARTUP:-1}
+BASH_TIME_STARTUP=${BASH_TIME_STARTUP:-0}
 
 if [[ $BASH_TIME_STARTUP == 1 ]]; then
     # Track the time it takes to load each configuration file and store it a
