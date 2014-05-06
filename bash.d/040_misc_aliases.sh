@@ -43,6 +43,8 @@ alias ip0='getip4 eth0'
 alias ud='export DISPLAY=:0.0'
 
 alias agi='sudo apt-get install'
+make_completion_wrapper _apt_get __complete_agi agi apt-get install
+complete -F __complete_agi agi
 
 alias l=ls
 alias sl=ls
@@ -51,6 +53,13 @@ alias sls=ls
 alias kb='emacs $DDOC/PKB/notes.org'
 
 alias cp="rsync -avz"
+
+alias git-root='cd "$(git rev-parse --show-toplevel)"'
+alias g=git
+alias tit=git
+
+complete -o bashdefault -o default -o nospace -F _git g
+complete -o bashdefault -o default -o nospace -F _git tit
 
 # vim: ft=sh fdm=marker expandtab ts=3 sw=3 :
 

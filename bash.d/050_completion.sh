@@ -31,3 +31,9 @@ _complete_ansi_color()
 complete -C _complete_ansi_color -o default set_prompt_color
 complete -C _complete_ansi_color -o default ansi_color
 # ---------------------------------------------------------------------------
+
+_complete_new()
+{
+   (builtin cd $SOURCE_TEMPLATES && ls) | grep "^$2.*"
+}
+complete -C _complete_new -o default new
