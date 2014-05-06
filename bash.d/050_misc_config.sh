@@ -129,7 +129,7 @@ function theme_simple_prompt_cmd()
 
 theme_simple()
 {
-   export PROMPT_COMMAND=theme_simple_prompt_cmd
+   BASH_THEME_CMD=theme_simple_prompt_cmd
 }
 # }}}
 
@@ -139,6 +139,19 @@ PROMPT_SYMBOL=' ⇶ '
 theme_simple
 
 fi
+
+
+function prompt_command()
+{
+   LAST_RC=$?
+   if [[ -n $BASH_THEME_CMD ]]; then
+      eval "$BASH_THEME_CMD"
+   fi
+   log_bash_persistent_history
+}
+
+export PROMPT_COMMAND=prompt_command
+
 
 #############################################################################
 # }}}
@@ -189,6 +202,16 @@ HISTFILESIZE=20000
 # lines of a multi-line compound command are not tested, and are added to the
 # history regardless of the value of HISTIGNORE.
 HISTIGNORE="ls:cd:cd *:pwd:cdd *:p"
+
+# HISTTIMEFORMAT
+# ==============
+# If this variable is set and not null, its value is used as a format string
+# for strftime(3) to print the time stamp associated with each history entry
+# displayed by the history builtin.  If this variable is set, time stamps are
+# written to the history file so they may be preserved across shell sessions.
+# This uses the history comment character to distinguish timestamps from other
+# history lines.
+HISTTIMEFORMAT="%Y-%m-%d %T %z "
 
 # shopt: histappend
 # =================
