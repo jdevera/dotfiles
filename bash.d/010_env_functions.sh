@@ -91,6 +91,50 @@ delfrompath()
 ##############################################################################
 
 
+#_____________________________________________________________________________
+#
+# FUNCTION:     make_completion_wrapper
+#
+# DESCRIPTION:  Create a completion function for an alias by wrapping the
+#               completion function for the original command.
+#
+# PARAMETERS:   1 (r): Actual completion function
+#               2 (r): Name of the new generated function
+#               3 (r): Name of the alias
+#               4 (r): Original command name
+#             5.. (r): List of arguments fixed by the alias
+#
+# HELP:
+#     http://ubuntuforums.org/showthread.php?t=733397
+#     For example, to define a function called _apt_get_install that will
+#     complete the 'agi' alias:
+#        alias agi='apt-get install'
+#        make_completion_wrapper _apt_get _apt_get_install agi apt-get install
+#        complete -F _apt_get_install agi
+#
+#_____________________________________________________________________________
+#
+function make_completion_wrapper () {
+   local comp_function_name="$1"
+   local function_name="$2"
+   local alias_name="$3"
+   local arg_count=$(($#-4))
+   shift 3
+   local args="$*"
+   local function="
+function $function_name {
+   COMP_LINE=\"$@\${COMP_LINE#$alias_name}\"
+   let COMP_POINT+=$((${#args}-${#alias_name}))
+   ((COMP_CWORD+=$arg_count))
+   COMP_WORDS=("$@" \"\${COMP_WORDS[@]:1}\")
+
+   local cur words cword prev
+   _get_comp_words_by_ref -n =: cur words cword prev
+   "$comp_function_name"
+   return 0
+}"
+   eval "$function"
+}
 
 # vim: ft=sh fdm=marker expandtab ts=3 sw=3 :
 
