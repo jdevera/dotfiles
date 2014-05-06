@@ -79,6 +79,11 @@ function virtualenvwrapper_enable()
    [[ -n $VIRTUAL_ENV_WRAPPER ]] && source "$VIRTUAL_ENV_WRAPPER" > /dev/null
 }
 
+hless()
+{
+   pygmentize -g -f terminal256 -P style=emacs "$@" | less -FiXRM
+}
+
 # ---------------------------------------------------------------------------
 # Find the type of executable "thing" that the shell will use and try to
 # describe it in its output:
@@ -91,31 +96,31 @@ function virtualenvwrapper_enable()
 # ---------------------------------------------------------------------------
 function code()
 {
-   local type=$(builtin type -t $1);
+   local type="$(builtin type -t $1)"
    case $type in
       alias)
-         echo "$1 is an alias";
-         builtin alias $1 | sed 's/^[^=]\+=//'
+         echo "$1 is an alias"
+         builtin alias "$1" | sed 's/^[^=]\+=//'
          ;;
       function)
-         echo "$1 is a function";
-         builtin declare -f $1;
+         echo "$1 is a function"
+         builtin declare -f "$1" | hless
          ;;
       builtin | keyword)
-         echo "$1 is a shell $type";
-         builtin help $1
+         echo "$1 is a shell $type"
+         builtin help "$1"
          ;;
       file)
-         local path=$(which $1);
-         if head -1 $path | grep -q "^#!"; then
-            echo "$1 is a script at $path";
-            cat $path;
+         local path="$(which "$1")"
+         if head -1 "$path" | grep -q "^#!"; then
+            echo "$1 is a script at $path"
+            cat "$path" | hless
          else
-            echo "$1 is a binary at $path";
+            echo "$1 is a binary at $path"
          fi
          ;;
       *)
-         echo "I don't know what $1 is";
+         echo "I don't know what $1 is"
          return 1
          ;;
    esac
