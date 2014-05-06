@@ -127,5 +127,29 @@ function code()
 }
 
 
+function extract()
+{
+   local file="$1"
+   [[ -f $1 ]] || { echo "$file not a file" >&2; return 1; }
+   case $file in
+      *.tar.bz2 ) tar xjf    "$file"  ;;
+      *.tar.gz  ) tar xzf    "$file"  ;;
+      *.bz2     ) bunzip2    "$file"  ;;
+      *.rar     ) rar x      "$file"  ;;
+      *.gz      ) gunzip     "$file"  ;;
+      *.tar     ) tar xf     "$file"  ;;
+      *.tbz2    ) tar xjf    "$file"  ;;
+      *.tgz     ) tar xzf    "$file"  ;;
+      *.zip     ) unzip      "$file"  ;;
+      *.Z       ) uncompress "$file"  ;;
+      *.7z      ) 7z x       "$file"  ;;
+      *         )
+         echo "Don't know how to extract '$file'" >&2
+         return 1
+         ;;
+    esac
+}
+
+
 # vim: ft=sh fdm=marker expandtab ts=3 sw=3 :
 
