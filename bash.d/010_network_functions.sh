@@ -35,5 +35,12 @@ function download()
 {
     wget --no-use-server-timestamps --no-clobber --directory-prefix="$DDOWN" "$@"
 }
+
+
+http_server()
+{
+    python -m SimpleHTTPServer ${1:-8000}
+}
+
 # vim: ft=sh fdm=marker expandtab ts=4 sw=4 :
 
