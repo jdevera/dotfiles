@@ -10,7 +10,8 @@
 
 log_bash_persistent_history()
 {
-   HISTTIMEFORMAT="%Y-%m-%d %T %z "
+   local LAST_RC=${LAST_RC:-$?}
+   local HISTTIMEFORMAT="%Y-%m-%d %T %z "
    [[
       $(history 1) =~ ^\ *[0-9]+\ +([^\ ]+\ [^\ ]+\ [^\ ]+)\ +(.*)$
    ]]
@@ -18,7 +19,7 @@ log_bash_persistent_history()
    local command_part="${BASH_REMATCH[2]}"
    if [ "$command_part" != "$PERSISTENT_HISTORY_LAST" ]
    then
-      echo "$date_part | $PWD | $command_part" >> ~/.persistent_history
+      echo "$date_part | $PWD | $LAST_RC | $command_part" >> ~/.persistent_history
       export PERSISTENT_HISTORY_LAST="$command_part"
    fi
 }
@@ -30,7 +31,7 @@ phack()
 
 color_phist()
 {
-   colout '^([^\|]+)(\|)([^|]+)(\|)(.*)$' 208,21,238,21,174 normal,bold,normal,bold,bold |
+   colout '^([^\|]+)(\|)([^|]+)(\|) (?:(\?)|(0)|([1-9]\d*)) (\|)(.*)$' 208,21,238,21,yellow,green,red,21,174 normal,bold,normal,bold,bold,bold,bold,bold,bold |
       less -RMFX
 
 }
