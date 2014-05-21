@@ -114,7 +114,8 @@ delfrompath()
 #
 #_____________________________________________________________________________
 #
-function make_completion_wrapper () {
+function make_completion_wrapper ()
+{
    local comp_function_name="$1"
    local function_name="$2"
    local alias_name="$3"
@@ -134,6 +135,12 @@ function $function_name {
    return 0
 }"
    eval "$function"
+}
+
+
+function link_complete_function()
+{
+   eval "complete -C __complete_$1 -o default ${2:-$1}"
 }
 
 # vim: ft=sh fdm=marker expandtab ts=3 sw=3 :

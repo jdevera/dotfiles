@@ -23,17 +23,19 @@ complete -C _rabitvcs_opts -o default rabbitvcs
 
 # ANSI colours
 # ---------------------------------------------------------------------------
-_complete_ansi_color()
+__complete_ansi_color()
 {
    echo "black red green brown blue purple cyan light_gray dark_gray light_red light_green yellow light_blue light_purple light_cyan white none" | 
    tr ' ' '\n' | grep "^$2.*"
 }
-complete -C _complete_ansi_color -o default set_prompt_color
-complete -C _complete_ansi_color -o default ansi_color
+
+link_complete_function ansi_color
+link_complete_function ansi_color set_prompt_color
 # ---------------------------------------------------------------------------
 
-_complete_new()
+__complete_new()
 {
    (builtin cd $SOURCE_TEMPLATES && ls) | grep "^$2.*"
 }
-complete -C _complete_new -o default new
+
+link_complete_function new
