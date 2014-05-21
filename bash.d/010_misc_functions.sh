@@ -150,6 +150,10 @@ function extract()
     esac
 }
 
+function dump_functions()
+{
+   declare -f $(declare -F | awk '{print $3}')
+}
 
 # vim: ft=sh fdm=marker expandtab ts=3 sw=3 :
 

@@ -127,5 +127,20 @@ tolowercase() { tr '[:upper:]' '[:lower:]'; }
 ##############################################################################
 
 
+average ()
+{
+    awk '{total+=$0}END{printf("%.2f\n",total/NR);}'
+}
+
+field ()
+{
+    awk '{print $'"$1"'}' "$2"
+}
+
+echoe ()
+{
+    echo $* 1>&2
+}
+
 # vim: ft=sh fdm=marker expandtab ts=3 sw=3 :
 
