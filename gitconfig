@@ -12,16 +12,22 @@
     br   = branch
     co   = checkout
     df   = diff
+    dc   = diff --cached
     lg   = log -p
     who  = shortlog -s --
     slog = !git --no-pager log --format=oneline --abbrev-commit
-    clog = !git --no-pager log -n 20 --pretty=tformat:'%Cred%h%Creset %ai %Cblue%an%Creset %Cgreen->%Creset %s'
-    dlog = !git log --graph --decorate --oneline -n 20
+    clog  = log -n 20  --pretty=tformat:'%C(yellow)%h%Creset %ai %C(green)%an%Creset %C(bold cyan)->%Creset%C(bold blue)%d%Creset %s'
+    ncclog  = log --pretty=tformat:'%h %ai %an -> %d %s'
+    dlog = log -n 20  --pretty=tformat:'%C(yellow)%h%Creset %ai %C(green)%an%Creset %C(bold cyan)->%Creset%C(bold blue)%d%Creset %s' --graph
     dfnp = !git --no-pager diff
     fuckoff = clean -fdx
     see = !sh -c 'git show $1 | view - -c "set\\ fdm=syntax"' --
     fixup = commit --amend -C HEAD
-    econf = !$EDITOR $HOME/.gitconfig
+    econf = config --global -e
+    lasttag = describe --tags --abbrev=0
+    lt = describe --tags --abbrev=0
+    la = "!git config -l | grep alias | cut -c 7- | showaliases -a -"
+    mergeto = "!f() { local CURRENT=$(git rev-parse --abbrev-ref HEAD); git checkout $1; git merge $CURRENT; }; f"
 
 [hub]
     protocol = https
