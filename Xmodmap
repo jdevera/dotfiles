@@ -11,3 +11,8 @@
 ! Turn Caps Lock into an additional Esc key
 clear lock
 keycode 66 = Escape
+
+! In Microsoft Natural keyboard, use the extra buttons 4 and 5 to jump to
+! previous and next track, respectively.
+keycode 195 = XF86AudioPrev
+keycode 196 = XF86AudioNext
