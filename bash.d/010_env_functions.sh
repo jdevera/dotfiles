@@ -143,5 +143,16 @@ function link_complete_function()
    eval "complete -C __complete_$1 -o default ${2:-$1}"
 }
 
+
+function reloadsh()
+{
+   for f in $(declare -F |  awk '{ print $3 }')
+   do
+      unset -f $f
+   done
+   unalias -a
+   KEEP_PROMPT=1 source $HOME/.bashrc
+}
+
 # vim: ft=sh fdm=marker expandtab ts=3 sw=3 :
 
