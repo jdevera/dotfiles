@@ -25,22 +25,6 @@ show_parent_dirs()
 }
 
 
-function_exists()
-{
-   local a_function_name="$1"
-
-   [[ -z $a_function_name ]] && return 1
-
-   declare -F "$a_function_name" > /dev/null 2>&1
-
-   return $?
-}
-
-function call_if()
-{
-   function_exists "$1" && "$1"
-}
-
 stripe()
 {
    perl -pe '$_ = "\033[1;34m$_\033[0m" if($. % 2)'
@@ -150,10 +134,6 @@ function extract()
     esac
 }
 
-function dump_functions()
-{
-   declare -f $(declare -F | awk '{print $3}')
-}
 
 # vim: ft=sh fdm=marker expandtab ts=3 sw=3 :
 
