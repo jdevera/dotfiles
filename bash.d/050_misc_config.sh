@@ -7,7 +7,19 @@
 #
 #############################################################################
 
+# Section: Setting the right TERM value {{{
+#############################################################################
+if [[ -z $TMUX ]]; then
+   case $COLORTERM in
+      (Terminal|gnome-256color|xfce4-terminal)
+         TERM=gnome-256color tput colors > /dev/null 2>&1  &&  export TERM='gnome-256color'
+         ;;
+   esac
+fi
 
+#############################################################################
+
+# }}}
 # Section: Files and directories (ENV) {{{
 #############################################################################
 
@@ -28,17 +40,11 @@ export DAPTCACHE=/var/cache/apt/archives
 export FSYSLOG=/var/log/syslog
 export FILOG=$DSYSDATA/install.log
 
-
 #############################################################################
-# }}}
 
-if [[ -z $TMUX ]]; then
-   case $COLORTERM in
-      (Terminal|gnome-256color|xfce4-terminal)
-         TERM=gnome-256color tput colors > /dev/null 2>&1  &&  export TERM='gnome-256color'
-         ;;
-   esac
-fi
+# }}}
+# Section: PATH {{{
+#############################################################################
 
 # Add my admin scripts to the path
 pathprepend "$DADMIN/scripts"
@@ -49,7 +55,9 @@ pathprepend "$HOME/.cabal/bin/"
 
 pathprepend "$DDROPBOX/todo"
 
+#############################################################################
 
+# }}}
 # Section: Apps {{{
 #############################################################################
 
@@ -64,9 +72,6 @@ else
    export PAGER='less -R'
 fi
 
-# Make less more friendly for non-text input files, see lesspipe(1)
-[ -x /usr/bin/lesspipe ] && eval "$(SHELL=/bin/sh lesspipe)"
-
 # Enable color support of ls and grep
 if [ -x /usr/bin/dircolors ]; then
     test -r ~/.dircolors && eval "$(dircolors -b ~/.dircolors)" || eval "$(dircolors -b)"
@@ -80,10 +85,13 @@ fi
 [[ -e ~/.pystartup ]] && export PYTHONSTARTUP=~/.pystartup
 
 #############################################################################
-# }}}   
 
+# }}}
 # Section: LESS {{{
 #############################################################################
+
+# Make less more friendly for non-text input files, see lesspipe(1)
+[ -x /usr/bin/lesspipe ] && eval "$(SHELL=/bin/sh lesspipe)"
 
 # LESS colours for man pages
 export LESS_TERMCAP_mb=$'\E[01;31m'       # begin blinking
@@ -169,12 +177,12 @@ export PROMPT_COMMAND=prompt_command
 
 
 #############################################################################
-# }}}
 
+# }}}
 # Section: History {{{
 #############################################################################
 
-# HISTCONTROL
+# HISTCONTROL {{{
 # ===========
 # A colon-separated list of values controlling how commands are saved on the
 # history list. If the list of values includes ignorespace, lines which begin
@@ -190,13 +198,15 @@ export PROMPT_COMMAND=prompt_command
 # the value of HISTCONTROL.
 HISTCONTROL=ignorespace
 
-# HISTSIZE
+# }}}
+# HISTSIZE {{{
 # ========
 # The number of commands to remember in the command history. The default value
 # is 500.
 HISTSIZE=5000
 
-# HISTFILESIZE
+# }}}
+# HISTFILESIZE {{{
 # ============
 # The maximum number of lines contained in the history file. When this variable
 # is assigned a value, the history file is truncated, if necessary, by removing
@@ -205,7 +215,8 @@ HISTSIZE=5000
 # writing it when an interactive shell exits.
 HISTFILESIZE=20000
 
-# HISTIGNORE
+# }}}
+# HISTIGNORE {{{
 # ==========
 # A colon-separated list of patterns used to decide which command lines should
 # be saved on the history list. Each pattern is anchored at the beginning of
@@ -218,7 +229,8 @@ HISTFILESIZE=20000
 # history regardless of the value of HISTIGNORE.
 HISTIGNORE="ls:cd:cd *:pwd:cdd *:p"
 
-# HISTTIMEFORMAT
+# }}}
+# HISTTIMEFORMAT {{{
 # ==============
 # If this variable is set and not null, its value is used as a format string
 # for strftime(3) to print the time stamp associated with each history entry
@@ -228,26 +240,28 @@ HISTIGNORE="ls:cd:cd *:pwd:cdd *:p"
 # history lines.
 HISTTIMEFORMAT="%Y-%m-%d %T %z "
 
-# shopt: histappend
+# }}}
+# shopt: histappend {{{
 # =================
 # If set, the history list is appended to the file named by the value of the
 # HISTFILE variable when the shell exits, rather than overwriting the file.
 shopt -s histappend
 
-
+# }}}
 #############################################################################
-# }}}   
 
-# Get my name from the system to make it easily available everywhere I might
-# need it
-export MYFULLNAME=$(getent passwd $(whoami) | cut -d ':' -f 5 | cut -d ',' -f 1)
-
+# }}}
+# Section: Bash Options {{{
+#############################################################################
+# checkwinsize {{{
+# ------------
+#
 # Check the window size after each command and, if necessary, update the
 # values of LINES and COLUMNS.
 shopt -s checkwinsize
 
-
-# cdspell
+# }}}
+# cdspell {{{
 # -------
 #
 # If set, minor errors in the spelling of a directory component in a cd command
@@ -257,7 +271,8 @@ shopt -s checkwinsize
 # by interactive shells.
 shopt -s cdspell
 
-# extglob
+# }}}
+# extglob {{{
 # -------
 #
 # If set, several extended pattern matching operators are recognized:
@@ -267,6 +282,16 @@ shopt -s cdspell
 #   @(pattern-list) Matches one of the given patterns
 #   !(pattern-list) Matches anything except one of the given patterns
 shopt -s extglob
+
+# }}}
+#############################################################################
+
+# }}}
+
+# Get my name from the system to make it easily available everywhere I might
+# need it
+export MYFULLNAME=$(getent passwd $(whoami) | cut -d ':' -f 5 | cut -d ',' -f 1)
+
 
 # CTRL-D must be used twice to exit the shell
 export IGNOREEOF=1
