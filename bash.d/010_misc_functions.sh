@@ -7,6 +7,7 @@
 #
 #############################################################################
 
+
 show_parent_dirs()
 {
    pwd | awk '
@@ -30,11 +31,13 @@ stripe()
    perl -pe '$_ = "\033[1;34m$_\033[0m" if($. % 2)'
 }
 
+
 function check_home_purity()
 {
    [ -z "$PS1" ] && return
    purehome
 }
+
 
 function bashtimes()
 {
@@ -56,6 +59,7 @@ function bashtimes()
    sort -k1 -n -r
 }
 
+
 function virtualenvwrapper_enable()
 {
    VIRTUAL_ENV_WRAPPER="$(which virtualenvwrapper.sh 2>/dev/null)"
@@ -63,12 +67,15 @@ function virtualenvwrapper_enable()
    [[ -n $VIRTUAL_ENV_WRAPPER ]] && source "$VIRTUAL_ENV_WRAPPER" > /dev/null
 }
 
+
 hless()
 {
    pygmentize -g -f terminal256 -P style=emacs "$@" | less -FiXRM
 }
 
-# ---------------------------------------------------------------------------
+
+#______________________________________________________________________________
+#
 # Find the type of executable "thing" that the shell will use and try to
 # describe it in its output:
 #
@@ -77,7 +84,8 @@ hless()
 # For a shell builtin, print its help text
 # For a script, print the source
 # For a binary executable file, print nothing.
-# ---------------------------------------------------------------------------
+#______________________________________________________________________________
+#
 function code()
 {
    local type="$(builtin type -t $1)"
@@ -110,9 +118,15 @@ function code()
          ;;
    esac
 }
-complete -c code
+complete -c code # Complete with command names
+#______________________________________________________________________________
 
 
+#______________________________________________________________________________
+#
+# Unified way of extracting compressed files.
+#______________________________________________________________________________
+#
 function extract()
 {
    local file="$1"
