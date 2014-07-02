@@ -21,6 +21,8 @@ alias gvivi='gvim $HOME/.vimrc'
 alias viil='vim $DSYSDATA/install.log -c "\$"'
 alias gviil='gvim $DSYSDATA/install.log -c "\$"'
 
+alias vif='vim $(fzf -x)'
+
 alias mountbooks='truecrypt -t -k "" --protect-hidden=no /media/PLATYPUS/c/secure.tc $DOTHER/books/'
 
 alias ..='cd ..'
