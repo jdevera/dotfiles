@@ -27,15 +27,14 @@
 #                      - "end" to insert at the end
 #
 # DEPENDS-ON:   myrmlistitems
-#
-##############################################################################
+#______________________________________________________________________________
 #
 addtopath()
 {
     local a_directory="$1"
     local a_position="$2"
 
-    local a_directory=`echo "$a_directory" | sed 's#/$##'`  # remove trailing slash
+    a_directory="${a_directory/%\//}"  # remove trailing slash
 
     # Add only existing directories
     [[ ! -d $a_directory ]] && return 1
@@ -46,31 +45,29 @@ addtopath()
     local newpath=`echo $PATH | myrmlistitems "$a_directory" ':'`
 
     if [[ $a_position == beg ]]; then    # Prefix to $PATH
-        export PATH=$a_directory:$newpath
+        export PATH="$a_directory:$newpath"
     elif [[ $a_position == end ]]; then  # Append to $PATH
-        export PATH=$newpath:$a_directory
+        export PATH="$newpath:$a_directory"
     else
         return 1
     fi
 
     return 0
 }
+#______________________________________________________________________________
 
-##############################################################################
 
-
-##############################################################################
+#______________________________________________________________________________
 # Convenience wrappers for addtopath
 #
 pathappend()  { addtopath $1 end; return $?; }
 pathprepend() { addtopath $1 beg; return $?; }
-#
-##############################################################################
+#______________________________________________________________________________
 
 
 
 
-##############################################################################
+#______________________________________________________________________________
 #
 # FUNCTION:     delfrompath
 #
@@ -79,8 +76,7 @@ pathprepend() { addtopath $1 beg; return $?; }
 # PARAMETERS:   1 (r): Directory to delete
 #
 # DEPENDS-ON:   myrmlistitems
-#
-##############################################################################
+#______________________________________________________________________________
 #
 delfrompath()
 {
@@ -88,10 +84,10 @@ delfrompath()
 
     export PATH=`echo $PATH | myrmlistitems "$a_directory" ':'`
 }
-##############################################################################
+#______________________________________________________________________________
 
 
-#_____________________________________________________________________________
+#______________________________________________________________________________
 #
 # FUNCTION:     make_completion_wrapper
 #
@@ -111,8 +107,7 @@ delfrompath()
 #        alias agi='apt-get install'
 #        make_completion_wrapper _apt_get _apt_get_install agi apt-get install
 #        complete -F _apt_get_install agi
-#
-#_____________________________________________________________________________
+#______________________________________________________________________________
 #
 function make_completion_wrapper ()
 {
@@ -136,14 +131,69 @@ function $function_name {
 }"
    eval "$function"
 }
+#______________________________________________________________________________
 
 
+#______________________________________________________________________________
+#
+# FUNCTION:     link_complete_function
+#
+# DESCRIPTION:  Assign a function called __complete_<blah> to a command named
+#               <blah>. The name of the command is a parameter.
+#
+# PARAMETERS:   1 (r): The name of the command that is used to derive the
+#                      completion function name
+#               2 (o): Optionally, bind the derived name to this command. This
+#                      is used to prevent having to duplicate the function if
+#                      it is to be applied to several aliases of the same
+#                      command.
+#
+# HELP:
+#     For example, to apply a custom completion function for a `foo` command
+#     and its alias `bar`:
+#
+#        link_complete_function foo
+#
+#     will use __complete_foo to complete foo, and
+#
+#        link_complete_function foo bar
+#
+#     will use also __complete_foo to complete bar
+#______________________________________________________________________________
+#
 function link_complete_function()
 {
    eval "complete -C __complete_$1 -o default ${2:-$1}"
 }
+#______________________________________________________________________________
 
 
+#______________________________________________________________________________
+#
+# FUNCTION:     showenv
+#
+# DESCRIPTION:  Show a pretty printed list of environment variables.
+#
+# PARAMETERS:   None
+#______________________________________________________________________________
+#
+function showenv()
+{
+   printenv | grep = | showaliases -a -
+}
+#______________________________________________________________________________
+
+
+#______________________________________________________________________________
+#
+# FUNCTION:     reloadsh
+#
+# DESCRIPTION:  Reload all bash's config files after clearing all defined
+#               functions.
+#
+# PARAMETERS:   None
+#______________________________________________________________________________
+#
 function reloadsh()
 {
    for f in $(declare -F |  awk '{ print $3 }')
@@ -153,6 +203,7 @@ function reloadsh()
    unalias -a
    KEEP_PROMPT=1 source $HOME/.bashrc
 }
+#______________________________________________________________________________
 
 # vim: ft=sh fdm=marker expandtab ts=3 sw=3 :
 
