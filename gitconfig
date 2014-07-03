@@ -24,7 +24,7 @@
     see = !sh -c 'git show $1 | view - -c "set\\ fdm=syntax"' --
     fixup = commit --amend -C HEAD
     econf = config --global -e
-    choosebranch = !git co "$(git branch --list --no-color | grep -v resolved/ | cut -c3- | fzf -x)"
+    choosebranch = !git co "$(git branch --list --no-color | cut -c3- | egrep -v '^(resolved|parked)/' | fzf -x)"
     cb = !git choosebranch
     bs = branches
     graphviz = "!f() { echo 'digraph git {' ; git log --pretty='format:  %h -> { %p }' \"$@\" | sed 's/[0-9a-f][0-9a-f]*/\"&\"/g' ; echo '}'; }; f"
