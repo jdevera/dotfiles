@@ -2,6 +2,7 @@ vim/.netrwhist
 vim/bundle/*
 vim/local/*
 vim/tmp/*
+vim/spell/*
 !vim/tmp/undodir/.empty
 bash.d/local/before/*
 !bash.d/local/before/.empty
