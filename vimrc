@@ -98,6 +98,7 @@ Plugin 'Colorzone'                , {'name' : 'color-colorzone' }
 Plugin 'lightcolors'              , {'name' : 'color-lightcolors' }
 Plugin 'print_bw.zip'             , {'name' : 'color-print_bw' }
 Plugin 'morhetz/gruvbox'          , {'name' : 'color-gruvbox' }
+Plugin 'flazz/vim-colorschemes'
 
 
 " Load additional local vundle plugins. The local/bundles.vim file, if it
