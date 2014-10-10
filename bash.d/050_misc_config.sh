@@ -51,9 +51,10 @@ pathprepend "$DADMIN/scripts"
 pathprepend "$DOTHER/run/bin"
 
 # Add user's Cabal binaries to the path
-pathprepend "$HOME/.cabal/bin/"
+pathprepend "$HOME/.cabal/bin"
 
-pathprepend "$DDROPBOX/todo"
+pathprepend "$HOME/.local/bin"
+
 
 #############################################################################
 
