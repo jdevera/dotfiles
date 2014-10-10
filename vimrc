@@ -172,6 +172,9 @@ set undoreload=10000
 " Do not wrap around when doing searches
 set nowrapscan
 
+" put swap files in the same directory
+set directory^=~/.vim/tmp/swap
+
 
 " ----------------------------------------------------------------------------
 " }}}
