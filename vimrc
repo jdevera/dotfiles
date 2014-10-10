@@ -38,11 +38,8 @@ call vundle#begin()
 " Manage vundle with vundle, oh yeah!
 Plugin 'gmarik/vundle'
 
-" Snipmate, dependencies and snippets
-Plugin 'tomtom/tlib_vim'          , {'name': 'tlib'}
-Plugin 'MarcWeber/vim-addon-mw-utils' , {'name': 'markweber-utils'}
-Plugin 'garbas/vim-snipmate'      , {'name': 'snipmate'}
 Plugin 'honza/vim-snippets'
+Plugin 'SirVer/ultisnips'
 
 " Surround and repeat (to make the former repeatable)
 Plugin 'tpope/vim-repeat'         , {'name': 'repeat'}
@@ -77,6 +74,8 @@ Plugin 'davidhalter/jedi-vim'
 Plugin 'tpope/vim-sleuth'         , {'name': 'sleuth'}
 Plugin 'sjl/splice.vim'           , {'name': 'splice'}
 Plugin 'luochen1990/rainbow'
+Plugin 'Shougo/unite.vim'
+Plugin 'Valloric/YouCompleteMe'
 
 " My own plugins / forks
 Plugin 'jdevera/vim-stl-syntax'   , {'name': 'jdv-stl-syntax'}
@@ -379,10 +378,10 @@ nmap <C-F6> :let tmp=@f<CR>"fyaw<Esc>:bot split ~/.vimrc<CR>G?LAST_SPELL<CR>zRko
 nnoremap ; :
 
 " Easily move through windows
-nnoremap <C-h> <C-W>h
-nnoremap <C-j> <C-W>j
-nnoremap <C-k> <C-W>k
-nnoremap <C-l> <C-W>l
+" nnoremap <C-h> <C-W>h
+" nnoremap <C-j> <C-W>j
+" nnoremap <C-k> <C-W>k
+" nnoremap <C-l> <C-W>l
 
 
 " Make shift insert work in the gui as it does in the shell.
@@ -403,6 +402,9 @@ if &diff
     call SetDiffMappings()
 endif
 
+
+nnoremap <silent> <leader>ub :<C-u>Unite -start-insert buffer bookmark<CR>
+nnoremap <silent> <leader>ubf :<C-u>Unite -start-insert buffer file_rec<CR>
 " ----------------------------------------------------------------------------
 " }}}
 " {{{ Cscope
@@ -631,6 +633,29 @@ endif
 
 " Rainbow: Activate
 let g:rainbow_active = 1
+
+" UltiSnips: Set keys
+let g:UltiSnipsExpandTrigger="<C-Y>"
+" let g:UltiSnipsJumpForwardTrigger="<tab>"
+" let g:UltiSnipsJumpBackwardTrigger="<s-tab>"
+
+" UltiSnips: Unite integration (extracted from help)
+
+function! UltiSnipsCallUnite()
+   Unite -start-insert -winheight=100 -immediately -no-empty ultisnips
+   return ''
+endfunction
+
+inoremap <silent> <F12> <C-R>=(pumvisible()? "\<LT>C-E>":"")<CR><C-R>=UltiSnipsCallUnite()<CR>
+nnoremap <silent> <F12> a<C-R>=(pumvisible()? "\<LT>C-E>":"")<CR><C-R>=UltiSnipsCallUnite()<CR>
+
+" Jedi: Disable features that clash with YoutCompleteMe
+let g:jedi#auto_vim_configuration = 0
+let g:jedi#popup_on_dot = 0
+let g:jedi#popup_select_first = 0
+let g:jedi#completions_enabled = 0
+let g:jedi#completions_command = ""
+let g:jedi#show_call_signatures = "1"
 
 
 " ----------------------------------------------------------------------------
