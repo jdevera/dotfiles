@@ -11,7 +11,7 @@
 #############################################################################
 if [[ -z $TMUX ]]; then
    case $COLORTERM in
-      (Terminal|gnome-256color|xfce4-terminal)
+      (Terminal|gnome-terminal|gnome-256color|xfce4-terminal)
          TERM=gnome-256color tput colors > /dev/null 2>&1  &&  export TERM='gnome-256color'
          ;;
    esac
