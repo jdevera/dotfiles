@@ -68,9 +68,14 @@ function virtualenvwrapper_enable()
 }
 
 
+function hl()
+{
+   pygmentize -g -f terminal256 -P style=emacs "$@"
+}
+
 hless()
 {
-   pygmentize -g -f terminal256 -P style=emacs "$@" | less -FiXRM
+   hl "$@" | less -FiXRM
 }
 
 
@@ -198,6 +203,97 @@ function rtouch()
    local path="$1"
    mkdir -p "$(dirname $path)"
    touch "$path"
+}
+#______________________________________________________________________________
+
+
+#______________________________________________________________________________
+# Runs locate with all given arguments, and uses the fzf fuzzy finder to choose
+# from the results one file to open in the configured $EDITOR
+#______________________________________________________________________________
+#
+function eloc()
+{
+   local file="$(locate "$@" | fzf -0 -1 -x)"
+   if [[ -n $file ]]
+   then
+      $EDITOR "$file"
+   fi
+}
+#______________________________________________________________________________
+
+
+#______________________________________________________________________________
+# Show the most recently downloaded files. With colours!
+#______________________________________________________________________________
+#
+function lastdown()
+{
+   find $DDOWN -maxdepth 1 -printf '%T@ %TY-%Tm-%Td %TT %p\n'  |
+      sort -k1 -n |
+      cut -d' ' -f2- |
+      cut -c-19,31- |
+      grep -v $DDOWN$ |
+      colout '^(\S+ \S+) ('$DDOWN'/)(.+)$' blue,black,cyan dim,dim,dim |
+      tail "$@"
+}
+#______________________________________________________________________________
+
+
+#______________________________________________________________________________
+# Check whether the argument is a runnable command: shell built-in, alias,
+# function, or file in the PATH
+#______________________________________________________________________________
+#
+function has_command()
+{
+   type "$1" >& /dev/null
+}
+#______________________________________________________________________________
+
+
+#______________________________________________________________________________
+# run_first_of COMMAND_LIST [-- ARGUMENTS]
+#
+# Run the first command from COMMAND_LIST that is found to exist.
+# When -- is found after the command list, it is discarded and all subsequent
+# arguments are passed directly to the command that is found first, if any.
+#______________________________________________________________________________
+#
+function run_first_of()
+{
+   local cmd=
+   # Find the command
+   while [[ $# -gt 0 ]]
+   do
+      # If we find -- before finding the command, none of the commands listed
+      # actually exist, so bail out
+      [[ $1 == '--' ]] && return 1
+
+      if has_command "$1"; then
+         cmd="$1"
+         shift
+         break
+      fi
+      shift
+   done
+
+   [[ -z $cmd ]] && return 1
+
+   # A command was found, now discard the rest of the commands and '--' if
+   # found, so that we are left with the list of arguments to pass to the
+   # command.
+   while [[ $# -gt 0 ]]
+   do
+      if [[ $1 == '--' ]]; then
+         shift
+         break
+      fi
+      shift
+   done
+
+   # Finaly run the command with the desired arguments
+   "$cmd" "$@"
 }
 #______________________________________________________________________________
 
