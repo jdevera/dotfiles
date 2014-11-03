@@ -36,6 +36,8 @@ export DBASH=$HOME/.bash.d
 export DDESKTOP=$DOTHER/Desktop
 export DAPTCACHE=/var/cache/apt/archives
 
+export PROJECT_HOME=$HOME/devel/myforge/projects
+
 # Files
 export FSYSLOG=/var/log/syslog
 export FILOG=$DSYSDATA/install.log
