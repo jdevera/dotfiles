@@ -208,7 +208,7 @@ set backspace=indent,eol,start
 " Set the caracters to use when showing tabs and trailing spaces with
 " :set list
 " Ctrl-K >> for » and Ctrl-K .M for ·  (use :dig for list of digraphs)
-set listchars=tab:»»,trail:·
+set listchars=tab:»»,trail:·,eol:↵
 
 " ----------------------------------------------------------------------------
 " }}}
