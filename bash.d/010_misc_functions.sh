@@ -298,5 +298,17 @@ function run_first_of()
 #______________________________________________________________________________
 
 
+function ranking()
+{
+   local rev='-r'
+   if [[ $1 == '-r' ]]
+   then
+      rev=''
+      shift
+   fi
+   sort "$@" | uniq -c | sort -k 1 -n $rev
+}
+
+
 # vim: ft=sh fdm=marker expandtab ts=3 sw=3 :
 
