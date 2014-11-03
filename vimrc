@@ -26,7 +26,7 @@ endif
 filetype off
 
 " Add vundle to the runtime path
-set rtp+=~/.vim/bundle/vundle/
+set rtp+=~/.vim/bundle/Vundle.vim/
 
 " Call Vundle
 call vundle#begin()
@@ -36,7 +36,7 @@ call vundle#begin()
 " ===========================================================================
 
 " Manage vundle with vundle, oh yeah!
-Plugin 'gmarik/vundle'
+Plugin 'gmarik/Vundle.vim'
 
 Plugin 'honza/vim-snippets'
 Plugin 'SirVer/ultisnips'
