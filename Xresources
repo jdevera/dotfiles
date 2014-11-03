@@ -39,3 +39,18 @@
 *color7:  #babdb9
 *color15: #EEEEEC
 ! ----------------------------------------------------------------------------
+URxvt*font: -xos4-terminus-medium-*-*-*-17-120-*-*-*-*-iso8859-15
+! To disable the scrollbar
+URxvt.scrollBar:          false
+! scrollback buffer lines - 65535 is max on most machines (64 is default)
+URxvt*saveLines: 12000
+
+! font color (default is black)
+URxvt*foreground: White
+
+! background color (prior to tinting) (default is white)
+URxvt*background: Black
+URxvt*transparent: true
+URxvt*shading: 40
+! Fade the text by the given percentage when focus is lost. 
+URxvt*fading:  30
