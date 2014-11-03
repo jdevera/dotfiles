@@ -62,9 +62,8 @@ alias tit=git
 complete -o bashdefault -o default -o nospace -F _git g
 complete -o bashdefault -o default -o nospace -F _git tit
 
-
 alias jo=jrnl
-alias jot='jrnl --export text'
+alias jot='jrnl --export text | less -RMSFiX'
 
 # vim: ft=sh fdm=marker expandtab ts=3 sw=3 :
 
