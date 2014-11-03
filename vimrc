@@ -76,6 +76,7 @@ Plugin 'sjl/splice.vim'           , {'name': 'splice'}
 Plugin 'luochen1990/rainbow'
 Plugin 'Shougo/unite.vim'
 Plugin 'Valloric/YouCompleteMe'
+Plugin 'LanguageTool'             , {'name': 'language-tool'}
 
 " My own plugins / forks
 Plugin 'jdevera/vim-stl-syntax'   , {'name': 'jdv-stl-syntax'}
@@ -660,6 +661,9 @@ let g:jedi#popup_select_first = 0
 let g:jedi#completions_enabled = 0
 let g:jedi#completions_command = ""
 let g:jedi#show_call_signatures = "1"
+
+" LanguageTool:
+let g:languagetool_jar='$HOME/other/run/lib/LanguageTool-2.6/languagetool-commandline.jar'
 
 
 " ----------------------------------------------------------------------------
