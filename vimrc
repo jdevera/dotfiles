@@ -177,6 +177,9 @@ set nowrapscan
 " put swap files in the same directory
 set directory^=~/.vim/tmp/swap
 
+" Do not write backup files
+set nobackup
+
 
 " ----------------------------------------------------------------------------
 " }}}
