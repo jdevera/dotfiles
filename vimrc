@@ -637,6 +637,7 @@ if executable("rst2ctags")
         \    'kind2scope' : {
         \        's' : 'section',
         \    },
+        \    'sort': 0,
         \}
 endif
 
