@@ -77,6 +77,7 @@ Plugin 'luochen1990/rainbow'
 Plugin 'Shougo/unite.vim'
 Plugin 'Valloric/YouCompleteMe'
 Plugin 'LanguageTool'             , {'name': 'language-tool'}
+Plugin 'jmcantrell/vim-virtualenv'
 
 " My own plugins / forks
 Plugin 'jdevera/vim-stl-syntax'   , {'name': 'jdv-stl-syntax'}
@@ -667,6 +668,10 @@ let g:jedi#show_call_signatures = "1"
 
 " LanguageTool:
 let g:languagetool_jar='$HOME/other/run/lib/LanguageTool-2.6/languagetool-commandline.jar'
+
+
+" VirtualEnv:
+let g:virtualenv_directory = '$HOME/.local/share/virtualenvs/'
 
 
 " ----------------------------------------------------------------------------
