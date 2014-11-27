@@ -310,5 +310,12 @@ function ranking()
 }
 
 
+function vecd()
+{
+   [[ -z $VIRTUAL_ENV ]] && return 1
+   cd "$(cat "$VIRTUAL_ENV/.project")"
+}
+
+
 # vim: ft=sh fdm=marker expandtab ts=3 sw=3 :
 
