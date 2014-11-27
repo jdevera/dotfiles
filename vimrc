@@ -77,6 +77,8 @@ Plugin 'luochen1990/rainbow'
 Plugin 'Shougo/unite.vim'
 Plugin 'Valloric/YouCompleteMe'
 Plugin 'LanguageTool'             , {'name': 'language-tool'}
+Plugin 'airblade/vim-gitgutter'
+Plugin 'junegunn/fzf'
 Plugin 'jmcantrell/vim-virtualenv'
 
 " My own plugins / forks
