@@ -309,6 +309,16 @@ function ranking()
    sort "$@" | uniq -c | sort -k 1 -n $rev
 }
 
+function cdz()
+{
+   local dir="$(
+      awk -F"|" '{printf("%5s\t%s\n", $2, $1);}' "$(__bm_bookmarks_file)"  |
+      fzf -1 -0 -x |
+      awk -F"\t" '{print $2}'
+      )"
+   [[ -n $dir ]] && { echo $dir; cd "$dir"; }
+}
+
 
 function vecd()
 {
