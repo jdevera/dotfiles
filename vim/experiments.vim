@@ -74,13 +74,6 @@ command! -bar Hexmode call ToggleHex()
 if v:progname == "vimm"
     color morning
 endif
-
-" TODO: This should only be set for rst or text files
-nmap <Leader>ti yyPVr=yyjpo<CR>
-nmap <Leader>h1 yypVr=o<CR>
-nmap <Leader>h2 yypVr-o<CR>
-nmap <Leader>h3 yypVr~o<CR>
-
 " Function and command to open a tag in a new tab (I'm always doing this
 " manually).
 function! Tabtag(word)
