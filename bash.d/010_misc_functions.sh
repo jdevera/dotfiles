@@ -7,8 +7,8 @@
 #
 #############################################################################
 
-
-show_parent_dirs()
+# @tags: support
+function show_parent_dirs()
 {
    pwd | awk '
    BEGIN {
@@ -25,20 +25,20 @@ show_parent_dirs()
    }'
 }
 
-
-stripe()
+# @tags: command canbescript
+function stripe()
 {
    perl -pe '$_ = "\033[1;34m$_\033[0m" if($. % 2)'
 }
 
-
+# @tags: command wrapper
 function check_home_purity()
 {
    [ -z "$PS1" ] && return
    purehome
 }
 
-
+# @tags: support
 function bashtimes()
 {
    [[ -f /tmp/bashtimes.$$ ]] || return 1
@@ -60,20 +60,14 @@ function bashtimes()
 }
 
 
-function virtualenvwrapper_enable()
-{
-   VIRTUAL_ENV_WRAPPER="$(which virtualenvwrapper.sh 2>/dev/null)"
-
-   [[ -n $VIRTUAL_ENV_WRAPPER ]] && source "$VIRTUAL_ENV_WRAPPER" > /dev/null
-}
-
-
+# @tags: command canbescript
 function hl()
 {
    pygmentize -g -f terminal256 -P style=emacs "$@"
 }
 
-hless()
+# @tags: command canbescript
+function hless()
 {
    hl "$@" | less -FiXRM
 }
@@ -91,6 +85,7 @@ hless()
 # For a binary executable file, print nothing.
 #______________________________________________________________________________
 #
+# @tags: command
 function code()
 {
    local type="$(builtin type -t $1)"
@@ -132,6 +127,7 @@ complete -c code # Complete with command names
 # Unified way of extracting compressed files.
 #______________________________________________________________________________
 #
+# @tags: command canbescript
 function extract()
 {
    local file="$1"
@@ -163,6 +159,7 @@ function extract()
 # a directory.
 #______________________________________________________________________________
 #
+# @tags: command cd
 function cdf()
 {
    if [[ -e $1 && ! -d $1 ]]; then
@@ -179,6 +176,7 @@ function cdf()
 # which + editor = whed
 #______________________________________________________________________________
 #
+# @tags: command canbescript
 function whed()
 {
    local matches="$(which -a "$@" | fzf -0 -1)"
@@ -198,6 +196,7 @@ complete -c whed # Complete with command names
 # A powerful version of touch. Create all the path until it can touch the file.
 #______________________________________________________________________________
 #
+# @tags: command canbescript
 function rtouch()
 {
    local path="$1"
@@ -212,6 +211,7 @@ function rtouch()
 # from the results one file to open in the configured $EDITOR
 #______________________________________________________________________________
 #
+# @tags: command canbescript
 function eloc()
 {
    local file="$(locate "$@" | fzf -0 -1 -x)"
@@ -227,6 +227,7 @@ function eloc()
 # Show the most recently downloaded files. With colours!
 #______________________________________________________________________________
 #
+# @tags: command canbescript
 function lastdown()
 {
    find $DDOWN -maxdepth 1 -printf '%T@ %TY-%Tm-%Td %TT %p\n'  |
@@ -245,6 +246,7 @@ function lastdown()
 # function, or file in the PATH
 #______________________________________________________________________________
 #
+# @tags: support
 function has_command()
 {
    type "$1" >& /dev/null
@@ -260,6 +262,7 @@ function has_command()
 # arguments are passed directly to the command that is found first, if any.
 #______________________________________________________________________________
 #
+# @tags: support
 function run_first_of()
 {
    local cmd=
@@ -298,6 +301,7 @@ function run_first_of()
 #______________________________________________________________________________
 
 
+# @tags: command canbescript filter
 function ranking()
 {
    local rev='-r'
@@ -309,6 +313,7 @@ function ranking()
    sort "$@" | uniq -c | sort -k 1 -n $rev
 }
 
+# @tags: command cd
 function cdz()
 {
    local dir="$(
@@ -320,6 +325,7 @@ function cdz()
 }
 
 
+# @tags: command virtualenv
 function vecd()
 {
    [[ -z $VIRTUAL_ENV ]] && return 1
