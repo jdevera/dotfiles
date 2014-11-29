@@ -699,6 +699,21 @@ if filereadable(expand('~/.vim/local/config.vim'))
 endif
 
 " }}}
+" {{{ Config reload support
+" Reload this configuration file automatically when it is changed within Vim
+augroup myvimrc
+    au!
+    au BufWritePost .vimrc,_vimrc,vimrc,.gvimrc,_gvimrc,gvimrc nested
+        \ so $MYVIMRC |
+        \ if has('gui_running') && !empty($MYGVIMRC) |
+        \     so $MYGVIMRC |
+        \ endif |
+        \ so <sfile>:p |
+        \ filetype detect |
+        \ echo '<sfile>:t has been reloaded after saving it'
+augroup END
+
+" }}}
 " {{{ Experimental area
 " ----------------------------------------------------------------------------
 
