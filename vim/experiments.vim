@@ -70,12 +70,7 @@ command! -bar Hexmode call ToggleHex()
 " ----------------------------------------------------------------------------
 " }}}
 
-" Create specific settings depending on the calling program name
-if v:progname == "vimm"
-    color morning
-endif
-" Function and command to open a tag in a new tab (I'm always doing this
-" manually).
+" Function and command to open a tag in a new tab
 function! Tabtag(word)
     echo a:word
     tab split
