@@ -184,6 +184,11 @@ set directory^=~/.vim/tmp/swap
 set nobackup
 
 
+" When opening a file, go to the last known position when the file was last
+" open.
+au BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g`\"" | endif
+
+
 " ----------------------------------------------------------------------------
 " }}}
 " {{{ Spacing

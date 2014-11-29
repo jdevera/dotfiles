@@ -81,16 +81,6 @@ nmap <Leader>h1 yypVr=o<CR>
 nmap <Leader>h2 yypVr-o<CR>
 nmap <Leader>h3 yypVr~o<CR>
 
-"TODO: This should probably be set somewhere else.
-augroup experiment
-
-    au!
-    " When opening a file, go to the last known position when the file was last
-    " open.
-    au BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g`\"" | endif
-
-augroup END
-
 " Reload this configuration file automatically when it is changed within Vim
 augroup myvimrc
     au!
