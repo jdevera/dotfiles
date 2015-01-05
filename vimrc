@@ -678,6 +678,10 @@ let g:jedi#show_call_signatures = "1"
 let g:languagetool_jar='$HOME/other/run/lib/LanguageTool-2.6/languagetool-commandline.jar'
 
 
+" YouCompleteMe:
+" When the following options is on, YCM aggressively empties the sign column
+let g:ycm_enable_diagnostic_signs = 0
+
 " VirtualEnv:
 let g:virtualenv_directory = '$HOME/.local/share/virtualenvs/'
 
