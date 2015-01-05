@@ -315,7 +315,7 @@ if [ -f /etc/bash_completion ] && ! shopt -oq posix; then
 fi
 
 
-if [[ -z $TMUX ]]; then
+if [[ -z $TMUX && -z $SSH_CLIENT ]]; then
    call_if check_home_purity
 fi
 
