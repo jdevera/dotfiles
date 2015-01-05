@@ -170,7 +170,14 @@ fi
 
 function prompt_command()
 {
-   LAST_RC=$?
+   # As the first command, capture all status info from the previous command IN
+   # ONE GO. Then later break it down. If done in two separate assignments, the
+   # status of the first assignment, and not that of the previos shell command,
+   # will be used instead.
+   local status_capture=( $? "${PIPESTATUS[@]}" )
+   LAST_RC="${status_capture[0]}"
+   LAST_PIPESTATUS=( "${status_capture[@]:1}" )
+
    if [[ -n $BASH_THEME_CMD ]]; then
       eval "$BASH_THEME_CMD"
    fi
