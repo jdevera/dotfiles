@@ -68,5 +68,8 @@ alias jot='jrnl --export text | less -RMSFiX'
 alias pbcopy='xsel --clipboard --input'
 alias pbpaste='xsel --clipboard --output'
 
+
+alias workon='pew workon $(pew ls | mysplit | fzf)'
+
 # vim: ft=sh fdm=marker expandtab ts=3 sw=3 :
 
