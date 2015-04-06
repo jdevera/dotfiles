@@ -15,7 +15,7 @@ time, but if you are not me, please read on :)
 ## Contents
 
 Most files handle Bash or Vim configuration, but I also share my settings for
-GNU Screen, Tmux, Git, Emacs, and the Python interpreter.
+GNU Screen, Tmux, Git, Emacs, the Python interpreter, and others.
 
 My git configuration file is actually a generator (more on this below).
 
@@ -37,7 +37,7 @@ installation.
 
 My bash configuration files live in the _.bash.d_ directory.
 
-My _.bashrc_. sources configuration files in this order:
+My _.bashrc_ sources configuration files in this order:
 
  * Every file under _.bash.d/local/before_
  * Every file under _.bash.d_
@@ -48,17 +48,17 @@ add configuration files that are specific for the current machine.
 
 ### Vim configuration
 
-I am using [Gmarik's Vundle](https://github.com/gmarik/vundle) Vim plug-in to
-manage my Vim add-ons and keep them up to date.
+I am using [Junegunn Choi's Vim-Plug](https://github.com/junegunn/vim-plug) to
+manage my Vim plug-ins and keep them up to date.
 
-With Vundle, I only have to point, in my _.vimrc_ file, to the git
+With Vim-Plug, I only have to point, in my _.vimrc_ file, to the git
 repositories of all the Vim add-ons I want to have installed and it takes care
-or the rest. Vundle clones each add-on under its own directory and adds it to
-Vim's runtime path.
+or the rest. Vim-Plug clones each add-on under its own directory and adds it
+to Vim's runtime path.
 
 All add-ons in the official Vim's website are actively mirrored in github by
-the [Vim-Scripts.org](http://vim-scripts.org/) project. This means Vundle can
-be used to install any add-on published in the official site.
+the [Vim-Scripts.org](http://vim-scripts.org/) project. This means Vim-Plug
+can be used to install any add-on published in the official site.
 
 ### Emacs configuration
 

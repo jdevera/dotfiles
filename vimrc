@@ -20,107 +20,94 @@ if has('win32') || has('win64')
 endif
 
 " }}}
-" {{{ Vundle Plugins configuration (must precede others)
+" {{{ Plugins configuration (must precede others)
 
-" Temporarily turn off filetype detection (vundle requirement)
-filetype off
-
-" Add vundle to the runtime path
-set rtp+=~/.vim/bundle/Vundle.vim/
-
-" Call Vundle
-call vundle#begin()
+call plug#begin('~/.vim/bundle')
 
 " ===========================================================================
-" Vundle Plugins
+" Plugins
 " ===========================================================================
 
-" Manage vundle with vundle, oh yeah!
-Plugin 'gmarik/Vundle.vim'
-
-Plugin 'honza/vim-snippets'
-Plugin 'SirVer/ultisnips'
+Plug 'honza/vim-snippets'
+Plug 'SirVer/ultisnips'
 
 " Surround and repeat (to make the former repeatable)
-Plugin 'tpope/vim-repeat'         , {'name': 'repeat'}
-Plugin 'tpope/vim-surround'       , {'name': 'surround'}
+Plug 'tpope/vim-repeat'
+Plug 'tpope/vim-surround'
 
-Plugin 'Align'                    , {'name': 'align'}
-Plugin 'camelcasemotion'
-Plugin 'godlygeek/csapprox'
-Plugin 'hallison/vim-markdown'    , {'name': 'markdown'}
-Plugin 'majutsushi/tagbar'
-Plugin 'python.vim--Vasiliev'     , {'name': 'python-syntax'}
-Plugin 'scrooloose/nerdcommenter'
-Plugin 'scrooloose/nerdtree'
-Plugin 'ShowMarks'                , {'name': 'showmarks'}
-Plugin 'TaskList.vim'             , {'name': 'tasklist'}
-Plugin 'tpope/vim-fugitive'       , {'name': 'fugitive'}
-Plugin 'tpope/vim-abolish'        , {'name': 'abolish'}
-Plugin 'matchit.zip'              , {'name': 'matchit'}
-Plugin 'vim-creole'               , {'name': 'syntax-creole'}
-Plugin 'toggle_words.vim'         , {'name': 'togglewords' }
-Plugin 'mileszs/ack.vim'          , {'name': 'ack'}
-Plugin 'bufexplorer.zip'          , {'name': 'bufexplorer'}
-Plugin 'sjl/gundo.vim'            , {'name': 'gundo'}
-Plugin 'vcscommand.vim'           , {'name': 'vcscommand'}
-Plugin 'OmniCppComplete'          , {'name': 'omnicppcomplete'}
-Plugin 'SwapHeader'               , {'name': 'swapheader'}
-Plugin 'DoxygenToolkit.vim'       , {'name': 'doxygen-toolkit'}
-Plugin 'scrooloose/syntastic'
-Plugin 'jceb/vim-orgmode'         , {'name': 'orgmode' }
-Plugin 'helino/vim-json'          , {'name': 'syntax-json'}
-Plugin 'davidhalter/jedi-vim'
-Plugin 'tpope/vim-sleuth'         , {'name': 'sleuth'}
-Plugin 'sjl/splice.vim'           , {'name': 'splice'}
-Plugin 'luochen1990/rainbow'
-Plugin 'Shougo/unite.vim'
-Plugin 'Valloric/YouCompleteMe'
-Plugin 'LanguageTool'             , {'name': 'language-tool'}
-Plugin 'airblade/vim-gitgutter'
-Plugin 'junegunn/fzf'
-Plugin 'jmcantrell/vim-virtualenv'
+Plug 'Align'
+Plug 'camelcasemotion'
+Plug 'godlygeek/csapprox'
+Plug 'hallison/vim-markdown'
+Plug 'majutsushi/tagbar'
+Plug 'python.vim--Vasiliev'
+Plug 'scrooloose/nerdcommenter'
+Plug 'scrooloose/nerdtree'
+Plug 'ShowMarks'
+Plug 'TaskList.vim'
+Plug 'tpope/vim-fugitive'
+Plug 'tpope/vim-abolish'
+Plug 'matchit.zip'
+Plug 'vim-creole'
+Plug 'toggle_words.vim'
+Plug 'mileszs/ack.vim'
+Plug 'bufexplorer.zip'
+Plug 'sjl/gundo.vim'
+Plug 'vcscommand.vim'
+Plug 'OmniCppComplete'
+Plug 'SwapHeader'
+Plug 'DoxygenToolkit.vim'
+Plug 'scrooloose/syntastic'
+Plug 'jceb/vim-orgmode'
+Plug 'helino/vim-json'
+Plug 'davidhalter/jedi-vim'
+Plug 'tpope/vim-sleuth'
+Plug 'sjl/splice.vim'
+Plug 'luochen1990/rainbow'
+Plug 'Shougo/unite.vim'
+Plug 'Valloric/YouCompleteMe'
+Plug 'LanguageTool'
+Plug 'airblade/vim-gitgutter'
+Plug 'junegunn/fzf'
+Plug 'jmcantrell/vim-virtualenv'
 
 " My own plugins / forks
-Plugin 'jdevera/vim-stl-syntax'   , {'name': 'jdv-stl-syntax'}
-Plugin 'jdevera/vim-cs-explorer'  , {'name': 'jdv-cs-explorer'}
-Plugin 'jdevera/vim-protobuf-syntax' , {'name' : 'jdv-protobuf' }
-Plugin 'jdevera/qt-highlight-vim' , {'name': 'jdv-qt-syntax' }
+Plug 'jdevera/vim-stl-syntax'
+Plug 'jdevera/vim-cs-explorer'
+Plug 'jdevera/vim-protobuf-syntax'
+Plug 'jdevera/qt-highlight-vim'
 
 " Notetaking plugins I no longer use since I use org-mode
 " Plugin 'vimoutliner/vimoutliner'
 " Plugin 'xolox/vim-notes'
 
 " Colorschemes
-Plugin 'tomasr/molokai'           , {'name' : 'color-molokai'}
-Plugin 'Mustang2'                 , {'name' : 'color-mustang2'}
-Plugin 'DarkOcean.vim'            , {'name' : 'color-darkocean'}
-Plugin 'obxhdx/vim-github-theme'  , {'name' : 'color-github' }
-Plugin 'altercation/vim-colors-solarized' , {'name' : 'color-solarized'}
-Plugin 'asu1dark.vim'             , {'name' : 'color-asu1dark'}
-Plugin 'Colorzone'                , {'name' : 'color-colorzone' }
-Plugin 'lightcolors'              , {'name' : 'color-lightcolors' }
-Plugin 'print_bw.zip'             , {'name' : 'color-print_bw' }
-Plugin 'morhetz/gruvbox'          , {'name' : 'color-gruvbox' }
-Plugin 'flazz/vim-colorschemes'
+Plug 'tomasr/molokai'
+Plug 'Mustang2'
+Plug 'DarkOcean.vim'
+Plug 'obxhdx/vim-github-theme'
+Plug 'altercation/vim-colors-solarized'
+Plug 'asu1dark.vim'
+Plug 'Colorzone'
+Plug 'lightcolors'
+Plug 'print_bw.zip'
+Plug 'morhetz/gruvbox'
+Plug 'flazz/vim-colorschemes'
 
 
-" Load additional local vundle plugins. The local/bundles.vim file, if it
-" exists, contains Vundle's Plugin specs that make sense only in the current
+" Load additional local plugins. The local/bundles.vim file, if it
+" exists, contains Plugin specs that make sense only in the current
 " machine. That file is not tracked. See also the *Local configurations*
 " section below.
 if filereadable(expand('~/.vim/local/bundles.vim'))
     execute 'source ' . expand('~/.vim/local/bundles.vim')
 endif
 
-call vundle#end()
+call plug#end()
 
 " }}}
 " {{{ Behaviour?
 " ----------------------------------------------------------------------------
-
-" Enables file type specific plugins (with specific indentation)
-filetype plugin indent on
 
 " Shows autocomplete menu for commands
 set wildmenu
@@ -696,7 +683,7 @@ let g:virtualenv_directory = '$HOME/.local/share/virtualenvs/'
 " some overrides for remote headless boxes.
 " This should also work on Windows, since ~.vim is added to the runtimepath at
 " the top of this file.
-" Warning: Additional Bundles should not be included in this file, use the
+" Warning: Additional plugins should not be included in this file, use the
 "          local/bundles.vim file instead.
 if filereadable(expand('~/.vim/local/config.vim'))
     execute 'source ' . expand('~/.vim/local/config.vim')
