@@ -51,6 +51,6 @@ URxvt*foreground: White
 ! background color (prior to tinting) (default is white)
 URxvt*background: Black
 URxvt*transparent: true
-URxvt*shading: 40
+URxvt*shading: 10
 ! Fade the text by the given percentage when focus is lost. 
 URxvt*fading:  30
