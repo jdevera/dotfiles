@@ -70,6 +70,11 @@ Plug 'LanguageTool'
 Plug 'airblade/vim-gitgutter'
 Plug 'junegunn/fzf'
 Plug 'jmcantrell/vim-virtualenv'
+Plug 'Better-CSS-Syntax-for-Vim'
+Plug 'techlivezheng/vim-plugin-minibufexpl'
+Plug 'derekwyatt/vim-fswitch'
+Plug 'embear/vim-foldsearch'
+
 
 " My own plugins / forks
 Plug 'jdevera/vim-stl-syntax'
@@ -671,6 +676,11 @@ let g:ycm_enable_diagnostic_signs = 0
 
 " VirtualEnv:
 let g:virtualenv_directory = '$HOME/.local/share/virtualenvs/'
+
+" MiniBufExplorer:
+let g:miniBufExplVSplit = 20   " column width in chars
+" Put new window above current or on the left for vertical split:
+let g:miniBufExplBRSplit = 0
 
 
 " ----------------------------------------------------------------------------
