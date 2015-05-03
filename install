@@ -6,7 +6,7 @@ get_vim_plugins()
 {
     echo "Installing Vim Plugins"
     vim +PlugUpgrade +qa || { echo 'Error upgrading Plug. Will continue.'; }
-    vim +PlugInstall +qa || { echo 'Error installing vim plugins'; return 1 }
+    vim +PlugInstall +qa || { echo 'Error installing vim plugins'; return 1; }
 }
 
 ## Run xmodmap with the customisations in ~/.Xmodmap
