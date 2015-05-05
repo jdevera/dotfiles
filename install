@@ -6,6 +6,11 @@ get_vim_plugins()
 {
     echo "Installing Vim Plugins"
     vim +PlugUpgrade +qa || { echo 'Error upgrading Plug. Will continue.'; }
+    if [[ $SKIP_VIM_PLUGINS -eq 1 ]]
+    then
+        echo "Skipping Vim plugins installation"
+        return
+    fi
     vim +PlugInstall +qa || { echo 'Error installing vim plugins'; return 1; }
 }
 
