@@ -99,5 +99,6 @@ endf
 augroup git
     au!
     au FileType git set foldmethod=syntax foldtext=GitDiffFoldText()
+    au FileType gitcommit 1 | startinsert!
 augroup END
 " vim:fdm=marker:et:ts=4:
