@@ -88,4 +88,16 @@ function! ReloadCommandOutput(cmd)
     se nomod
     se ro
 endfunction
+
+function! GitDiffFoldText()
+    let lines = v:foldend - v:foldstart
+    let line = getline(v:foldstart)
+    let sub = substitute(line, 'diff --git a/\(.\{-}\) b/.*$', '\1', '')
+    return printf('-- %4d lines -- %s', lines, sub)
+endf
+
+augroup git
+    au!
+    au FileType git set foldmethod=syntax foldtext=GitDiffFoldText()
+augroup END
 " vim:fdm=marker:et:ts=4:
