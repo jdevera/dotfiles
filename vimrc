@@ -74,6 +74,7 @@ Plug 'Better-CSS-Syntax-for-Vim'
 Plug 'techlivezheng/vim-plugin-minibufexpl'
 Plug 'derekwyatt/vim-fswitch'
 Plug 'embear/vim-foldsearch'
+Plug 'confluencewiki.vim'
 
 
 " My own plugins / forks
