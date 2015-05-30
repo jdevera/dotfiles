@@ -2,36 +2,36 @@
 ;; --------------------------------------------------------------------------
 (add-to-list 'load-path "~/.emacs.d/el-get/el-get")
 
+;; Long form of (require 'el-get)
 (unless (require 'el-get nil 'noerror)
-  (with-current-buffer
-      (url-retrieve-synchronously
-       "https://raw.github.com/dimitri/el-get/master/el-get-install.el")
-    (let (el-get-master-branch)
-      (goto-char (point-max))
-      (eval-print-last-sexp))))
+    (with-current-buffer
+        (url-retrieve-synchronously
+            "https://raw.githubusercontent.com/dimitri/el-get/master/el-get-install.el")
+        (goto-char (point-max))
+        (eval-print-last-sexp)
+    )
+)
 
-;; Local Sources
-(setq el-get-sources
-      '(
-        ;; Use apt, since default recipe compiles everything
-	(:name emacs-goodies-el :type apt-get)))
+(add-to-list 'el-get-recipe-path "~/.emacs.d/el-get-user/recipes")
 
 ;; Packages I want installed and updated
-(setq my-packages (append '(
-	 color-theme
-	 color-theme-almost-monokai
-	 color-theme-leuven
-	 color-theme-solarized
-	 org-mode
-	 evil
-	 el-get
-	 )
-       ;; Plus everything that is include in el-get-sources
-       (mapcar 'el-get-source-name el-get-sources)))
-
-;; Sync my packages!
+(setq my-packages
+    (append '(
+             color-theme
+             color-theme-almost-monokai
+             color-theme-solarized
+             org-mode
+             evil
+             el-get
+        )
+        ;; Plus everything that is include in el-get-sources
+        (mapcar 'el-get-source-name el-get-sources)
+    )
+)
+;; Remove any packages not mentioned in the list above
+(el-get-cleanup my-packages)
+;; Install and init the packages from the list
 (el-get 'sync my-packages)
-
 ;; }}}
 ;; Enable modal editing with vim-like behaviour {{{
 ;; --------------------------------------------------------------------------
@@ -71,15 +71,31 @@
 ;; --------------------------------------------------------------------------
 ;;
 ;;
+;; Encrypting Specific Entries in an org File with org-crypt.
+;; --------------------------------------------------------------------------
+;; If you just want to encrypt the text of an entry, but not the headline, or
+;; properties you can use org-crypt. In order to use org-crypt you need to add
+;; something like the following to your .emacs:
+(require 'org-crypt)
+(org-crypt-use-before-save-magic)
+(setq org-tags-exclude-from-inheritance (quote ("crypt")))
+;; GPG key to use for encryption
+;; Either the Key ID or set to nil to use symmetric encryption.
+(setq org-crypt-key nil)
+
 ;; Active Babel languages
 ;; --------------------------------------------------------------------------
-(org-babel-do-load-languages 'org-babel-load-languages '(
-    (R . t)
-    (ditaa . t)
-    (python . t)
-    (sh . t)
-    ))
+(org-babel-do-load-languages
+    'org-babel-load-languages
+    '(
+        (R . t)
+        (ditaa . t)
+        (python . t)
+        (sh . t)
+    )
+)
 ;; Languages table {{{
+;; ---------------------------------------------------------
 ;; | Language   | Identifier | Language       | Identifier |
 ;; |------------+------------+----------------+------------|
 ;; | Asymptote  | asymptote  | Awk            | awk        |
@@ -99,6 +115,7 @@
 ;; | Sass       | sass       | Scheme         | scheme     |
 ;; | GNU Screen | screen     | shell          | sh         |
 ;; | SQL        | sql        | SQLite         | sqlite     |
+;; ---------------------------------------------------------
 ;; }}}
 ;;
 ;;
@@ -129,9 +146,14 @@
 (global-set-key "\C-cb" 'org-iswitchb)
 
 (add-hook 'org-mode-hook
-          (lambda ()
-            (color-theme-leuven)
-            ))
+    (lambda ()
+        (local-set-key "\M-n" 'outline-next-visible-heading)
+        (local-set-key "\M-p" 'outline-previous-visible-heading)
+        ;; display images
+        (local-set-key "\M-I" 'org-toggle-iimage-in-org)
+        (load-theme 'leuven t)
+    )
+)
 
 ;; }}}
 ;; Funniest part of the file {{{
