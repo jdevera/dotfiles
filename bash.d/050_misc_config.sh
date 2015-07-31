@@ -51,8 +51,8 @@ export NPM_PACKAGES="$HOME/.npm-packages"
 #############################################################################
 
 # Add my admin scripts to the path
-pathprepend "$DADMIN/scripts"
-pathprepend "$DOTHER/run/bin"
+[[ -n $DADMIN ]] && pathprepend "$DADMIN/scripts"
+[[ -n $DOTHER ]] && pathprepend "$DOTHER/run/bin"
 
 # Add user's Cabal binaries to the path
 pathprepend "$HOME/.cabal/bin"
