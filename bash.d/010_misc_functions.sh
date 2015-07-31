@@ -128,7 +128,7 @@ complete -c code # Complete with command names
 #______________________________________________________________________________
 #
 # @tags: command canbescript
-function extract()
+function xf()
 {
    local file="$1"
    [[ -f $1 ]] || { echo "$file not a file" >&2; return 1; }
