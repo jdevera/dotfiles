@@ -46,4 +46,47 @@ git-foldiff()
       $view - +'se fdm=marker ft=diff'
 }
 
+
+
+function git-explore()
+{
+    local dest="/tmp/git/$(basename $1 .git)"
+    while [[ -e $dest ]]
+    do
+       dest=${dest}_
+    done
+    
+    run_first_of hub git -- clone --recursive $1 $dest && cd "$dest" || return 1
+
+    local readme=
+    for readme in ./README*
+    do
+       break
+    done
+    [[ -e $readme ]] && run_first_of hless hl view less -- $readme
+}
+
+function in_git_repo()
+{
+   git rev-parse &> /dev/null
+}
+
+function check_in_git_repo()
+{
+   if ! in_git_repo
+   then
+      echo "Not in a git repository" &>2
+      return 1
+   fi
+   return 0
+}
+
+
+function git_has_local_branch()
+{
+   check_in_git_repo || return 1
+   git show-ref --verify --quiet refs/heads/$1
+}
+
+
 # vim: ft=sh fdm=marker expandtab ts=3 sw=3 :
