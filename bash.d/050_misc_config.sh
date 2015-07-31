@@ -42,6 +42,8 @@ export PROJECT_HOME=$HOME/devel/myforge/projects
 export FSYSLOG=/var/log/syslog
 export FILOG=$DSYSDATA/install.log
 
+export NPM_PACKAGES="$HOME/.npm-packages"
+
 #############################################################################
 
 # }}}
@@ -56,6 +58,8 @@ pathprepend "$DOTHER/run/bin"
 pathprepend "$HOME/.cabal/bin"
 
 pathprepend "$HOME/.local/bin"
+
+[[ -n $NPM_PACKAGES ]] && pathprepend "$NPM_PACKAGES/bin"
 
 
 #############################################################################
@@ -86,6 +90,9 @@ fi
 
 # Use a python init file
 [[ -e ~/.pystartup ]] && export PYTHONSTARTUP=~/.pystartup
+
+# Tell node js about the "global" package repo
+NODE_PATH="$NPM_PACKAGES/lib/node_modules:$NODE_PATH"
 
 #############################################################################
 
