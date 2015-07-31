@@ -64,3 +64,7 @@ URxvt*shading: 10
 
 ! Fade the text by the given percentage when focus is lost. 
 URxvt*fading:  30
+
+! Specifies the terminal type name to be set in the TERM environment variable.
+URxvt*termName: xterm-256color
+
