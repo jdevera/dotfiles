@@ -21,7 +21,7 @@
     dlog = log -n 20  --pretty=tformat:'%C(yellow)%h%Creset %ai %C(green)%an%Creset %C(bold cyan)->%Creset%C(bold blue)%d%Creset %s' --graph
     dfnp = !git --no-pager diff
     fuckoff = clean -fdx
-    see = !sh -c 'git show $1 | view - -c "set\\ fdm=syntax"' --
+    see = "!f() { git show --format=fuller \"$@\" | view - -c \"set fdm=syntax\"; }; f"
     fixup = commit --amend -C HEAD
     econf = config --global -e
     choosebranch = !git co "$(git branch --list --no-color | cut -c3- | egrep -v '^(resolved|parked)/' | fzf -x)"
