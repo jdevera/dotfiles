@@ -683,6 +683,9 @@ let g:miniBufExplVSplit = 20   " column width in chars
 " Put new window above current or on the left for vertical split:
 let g:miniBufExplBRSplit = 0
 
+" VimPlug: Timeout
+let g:plug_timeout = 1000
+
 
 " ----------------------------------------------------------------------------
 " }}}
