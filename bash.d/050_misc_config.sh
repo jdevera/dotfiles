@@ -154,7 +154,7 @@ ansi_color256()
 # THEME: simple prompt {{{
 function theme_simple_prompt_cmd()
 {
-   local rc=$?
+   local rc=${LAST_RC:-$?}
    local prompt_symbol=${PROMPT_SYMBOL:-"$ "}
    local color=yellow
    [[ $rc -ne 0 ]] && color=light_red
