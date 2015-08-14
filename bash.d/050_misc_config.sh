@@ -159,6 +159,11 @@ function theme_simple_prompt_cmd()
    local color=yellow
    [[ $rc -ne 0 ]] && color=light_red
    PS1="\[$(ansi_color $color)\]$prompt_symbol\[$(ansi_color none)\] "
+   if [[ -e $VIRTUAL_ENV ]]
+   then
+      local venvname="$(basename $VIRTUAL_ENV)"
+      PS1="{venv:\[$(ansi_color white)\]$venvname\[$(ansi_color none)\]}$PS1"
+   fi
 }
 
 theme_simple()
