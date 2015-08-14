@@ -35,31 +35,31 @@ Plug 'SirVer/ultisnips'
 Plug 'tpope/vim-repeat'
 Plug 'tpope/vim-surround'
 
-Plug 'Align'
+Plug 'Align', { 'on': 'Align' }
 Plug 'camelcasemotion'
 Plug 'godlygeek/csapprox'
 Plug 'hallison/vim-markdown'
-Plug 'majutsushi/tagbar'
-Plug 'python.vim--Vasiliev'
+Plug 'majutsushi/tagbar', { 'on' : 'TagbarToggle' }
+Plug 'python.vim--Vasiliev', { 'for' : 'python' }
 Plug 'scrooloose/nerdcommenter'
-Plug 'scrooloose/nerdtree'
-Plug 'ShowMarks'
-Plug 'TaskList.vim'
+Plug 'scrooloose/nerdtree', { 'on': 'NERDTreeToggle' }
+Plug 'ShowMarks', { 'on' : 'ShowMarksToggle' }
+Plug 'TaskList.vim', { 'on' : 'TaskList' }
 Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-abolish'
 Plug 'matchit.zip'
 Plug 'vim-creole'
-Plug 'toggle_words.vim'
-Plug 'mileszs/ack.vim'
-Plug 'bufexplorer.zip'
-Plug 'sjl/gundo.vim'
+Plug 'toggle_words.vim', { 'on' : 'ToggleWord' }
+Plug 'mileszs/ack.vim', { 'on' : 'Ack' }
+Plug 'bufexplorer.zip', { 'on' : ['BufExplorer', 'BufExplorerHorizontalSplit', 'BufExplorerVerticalSplit' ] }
+Plug 'sjl/gundo.vim', { 'on': 'GundoToggle' }
 Plug 'vcscommand.vim'
 Plug 'OmniCppComplete'
 Plug 'SwapHeader'
 Plug 'DoxygenToolkit.vim'
 Plug 'scrooloose/syntastic'
-Plug 'jceb/vim-orgmode'
-Plug 'helino/vim-json'
+Plug 'jceb/vim-orgmode', { 'for' : 'org' }
+Plug 'helino/vim-json', { 'for' : 'json' }
 Plug 'davidhalter/jedi-vim'
 Plug 'tpope/vim-sleuth'
 Plug 'sjl/splice.vim'
@@ -70,7 +70,7 @@ Plug 'LanguageTool'
 Plug 'airblade/vim-gitgutter'
 Plug 'junegunn/fzf'
 Plug 'jmcantrell/vim-virtualenv'
-Plug 'Better-CSS-Syntax-for-Vim'
+Plug 'Better-CSS-Syntax-for-Vim', { 'for' : ['css', 'html'] }
 Plug 'techlivezheng/vim-plugin-minibufexpl'
 Plug 'derekwyatt/vim-fswitch'
 Plug 'embear/vim-foldsearch'
@@ -78,10 +78,10 @@ Plug 'confluencewiki.vim'
 
 
 " My own plugins / forks
-Plug 'jdevera/vim-stl-syntax'
+Plug 'jdevera/vim-stl-syntax', { 'for' : 'cpp' }
 Plug 'jdevera/vim-cs-explorer'
 Plug 'jdevera/vim-protobuf-syntax'
-Plug 'jdevera/qt-highlight-vim'
+Plug 'jdevera/qt-highlight-vim', { 'for' : 'cpp' }
 
 " Notetaking plugins I no longer use since I use org-mode
 " Plugin 'vimoutliner/vimoutliner'
