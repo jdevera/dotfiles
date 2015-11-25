@@ -72,9 +72,9 @@ Plug 'junegunn/fzf'
 Plug 'jmcantrell/vim-virtualenv'
 Plug 'Better-CSS-Syntax-for-Vim', { 'for' : ['css', 'html'] }
 Plug 'techlivezheng/vim-plugin-minibufexpl'
-Plug 'derekwyatt/vim-fswitch'
-Plug 'embear/vim-foldsearch'
-Plug 'confluencewiki.vim'
+Plug 'derekwyatt/vim-fswitch'     " Switch between .h and .cpp files
+Plug 'embear/vim-foldsearch'      " Search, and fold all lines without matches
+Plug 'confluencewiki.vim'         " Syntax for Confluence wiki style (jira)
 
 
 " My own plugins / forks
