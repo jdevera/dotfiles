@@ -79,6 +79,7 @@ Plug 'confluencewiki.vim'         " Syntax for Confluence wiki style (jira)
 Plug 'ekalinin/Dockerfile.vim'    " Syntax for Dockerfiles
 Plug 'asciidoc/vim-asciidoc'      " Syntax for ASCII doc
 Plug 'khorser/vim-qfnotes'        " Take notes per line, visible in que quick fix window
+Plug 'mustache/vim-mustache-handlebars' " Mustache templates syntax and abbreviations
 
 
 " My own plugins / forks
@@ -693,6 +694,8 @@ let g:miniBufExplBuffersNeeded = 5
 " VimPlug: Timeout
 let g:plug_timeout = 1000
 
+" Mustache: Load abreviations to complete code
+let g:mustache_abbreviations = 1
 
 " ----------------------------------------------------------------------------
 " }}}
