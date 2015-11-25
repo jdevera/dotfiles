@@ -74,6 +74,7 @@ Plug 'Better-CSS-Syntax-for-Vim', { 'for' : ['css', 'html'] }
 Plug 'techlivezheng/vim-plugin-minibufexpl'
 Plug 'derekwyatt/vim-fswitch'     " Switch between .h and .cpp files
 Plug 'embear/vim-foldsearch'      " Search, and fold all lines without matches
+Plug 'chrisbra/vim-diff-enhanced' " Apply a different slow diff algorithm to vimdiff
 Plug 'confluencewiki.vim'         " Syntax for Confluence wiki style (jira)
 Plug 'ekalinin/Dockerfile.vim'    " Syntax for Dockerfiles
 Plug 'asciidoc/vim-asciidoc'      " Syntax for ASCII doc
