@@ -274,8 +274,8 @@ set showcmd
 
 " Highlight lines larger than 120 characters
 " -----------------------------------------------
-highlight rightMargin term=bold ctermfg=red guifg=red guibg=yellow
-match rightMargin /\%<122v.\%>121v/ " Only the 120th char
+" highlight rightMargin term=bold ctermfg=red guifg=red guibg=yellow
+" match rightMargin /\%<122v.\%>121v/ " Only the 120th char
 " match rightMargin /.\%>121v/        " All chars after the 120th
 " TODO: Turn this into a map, since changing the colorscheme
 "       turns this highlighting off.
