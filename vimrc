@@ -628,11 +628,31 @@ endif
 " Tagbar: Additional language support:
 "
 " Support for reStructuredText, if available.
+" https://github.com/jszakmeister/rst2ctags
 if executable("rst2ctags")
     " tagbar settings
     let g:tagbar_type_rst = {
         \    'ctagstype': 'rst',
         \    'ctagsbin' : 'rst2ctags',
+        \    'ctagsargs' : '-f - --sort=yes',
+        \    'kinds' : [
+        \        's:sections',
+        \        'i:images'
+        \    ],
+        \    'sro' : '|',
+        \    'kind2scope' : {
+        \        's' : 'section',
+        \    },
+        \    'sort': 0,
+        \}
+endif
+
+" Support for Markdown, if available.
+" https://github.com/jszakmeister/markdown2ctags
+if executable("markdown2ctags")
+   let g:tagbar_type_markdown = {
+        \    'ctagstype': 'markdown',
+        \    'ctagsbin' : 'markdown2ctags',
         \    'ctagsargs' : '-f - --sort=yes',
         \    'kinds' : [
         \        's:sections',
