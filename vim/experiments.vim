@@ -101,4 +101,130 @@ augroup git
     au FileType git set foldmethod=syntax foldtext=GitDiffFoldText()
     au FileType gitcommit 1 | startinsert!
 augroup END
+
+
+" http://vim.wikia.com/wiki/List_loaded_scripts
+function! s:Scratch (command, ...)
+   redir => lines
+   let saveMore = &more
+   set nomore
+   execute a:command
+   redir END
+   let &more = saveMore
+   call feedkeys("\<cr>")
+   new | setlocal buftype=nofile bufhidden=hide noswapfile
+   put=lines
+   if a:0 > 0
+      execute 'vglobal/'.a:1.'/delete'
+   endif
+   if a:command == 'scriptnames'
+      %substitute#^[[:space:]]*[[:digit:]]\+:[[:space:]]*##e
+   endif
+   silent %substitute/\%^\_s*\n\|\_s*\%$
+   let height = line('$') + 3
+   execute 'normal! z'.height."\<cr>"
+   0
+endfunction
+ 
+command! -nargs=? Scriptnames call <sid>Scratch('scriptnames', <f-args>)
+command! -nargs=+ Scratch call <sid>Scratch(<f-args>)
+
+function! s:ChooseFile()
+   setlocal cul
+   setlocal nomodifiable
+   setlocal nomodified
+   setlocal readonly
+   nnoremap <CR> gf
+endfunction
+
+command! -nargs=0 ChooseFile call <sid>ChooseFile()
+
+nnoremap \z :setlocal foldexpr=(getline(v:lnum)=~@/)?0:(getline(v:lnum-1)=~@/)\\|\\|(getline(v:lnum+1)=~@/)?1:2 foldmethod=expr foldlevel=0 foldcolumn=2<CR>
+
+" LEader l to mark the current line persistently
+nnoremap <silent> <Leader>l :exe "let m = matchadd('helpError','\\%" . line('.') . "l')"<CR>
+
+" Highly visible current line
+:hi CursorLine   cterm=NONE ctermbg=darkred ctermfg=white guibg=darkred guifg=white
+
+" From Plugin 'sgeb/vim-diff-fold'
+" Get fold level for diff mode
+" Works with normal, context, unified, rcs, ed, subversion and git diffs.
+" For rcs diffs, folds only files (rcs has no hunks in the common sense)
+" foldlevel=1 ==> file
+" foldlevel=2 ==> hunk
+" context diffs need special treatment, as hunks are defined
+" via context (after '***************'); checking for '*** '
+" or ('--- ') only does not work, as the file lines have the
+" same marker.
+" Inspired by Tim Chase.
+function! DiffFoldLevel()
+    let l:line=getline(v:lnum)
+
+    if l:line =~# '^\(diff\|Index\)'     " file
+        return '>1'
+    elseif l:line =~# '^\(@@\|\d\)'  " hunk
+        return '>2'
+    elseif l:line =~# '^\*\*\* \d\+,\d\+ \*\*\*\*$' " context: file1
+        return '>2'
+    elseif l:line =~# '^--- \d\+,\d\+ ----$'     " context: file2
+        return '>2'
+    else
+        return '='
+    endif
+endfunction
+
+function! DiffFoldText()
+    let lines = v:foldend - v:foldstart
+    let line = getline(v:foldstart)
+    if line =~# '^diff '
+       let sub = substitute(line, 'diff \S*\s*\(.\{-}\) .\+$', '\1', '')
+    else
+       let sub = line
+    endif
+    return printf('-%s%4d lines: %s', v:folddashes, lines, sub)
+endf
+
+augroup aaa
+    au FileType diff setlocal foldmethod=expr foldexpr=DiffFoldLevel() foldcolumn=3 foldtext=DiffFoldText()
+augroup END
+
+
+function! WhatFunctionAreWeIn()
+  let strList = ["while", "foreach", "ifelse", "if else", "for", "if", "else", "try", "catch", "case"]
+  let foundcontrol = 1
+  let position = ""
+  let pos=getpos(".")          " This saves the cursor position
+  let view=winsaveview()       " This saves the window view
+  while (foundcontrol)
+    let foundcontrol = 0
+    normal [{
+    call search('\S','bW')
+    let tempchar = getline(".")[col(".") - 1]
+    if (match(tempchar, ")") >=0 )
+      normal %
+      call search('\S','bW')
+    endif
+    let tempstring = getline(".")
+    for item in strList
+      if( match(tempstring,item) >= 0 )
+        let position = item . " - " . position
+        let foundcontrol = 1
+        break
+      endif
+    endfor
+    if(foundcontrol == 0)
+      call cursor(pos)
+      call winrestview(view)
+      return tempstring.position
+    endif
+  endwhile
+  call cursor(pos)
+  call winrestview(view)
+  return tempstring.position
+endfunction
+
+map <Leader>fu :echo WhatFunctionAreWeIn()<CR>
+
+
 " vim:fdm=marker:et:ts=4:
