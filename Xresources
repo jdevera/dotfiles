@@ -66,7 +66,7 @@ URxvt*shading: 10
 URxvt*fading:  30
 
 ! Specifies the terminal type name to be set in the TERM environment variable.
-URxvt*termName: xterm-256color
+URxvt*termName: rxvt-unicode-256color
 
 ! True: scroll to bottom when a non-special key pressed.
 URxvt*scrollTtyKeypress: true
