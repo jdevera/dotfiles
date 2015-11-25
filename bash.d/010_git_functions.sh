@@ -55,8 +55,8 @@ function git-explore()
     do
        dest=${dest}_
     done
-    
-    run_first_of hub git -- clone --recursive $1 $dest && cd "$dest" || return 1
+
+    run_first_of hub git -- clone --depth=1 --recursive $1 $dest && cd "$dest" || return 1
 
     local readme=
     for readme in ./README*
