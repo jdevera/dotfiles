@@ -33,8 +33,8 @@
 *color5:  #75507B
 *color13: #AD7FA8
 ! orange (replaces cyan)
-*color6:  #ce5c00
-*color14: #fcaf3e
+! *color6:  #ce5c00
+! *color14: #fcaf3e
 ! white
 *color7:  #babdb9
 *color15: #EEEEEC
