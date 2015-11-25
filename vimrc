@@ -75,6 +75,8 @@ Plug 'techlivezheng/vim-plugin-minibufexpl'
 Plug 'derekwyatt/vim-fswitch'     " Switch between .h and .cpp files
 Plug 'embear/vim-foldsearch'      " Search, and fold all lines without matches
 Plug 'confluencewiki.vim'         " Syntax for Confluence wiki style (jira)
+Plug 'ekalinin/Dockerfile.vim'    " Syntax for Dockerfiles
+Plug 'asciidoc/vim-asciidoc'      " Syntax for ASCII doc
 
 
 " My own plugins / forks
