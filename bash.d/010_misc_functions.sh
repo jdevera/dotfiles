@@ -179,7 +179,12 @@ function cdf()
 # @tags: command canbescript
 function whed()
 {
-   local matches="$(which -a "$@" | fzf -0 -1)"
+   if [[ $(builtin type -t $1) == 'function' ]]
+   then
+      whedf $1
+      return
+   fi
+   local matches="$(which -a "$@" | fzf -0 -1 --multi)"
    if [[ -z $matches ]]
    then
       echo "No matches found for $@" 1>&2
@@ -188,6 +193,18 @@ function whed()
    $EDITOR "$matches"
 }
 complete -c whed # Complete with command names
+
+function whedf()
+{
+   local match="$(find_function $1 | awk '{ printf("%s +%d\n", $3, $2) }')"
+   if [[ -z $match ]]
+   then
+      echo "No match found for function $@" 1>&2
+      return 1
+   fi
+   $EDITOR $match
+
+}
 #______________________________________________________________________________
 
 
