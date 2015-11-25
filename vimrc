@@ -690,6 +690,8 @@ let g:miniBufExplVSplit = 20
 let g:miniBufExplBRSplit = 0
 " Require at least 5 buffers before opening the BufExpl window
 let g:miniBufExplBuffersNeeded = 5
+" Don't open when running vimdiff or starting with -d
+let g:miniBufExplHideWhenDiff = 1
 
 " VimPlug: Timeout
 let g:plug_timeout = 1000
