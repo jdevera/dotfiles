@@ -78,6 +78,7 @@ Plug 'chrisbra/vim-diff-enhanced' " Apply a different slow diff algorithm to vim
 Plug 'confluencewiki.vim'         " Syntax for Confluence wiki style (jira)
 Plug 'ekalinin/Dockerfile.vim'    " Syntax for Dockerfiles
 Plug 'asciidoc/vim-asciidoc'      " Syntax for ASCII doc
+Plug 'khorser/vim-qfnotes'        " Take notes per line, visible in que quick fix window
 
 
 " My own plugins / forks
