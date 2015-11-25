@@ -679,9 +679,12 @@ let g:ycm_enable_diagnostic_signs = 0
 let g:virtualenv_directory = '$HOME/.local/share/virtualenvs/'
 
 " MiniBufExplorer:
-let g:miniBufExplVSplit = 20   " column width in chars
+" Column width in chars
+let g:miniBufExplVSplit = 20
 " Put new window above current or on the left for vertical split:
 let g:miniBufExplBRSplit = 0
+" Require at least 5 buffers before opening the BufExpl window
+let g:miniBufExplBuffersNeeded = 5
 
 " VimPlug: Timeout
 let g:plug_timeout = 1000
