@@ -349,6 +349,19 @@ function vecd()
    cd "$(cat "$VIRTUAL_ENV/.project")"
 }
 
+# tags: network command
+function getfavicon()
+{
+   local url="$1/favicon.ico"
+   local name="$2"
+   if [[ -z $name ]]; then
+      name="$(python -c 'import sys,urlparse; print urlparse.urlparse(sys.argv[1]).netloc.replace(".", "_")' "$1")"
+   fi
+   local favdir="$DDOWN/favicons"
+   mkdir -p "$favdir"
+   DDOWN="$favdir" download "$url" && mv "$favdir/favicon.ico" "$favdir/${name}.ico"
+}
+
 
 # vim: ft=sh fdm=marker expandtab ts=3 sw=3 :
 
