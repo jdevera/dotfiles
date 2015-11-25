@@ -42,7 +42,7 @@ Plug 'hallison/vim-markdown'
 Plug 'majutsushi/tagbar', { 'on' : 'TagbarToggle' }
 Plug 'python.vim--Vasiliev', { 'for' : 'python' }
 Plug 'scrooloose/nerdcommenter'
-Plug 'scrooloose/nerdtree', { 'on': 'NERDTreeToggle' }
+Plug 'scrooloose/nerdtree'
 Plug 'ShowMarks', { 'on' : 'ShowMarksToggle' }
 Plug 'TaskList.vim', { 'on' : 'TaskList' }
 Plug 'tpope/vim-fugitive'
