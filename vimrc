@@ -5,6 +5,11 @@
 " Website:     http://blog.jacobodevera.com
 " ---------------------------------------------------------------------------
 
+" {{{ Start declaring the encoding of this very file
+scriptencoding utf-8
+set encoding=utf-8
+
+" }}}
 " {{{ One setting to rule them all
 
 " This is Vim, not Vi. If I were to use only one setting this would b it.
