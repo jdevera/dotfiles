@@ -40,28 +40,30 @@ Plug 'SirVer/ultisnips'
 Plug 'tpope/vim-repeat'
 Plug 'tpope/vim-surround'
 
-Plug 'Align', { 'on': 'Align' }
-Plug 'camelcasemotion'
+Plug 'junegunn/vim-easy-align'
+Plug 'vim-scripts/camelcasemotion' "TODO: replace with chaoren/vim-wordmotion
 Plug 'godlygeek/csapprox'
 Plug 'hallison/vim-markdown'
 Plug 'majutsushi/tagbar', { 'on' : 'TagbarToggle' }
-Plug 'python.vim--Vasiliev', { 'for' : 'python' }
+" Plug 'vim-scripts/python.vim--Vasiliev', { 'for' : 'python' } "TODO: Replace with python-mode/python-mode
+Plug 'kh3phr3n/python-syntax', { 'for' : 'python' } "TODO: Replace with python-mode/python-mode
 Plug 'scrooloose/nerdcommenter'
 Plug 'scrooloose/nerdtree'
-Plug 'ShowMarks', { 'on' : 'ShowMarksToggle' }
-Plug 'TaskList.vim', { 'on' : 'TaskList' }
+Plug 'vim-scripts/ShowMarks', { 'on' : 'ShowMarksToggle' } "TODO: Replace with bootleq/ShowMarks
+Plug 'vim-scripts/TaskList.vim', { 'on' : 'TaskList' } "TODO: Replace with gilsondev/searchtasks.vim
 Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-abolish'
-Plug 'matchit.zip'
-Plug 'vim-creole'
-Plug 'toggle_words.vim', { 'on' : 'ToggleWord' }
+Plug 'benjifisher/matchit.zip'
+Plug 'neilus/vim-creole'
+Plug 'vim-scripts/toggle_words.vim', { 'on' : 'ToggleWord' }
+Plug 'rking/ag.vim', { 'on' : 'Ag' }
 Plug 'mileszs/ack.vim', { 'on' : 'Ack' }
-Plug 'bufexplorer.zip', { 'on' : ['BufExplorer', 'BufExplorerHorizontalSplit', 'BufExplorerVerticalSplit' ] }
+Plug 'vim-scripts/bufexplorer.zip', { 'on' : ['BufExplorer', 'BufExplorerHorizontalSplit', 'BufExplorerVerticalSplit' ] }
 Plug 'sjl/gundo.vim', { 'on': 'GundoToggle' }
-Plug 'vcscommand.vim'
-Plug 'OmniCppComplete'
-Plug 'SwapHeader'
-Plug 'DoxygenToolkit.vim'
+Plug 'vim-scripts/vcscommand.vim'
+Plug 'vim-scripts/OmniCppComplete'
+Plug 'vim-scripts/SwapHeader'
+Plug 'vim-scripts/DoxygenToolkit.vim'
 Plug 'scrooloose/syntastic'
 Plug 'jceb/vim-orgmode', { 'for' : 'org' }
 Plug 'helino/vim-json', { 'for' : 'json' }
@@ -70,17 +72,17 @@ Plug 'tpope/vim-sleuth'
 Plug 'sjl/splice.vim'
 Plug 'luochen1990/rainbow'
 Plug 'Shougo/unite.vim'
-Plug 'Valloric/YouCompleteMe'
-Plug 'LanguageTool'
+Plug 'Valloric/YouCompleteMe', { 'do' : './install.py --clang-completer' }
+Plug 'vim-scripts/LanguageTool'
 Plug 'airblade/vim-gitgutter'
 Plug 'junegunn/fzf'
 Plug 'jmcantrell/vim-virtualenv'
-Plug 'Better-CSS-Syntax-for-Vim', { 'for' : ['css', 'html'] }
+Plug 'vim-scripts/Better-CSS-Syntax-for-Vim', { 'for' : ['css', 'html'] }
 Plug 'techlivezheng/vim-plugin-minibufexpl'
 Plug 'derekwyatt/vim-fswitch'     " Switch between .h and .cpp files
 Plug 'embear/vim-foldsearch'      " Search, and fold all lines without matches
 Plug 'chrisbra/vim-diff-enhanced' " Apply a different slow diff algorithm to vimdiff
-Plug 'confluencewiki.vim'         " Syntax for Confluence wiki style (jira)
+Plug 'vim-scripts/confluencewiki.vim'         " Syntax for Confluence wiki style (jira)
 Plug 'ekalinin/Dockerfile.vim'    " Syntax for Dockerfiles
 Plug 'asciidoc/vim-asciidoc'      " Syntax for ASCII doc
 Plug 'khorser/vim-qfnotes'        " Take notes per line, visible in que quick fix window
@@ -99,14 +101,14 @@ Plug 'jdevera/qt-highlight-vim', { 'for' : 'cpp' }
 
 " Colorschemes
 Plug 'tomasr/molokai'
-Plug 'Mustang2'
-Plug 'DarkOcean.vim'
+Plug 'vim-scripts/Mustang2'
+Plug 'vim-scripts/DarkOcean.vim'
 Plug 'obxhdx/vim-github-theme'
 Plug 'altercation/vim-colors-solarized'
-Plug 'asu1dark.vim'
-Plug 'Colorzone'
-Plug 'lightcolors'
-Plug 'print_bw.zip'
+Plug 'vim-scripts/asu1dark.vim'
+Plug 'vim-scripts/Colorzone'
+Plug 'vim-scripts/lightcolors'
+Plug 'vim-scripts/print_bw.zip'
 Plug 'morhetz/gruvbox'
 Plug 'flazz/vim-colorschemes'
 
