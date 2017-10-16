@@ -426,6 +426,10 @@ endif
 
 nnoremap <silent> <leader>ub :<C-u>Unite -start-insert buffer bookmark<CR>
 nnoremap <silent> <leader>ubf :<C-u>Unite -start-insert buffer file_rec<CR>
+
+" A quick way to build whatever
+nnoremap <C-F9> :make<CR>
+
 " ----------------------------------------------------------------------------
 " }}}
 " {{{ Cscope
