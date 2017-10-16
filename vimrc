@@ -621,7 +621,8 @@ let python_highlight_all=1
 let g:is_bash = 1
 
 " Syntastic: Set per-language checkers
-let g:syntastic_python_checkers = ['pyflakes']
+let g:syntastic_python_checkers = ['flakes8', 'pylint']
+let g:syntastic_python_pylint_rcfile = '$HOME/.pylintrc'
 
 " Swapheader: Add mappings that don't clash with my spelling abbrevs
 let g:enableSwapHeaderMap = 0
