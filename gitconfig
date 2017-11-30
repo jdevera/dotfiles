@@ -35,7 +35,8 @@
     # Choose files
     cf = !tig status
     gvdiff = "!f() { git diff \"$@\" | gvim - +'se ro ft=git'; }; f"
-    mtv = mergetool -t gvimdiff
+    mtgv = mergetool -t gvimdiff
+    mtv = mergetool -t vimdiff
     pms = commit -a -m 'POOR MAN STASH'
     upstream = !git rev-parse --abbrev-ref --symbolic-full-name @{u} 2>/dev/null
     fchanged = !git diff --name-only $(git upstream)
