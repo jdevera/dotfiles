@@ -71,5 +71,9 @@ alias pbpaste='xsel --clipboard --output'
 
 alias workon='pew workon $(pew ls | mysplit | fzf)'
 
-# vim: ft=sh fdm=marker expandtab ts=3 sw=3 :
+alias mc='TERM=xterm-256color mc'
+alias mux=tmuxinator
+alias syslog='grc tail -F /var/log/syslog'
+alias ifconfig='grc ifconfig'
 
+# vim: ft=sh fdm=marker expandtab ts=3 sw=3 :
