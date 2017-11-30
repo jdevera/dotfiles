@@ -31,6 +31,12 @@ function stripe()
    perl -pe '$_ = "\033[1;34m$_\033[0m" if($. % 2)'
 }
 
+# @tags: command canbescript
+function stripcolor()
+{
+   sed "s,\x1B\[[0-9;]*[a-zA-Z],,g" "$@"
+}
+
 # @tags: command wrapper
 function check_home_purity()
 {
