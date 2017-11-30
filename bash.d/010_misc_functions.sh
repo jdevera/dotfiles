@@ -139,8 +139,7 @@ function xf()
    local file="$1"
    [[ -f $1 ]] || { echo "$file not a file" >&2; return 1; }
    case $file in
-      *.tar.bz2 ) tar xjf    "$file"  ;;
-      *.tar.gz  ) tar xzf    "$file"  ;;
+      *.tar.xz|*.tar.bz2|*.tar.gz  ) tar xf    "$file"  ;;
       *.bz2     ) bunzip2    "$file"  ;;
       *.rar     ) rar x      "$file"  ;;
       *.gz      ) gunzip     "$file"  ;;
