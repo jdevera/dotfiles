@@ -205,5 +205,28 @@ function reloadsh()
 }
 #______________________________________________________________________________
 
+
+#______________________________________________________________________________
+#
+# env-save and env-load are written to work with long lived tmux sessions. When
+# attaching to an existing session, some elements of the outer environment,
+# such as the DISPLAY, might have changed. These help taking care of that.
+#
+# Run env-save outside of tmux and then env-load inside.
+#______________________________________________________________________________
+function env-save()
+{
+   export |
+      grep 'SSH_AUTH_SOCK\|GNOME_KEYRING\|DISPLAY' |
+      grep -v PERSISTENT_HISTORY_LAST \
+      > /tmp/${USER}.env
+}
+
+function env-load()
+{
+   source /tmp/${USER}.env
+}
+#______________________________________________________________________________
+
 # vim: ft=sh fdm=marker expandtab ts=3 sw=3 :
 
