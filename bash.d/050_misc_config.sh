@@ -58,8 +58,15 @@ export NPM_PACKAGES="$HOME/.npm-packages"
 pathprepend "$HOME/.cabal/bin"
 
 pathprepend "$HOME/.local/bin"
+pathprepend "$HOME/.linuxbrew/bin"
 
 [[ -n $NPM_PACKAGES ]] && pathprepend "$NPM_PACKAGES/bin"
+
+if has_command brew
+then
+   export MANPATH="$(brew --prefix)/share/man:$MANPATH"
+   export INFOPATH="$(brew --prefix)/share/info:$INFOPATH"
+fi
 
 
 #############################################################################
