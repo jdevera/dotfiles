@@ -101,6 +101,14 @@ fi
 # Tell node js about the "global" package repo
 NODE_PATH="$NPM_PACKAGES/lib/node_modules:$NODE_PATH"
 
+
+# Pyenv
+if has_command pyenv
+then
+   export PYENV_ROOT="$HOME/.pyenv"
+   eval "$(pyenv init -)"
+fi
+
 #############################################################################
 
 # }}}
