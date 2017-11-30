@@ -45,6 +45,9 @@
 [hub]
     protocol = https
 
+[tig]
+    diff-context = 10
+
 [color "status"]
     added = "green normal bold"
     changed = "red normal bold"
