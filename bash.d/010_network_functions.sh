@@ -39,7 +39,12 @@ function download()
 
 http_server()
 {
-    python -m SimpleHTTPServer ${1:-8000}
+    if has_command python3
+    then
+        python3 -m http.server ${1:-8000}
+    else
+        python -m SimpleHTTPServer ${1:-8000}
+    fi
 }
 
 
