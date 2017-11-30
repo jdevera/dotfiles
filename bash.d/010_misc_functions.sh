@@ -250,15 +250,39 @@ function eloc()
 #______________________________________________________________________________
 #
 # @tags: command canbescript
+function _lastdown_porcelain()
+{
+   local default_format='%p'
+   local format="%T@ ${FORMAT:-$default_format}\\n"
+   find $DDOWN -maxdepth 1 -printf "$format"  |
+      sort -k1 -n |
+      grep -v $DDOWN$ |
+      tail "$@" |
+      cut -d' ' -f2-
+}
+
+function _maybe_colout()
+{
+   if has_command colout
+   then
+      colout "$@"
+   else
+      cat
+   fi
+}
+
 function lastdown()
 {
-   find $DDOWN -maxdepth 1 -printf '%T@ %TY-%Tm-%Td %TT %p\n'  |
-      sort -k1 -n |
-      cut -d' ' -f2- |
+      FORMAT='%TY-%Tm-%Td %TT %p' _lastdown_porcelain "$@" |
       cut -c-19,31- |
-      grep -v $DDOWN$ |
-      colout '^(\S+ \S+) ('$DDOWN'/)(.+)$' blue,black,cyan dim,dim,dim |
-      tail "$@"
+      _maybe_colout '^(\S+ \S+) ('$DDOWN'/)(.+)$' blue,black,cyan dim,bold,dim
+}
+
+function lastdown-pb()
+{
+   FORMAT='%p' _lastdown_porcelain -1 |
+   head -c -1 | # remove new line before copying
+   xsel --primary --input
 }
 #______________________________________________________________________________
 
