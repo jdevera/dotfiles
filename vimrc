@@ -261,6 +261,8 @@ endif
 " -----------------------------------------------
 if &term =~ '^\(xterm\|screen\|xterm-color\)$'
     set t_Co=256
+    set t_AB=^[[48;5;%dm
+    set t_AF=^[[38;5;%dm
 endif
 
 
