@@ -87,6 +87,10 @@ Plug 'ekalinin/Dockerfile.vim'    " Syntax for Dockerfiles
 Plug 'asciidoc/vim-asciidoc'      " Syntax for ASCII doc
 Plug 'khorser/vim-qfnotes'        " Take notes per line, visible in que quick fix window
 Plug 'mustache/vim-mustache-handlebars' " Mustache templates syntax and abbreviations
+Plug 'nelstrom/vim-markdown-folding'
+Plug 'jelera/vim-javascript-syntax', {'for': ['javascript', 'html']}
+Plug 'othree/javascript-libraries-syntax.vim', {'for': ['javascript', 'html']}
+Plug 'junegunn/goyo.vim'          " Distraction-free writing
 
 
 " My own plugins / forks
