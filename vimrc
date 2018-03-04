@@ -711,6 +711,8 @@ let g:languagetool_jar='$HOME/other/run/lib/LanguageTool-2.6/languagetool-comman
 " YouCompleteMe:
 " When the following options is on, YCM aggressively empties the sign column
 let g:ycm_enable_diagnostic_signs = 0
+" Program name to search for python in the PATH
+let g:ycm_python_binary_path = 'python3'
 
 " VirtualEnv:
 let g:virtualenv_directory = '$HOME/.local/share/virtualenvs/'
