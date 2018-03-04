@@ -31,6 +31,7 @@ alias ..3='cd ../../..'
 alias ..4='cd ../../../..'
 alias ..5='cd ../../../../..'
 alias ..?='show_parent_dirs'
+alias p=pwd
 
 alias du1='du --max-depth 1'
 alias dumd='du --max-depth'
