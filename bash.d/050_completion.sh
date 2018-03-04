@@ -19,5 +19,11 @@ __complete_new()
 link_complete_function new
 # ---------------------------------------------------------------------------
 # }}}
+# Load all completions from linuxbrew {{{
+# ---------------------------------------------------------------------------
+source_dir /home/linuxbrew/.linuxbrew/etc/bash_completion.d/
+source_dir ~/.linuxbrew/etc/bash_completion.d/
+# ---------------------------------------------------------------------------
+# }}}
 
 # vim: fdm=marker
