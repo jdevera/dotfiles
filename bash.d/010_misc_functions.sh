@@ -262,7 +262,11 @@ function rtouch()
 # @tags: command canbescript
 function eloc()
 {
-   local file="$(locate "$@" | fzf -0 -1 -x)"
+   local file="$(locate "$@" |
+      fzf --exit-0 -select-1 --extended \
+         --preview '[[ -d {} ]] || head -n $LINES {} | less -RMS' \
+         --preview-window hidden \
+         --bind ?:toggle-preview)"
    if [[ -n $file ]]
    then
       $EDITOR "$file"
