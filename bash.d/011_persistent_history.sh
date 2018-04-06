@@ -46,11 +46,39 @@ log_bash_persistent_history()
    fi
 
    # }}}
-   # Write to Classic text file {{{
-   local DELIM='|'
-   echo "$date_part $DELIM $PWD $DELIM $LAST_RC $DELIM $command_part" >> ~/.persistent_history
+   if ! has_command rsh-store
+   then
+      # Write directly to Classic text file for Rich Shell History {{{
+      local DELIM='|'
+      # echo "$date_part $DELIM $PWD $DELIM $LAST_RC $DELIM $command_part" >> ~/.persistent_history
+      # }}}
+   else
+      # Use rsh-store to save to JSON and Text files {{{
 
-   # }}}
+      # PHIST_METADATA is an associative array that might already contain metadata
+      # key value pairs. Redeclaring will not overwrite.
+      declare -gA PHIST_METADATA
+
+      local metadata=()
+      local metakey metavalue
+      for metakey in "${!PHIST_METADATA[@]}"
+      do
+         metavalue="${PHIST_METADATA[$metakey]}"
+         metadata=( "${metadata[@]}" '--metadata' "${metakey}=${metavalue}" )
+      done
+      rsh-store \
+               "${metadata[@]}"         \
+               "$command_part"          \
+               "$date_part"             \
+               "$PWD"                   \
+               "$$"                     \
+               "$LAST_RC"               \
+               "${#LAST_PIPESTATUS[@]}" \
+               "${LAST_PIPESTATUS[@]}"  \
+               --json-output ~/.persistent_history.json \
+               --text-output ~/.persistent_history
+      # }}}
+   fi
 
    export PERSISTENT_HISTORY_LAST="$command_part"
    unset PHIST_METADATA
