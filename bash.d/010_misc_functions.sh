@@ -299,6 +299,17 @@ function has_command()
 }
 #______________________________________________________________________________
 
+function assert_has_command()
+{
+   local command
+   command=$1
+   if ! has_command "$command"
+   then
+      echoe "Required command '$command' not found in PATH"
+      return 1
+   fi
+}
+
 
 #______________________________________________________________________________
 # run_first_of COMMAND_LIST [-- ARGUMENTS]
@@ -389,6 +400,22 @@ function getfavicon()
    local favdir="$DDOWN/favicons"
    mkdir -p "$favdir"
    DDOWN="$favdir" download "$url" && mv "$favdir/favicon.ico" "$favdir/${name}.ico"
+}
+
+
+# tags: command canbescript
+function edot
+{
+   local dir
+   dir=${1:-~/.dotfiles}
+   assert_has_command fzf && \
+   assert_has_command fd && \
+   assert_has_command pygmentize || \
+      return 1
+   (cd "$dir" && fd -tl -tf) |
+      fzf \
+      --preview "pygmentize -g -f terminal256 -P style=emacs '$dir/{}'" \
+      --bind "enter:execute(vim '$dir/{}' </dev/tty)"
 }
 
 
