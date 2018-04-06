@@ -8,8 +8,8 @@
 #############################################################################
 
 
-alias vish='vim $DBASH'
-alias vishaf='vim $DBASH/local/after'
+alias vish='edot $DBASH'
+alias vishaf='edot $DBASH/local/after'
 alias gvish='gvim $DBASH'
 alias rlsh='reloadsh'
 
