@@ -69,13 +69,39 @@ function bashtimes()
 # @tags: command canbescript
 function hl()
 {
-   pygmentize -g -f terminal256 -P style=emacs "$@"
+   local style
+   style=${HL_STYLE:-emacs}
+   pygmentize -g -f terminal256 -P "style=$style" "$@"
 }
 
 # @tags: command canbescript
 function hless()
 {
    hl "$@" | less -FiXRM
+}
+
+# Choose the style to use for hl and hless
+function hl_style()
+{
+   local file style newstyle
+   file=${1:?Need a file as first argument}
+   style=${HL_STYLE:-emacs}
+   assert_has_command pygmentize || return  1
+   assert_has_command fzf || return  1
+   newstyle=$(pygmentize -L styles |
+      grep \* |
+      cut -d' ' -f2 |
+      sed 's/://' |
+      sed "s/$style/$style (current style)/" |
+      fzf --preview "pygmentize -g -f terminal256 -P style=\$(echo {}| cut -d ' ' -f1) '$file'")
+   if [[ -n $newstyle ]]
+   then
+      newstyle=$(echo $newstyle | cut -d ' ' -f1)
+      echo "New style is $newstyle"
+      HL_STYLE=$newstyle
+   else
+      echo "No style chosen, $style remains"
+   fi
 }
 
 
