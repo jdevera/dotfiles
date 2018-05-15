@@ -466,5 +466,18 @@ function run_until_fail()
 }
 
 
+# This is a very hacky way to unset a readonly variable. With GDB!
+function unset_readonly_var
+{
+   local var=$1
+   cat << EOF| sudo gdb
+attach $$
+call unbind_variable("$var")
+detach
+EOF
+
+}
+
+
 # vim: ft=sh fdm=marker expandtab ts=3 sw=3 :
 
