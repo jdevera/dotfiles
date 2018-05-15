@@ -442,7 +442,7 @@ function edot
    assert_has_command fd && \
    assert_has_command pygmentize || \
       return 1
-   (cd "$dir" && fd -tl -tf) |
+   (builtin cd "$dir" && fd -I -tl -tf) |
       fzf \
       --preview "pygmentize -g -f terminal256 -P style=emacs '$dir/{}'" \
       --bind "enter:execute(vim '$dir/{}' </dev/tty)"
