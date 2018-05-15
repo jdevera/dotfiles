@@ -628,8 +628,10 @@ let python_slow_sync=1
 let g:is_bash = 1
 
 " Syntastic: Set per-language checkers
-let g:syntastic_python_checkers = ['flakes8', 'pylint']
+let g:syntastic_python_checkers = ['flake8', 'pylint', 'python']
 let g:syntastic_python_pylint_rcfile = '$HOME/.pylintrc'
+let g:syntastic_python_pylint_post_args="--max-line-length=120"
+let g:syntastic_python_flake8_post_args="--ignore=E501"
 
 " Swapheader: Add mappings that don't clash with my spelling abbrevs
 let g:enableSwapHeaderMap = 0
