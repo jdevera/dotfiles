@@ -87,6 +87,15 @@
     cmd = "gvim -f $BASE $LOCAL $REMOTE $MERGED -c 'SpliceInit'"
     trustExitCode = true
 
+[difftool "idea"]
+    cmd = "idea diff $LOCAL $REMOTE"
+    trustExitCode = true
+
+[mergetool "idea"]
+    cmd = "idea merge $LOCAL $REMOTE $BASE $MERGED"
+    trustExitCode = true
+
+
 [include]
     path = ~/.gitconfig.user
     path = ~/.gitconfig.local
