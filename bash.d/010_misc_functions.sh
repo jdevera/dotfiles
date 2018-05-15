@@ -449,5 +449,22 @@ function edot
 }
 
 
+
+function run_until_fail()
+{
+   local -i times=0
+   while true
+   do
+      (( times += 1 ))
+      echo "---------------------------------------------------"
+      echo "RUNNING UNTIL FAILURE (iteration $times)"
+      echo "Command: $*"
+      echo "---------------------------------------------------"
+      "$@" || break
+   done
+   echo "FAILED in iteration $times"
+}
+
+
 # vim: ft=sh fdm=marker expandtab ts=3 sw=3 :
 
