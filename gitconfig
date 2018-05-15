@@ -49,6 +49,9 @@
     upstream = !git rev-parse --abbrev-ref --symbolic-full-name @{u} 2>/dev/null
     fchanged = !git diff --name-only $(git upstream)
 
+    # Show all aliases from the active configuration
+    aliases = !git config --get-regexp '^alias\\.' | sed 's/alias\\.\\([^ ]\\+\\) /alias \\1=/' | showaliases -
+
 [hub]
     protocol = https
 
