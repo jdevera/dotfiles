@@ -6,19 +6,26 @@
     interactive = auto
 
 [alias]
+    # Essential
     st   = status
-    sts  = status --ignore-submodules
     ci   = commit --verbose
-    br   = branch
+    pms  = commit -a -m 'POOR MAN STASH'
     co   = checkout
     df   = diff
     dc   = diff --cached
+    unstash = stash pop
+
+    sts  = status --ignore-submodules
+    br   = branch
+
+    # Seeing logs
     lg   = log -p
     who  = shortlog -s --
     slog = !git --no-pager log --format=oneline --abbrev-commit
     clog  = log -n 20  --pretty=tformat:'%C(yellow)%h%Creset %ai %C(green)%an%Creset %C(bold cyan)->%Creset%C(bold blue)%d%Creset %s'
     ncclog  = log --pretty=tformat:'%h %ai %an -> %d %s'
     dlog = log -n 20  --pretty=tformat:'%C(yellow)%h%Creset %ai %C(green)%an%Creset %C(bold cyan)->%Creset%C(bold blue)%d%Creset %s' --graph
+
     dfnp = !git --no-pager diff
     fuckoff = clean -fdx
     see = "!f() { git show --format=fuller \"$@\" | view - -c \"set fdm=syntax\"; }; f"
@@ -31,16 +38,16 @@
     lasttag = describe --tags --abbrev=0
     lt = describe --tags --abbrev=0
     la = "!git config -l | grep alias | cut -c 7- | showaliases -a -"
+
+    # Merge TO: Be in your feature and merge it to the branch you choose
     meto = "!f() { : git branch ; local CURRENT=$(git rev-parse --abbrev-ref HEAD); git checkout $1; git merge $CURRENT; }; f"
     # Choose files
     cf = !tig status
     gvdiff = "!f() { git diff \"$@\" | gvim - +'se ro ft=git'; }; f"
     mtgv = mergetool -t gvimdiff
     mtv = mergetool -t vimdiff
-    pms = commit -a -m 'POOR MAN STASH'
     upstream = !git rev-parse --abbrev-ref --symbolic-full-name @{u} 2>/dev/null
     fchanged = !git diff --name-only $(git upstream)
-    unstash = stash pop
 
 [hub]
     protocol = https
