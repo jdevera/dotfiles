@@ -1,5 +1,17 @@
 #!/bin/bash
 
+# External Environment variables that affect behaviour:
+#  - DOTFILES_OVERWRITE_REPLY
+#       Set to one of ynq as the reply to use in case of overwriting files.
+#       y: yes
+#       n: no
+#       q: quit
+#  - SKIP_VIM_PLUGINS
+#       Set to 1 to prevent VIM from opening and installing all plugins, as
+#       can be a lengthy process.
+#
+
+THIS_SCRIPT="$(basename $0)"
 
 ## Download all vim plug-ins
 get_vim_plugins()
@@ -31,7 +43,7 @@ post_install_actions()
 install_home()
 {
     local dest_dir="$HOME"
-    local excluded=(`basename $0` README.mkd LICENSE TODO.mkd)
+    local excluded=("$THIS_SCRIPT" README.mkd LICENSE TODO.mkd)
     replace_all=false
 
     local file
@@ -39,13 +51,24 @@ install_home()
     do
         if ! element_exists "$file" "${excluded[@]}"
         then
-            local dest_file_name=`basename "$file" .tpl`
+            local dest_file_name=$(basename "$file" .tpl)
             local dest_file_path="$dest_dir/.$dest_file_name"
             install_file "$file" "$dest_file_path"
         fi
     done
 
     post_install_actions
+}
+
+overwrite_confirmation()
+{
+    local dest=$1
+    if [[ -n $DOTFILES_OVERWRITE_REPLY ]]
+    then
+        REPLY=$DOTFILES_OVERWRITE_REPLY
+    else
+        read -p "overwrite ${dest}? [ynaq] "
+    fi
 }
 
 
@@ -66,7 +89,7 @@ install_file()
         then
             replace_file "$file" "$dest_file_path"
         else
-            read -p "overwrite ${dest_file_path}? [ynaq] "
+            overwrite_confirmation "${dest_file_path}"
             case $REPLY in
                 'y') replace_file "$file" "$dest_file_path" ;;
                 'q') exit 1 ;;
@@ -102,7 +125,7 @@ link_file()
         bash "$file" > "$dest_file_path"
     else
         echo "linking $dest_file_path"
-        ln -s "`pwd`/$file" "$dest_file_path"
+        ln -s "$(pwd)/$file" "$dest_file_path"
     fi
 }
 
@@ -114,7 +137,7 @@ element_exists()
     local arr=( "$@" )
     local i
 
-    for i in ${arr[@]}
+    for i in "${arr[@]}"
     do
         if [[ $i == $elem ]]
         then
