@@ -77,4 +77,8 @@ alias mux=tmuxinator
 alias syslog='grc tail -F /var/log/syslog'
 alias ifconfig='grc ifconfig'
 
+alias go=xdg-open  # Legacy: from when it was gnome-open, try to get used to xo
+alias xo=xdg-open
+alias start=xdg-open
+
 # vim: ft=sh fdm=marker expandtab ts=3 sw=3 :
