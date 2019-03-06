@@ -52,7 +52,7 @@ alias l=ls
 alias sl=ls
 alias sls=ls
 
-alias kb='emacs $DDOC/PKB/notes.org'
+alias kb='emacs $DDROPBOX/docs/PKB/notes.org'
 
 alias cp="rsync -avz"
 
