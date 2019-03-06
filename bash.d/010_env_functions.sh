@@ -234,5 +234,37 @@ function env-load()
 }
 #______________________________________________________________________________
 
+__ensure_path_stack()
+{
+   if ! [[ "$(declare -p PATH_STACK 2>/dev/null)" =~ "declare -a" ]]
+   then
+      declare -a PATH_STACK
+      PATH_STACK=()
+   fi
+}
+push-path()
+{
+   __ensure_path_stack
+   PATH_STACK+=("$PATH")
+   echo "Pushed PATH: $PATH"
+}
+
+pop-path()
+{
+   __ensure_path_stack
+   local size=${#PATH_STACK[@]}
+   if [[ $size -eq 0 ]]
+   then
+      echoe 'PATH stack is empty, could not pop.'
+      return 1
+   fi
+   local last_elem=${PATH_STACK[-1]}
+   PATH=$last_elem
+   echo "Popped PATH: $PATH"
+   unset 'PATH_STACK[-1]'
+}
+
+
+
 # vim: ft=sh fdm=marker expandtab ts=3 sw=3 :
 
