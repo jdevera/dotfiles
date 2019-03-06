@@ -163,7 +163,13 @@ function $function_name {
 #
 function link_complete_function()
 {
-   eval "complete -C __complete_$1 -o default ${2:-$1}"
+   local command=$1
+   if has_command fzf && function_exists "__fzf_complete_$command"
+   then
+      complete -F "__fzf_complete_$command" -o default -o bashdefault "$command"
+   else
+      eval "complete -C __complete_$1 -o default ${2:-$1}"
+   fi
 }
 #______________________________________________________________________________
 
