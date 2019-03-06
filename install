@@ -30,7 +30,7 @@ get_vim_plugins()
 apply_xmodmap()
 {
     echo "Applying custom key bindings"
-    [[ -e ~/.Xmodmap ]] && has_program xmodmap && xmodmap ~/.Xmodmap
+    [[ -e ~/.Xmodmap ]] && has_program xmodmap && xmodmap ~/.Xmodmap || true
 }
 
 post_install_actions()
