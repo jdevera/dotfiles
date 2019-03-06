@@ -33,7 +33,7 @@ call plug#begin('~/.vim/bundle')
 " Plugins
 " ===========================================================================
 
-Plug 'honza/vim-snippets'
+Plug 'jdevera/vim-snippets', {'frozen': 1}
 Plug 'SirVer/ultisnips'
 
 " Surround and repeat (to make the former repeatable)
@@ -91,6 +91,11 @@ Plug 'nelstrom/vim-markdown-folding'
 Plug 'jelera/vim-javascript-syntax', {'for': ['javascript', 'html']}
 Plug 'othree/javascript-libraries-syntax.vim', {'for': ['javascript', 'html']}
 Plug 'junegunn/goyo.vim'          " Distraction-free writing
+Plug 'Glench/Vim-Jinja2-Syntax'
+Plug 'mattn/webapi-vim'
+Plug 'mattn/gist-vim'
+Plug 'leafgarland/typescript-vim'
+Plug 'pearofducks/ansible-vim'
 
 
 " My own plugins / forks
@@ -98,6 +103,7 @@ Plug 'jdevera/vim-stl-syntax', { 'for' : 'cpp' }
 Plug 'jdevera/vim-cs-explorer'
 Plug 'jdevera/vim-protobuf-syntax'
 Plug 'jdevera/qt-highlight-vim', { 'for' : 'cpp' }
+Plug 'jdevera/vim-bashmarks-syntax', {'for': 'bashmarks'}
 
 " Notetaking plugins I no longer use since I use org-mode
 " Plugin 'vimoutliner/vimoutliner'
@@ -115,6 +121,7 @@ Plug 'vim-scripts/lightcolors'
 Plug 'vim-scripts/print_bw.zip'
 Plug 'morhetz/gruvbox'
 Plug 'flazz/vim-colorschemes'
+Plug 'chriskempson/base16-vim'
 
 
 " Load additional local plugins. The local/bundles.vim file, if it
