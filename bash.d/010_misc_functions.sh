@@ -129,7 +129,7 @@ function code()
       function)
          echo "$1 is a function"
          find_function $1 | awk '{ printf("Defined in: %s +%d\n", $3, $2) }'
-         builtin declare -f "$1" | hless
+         builtin declare -f "$1" | hless -l sh
          ;;
       builtin | keyword)
          echo "$1 is a shell $type"
