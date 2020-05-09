@@ -331,7 +331,13 @@ shopt -s extglob
 
 # Get my name from the system to make it easily available everywhere I might
 # need it
-export MYFULLNAME=$(getent passwd $(whoami) | cut -d ':' -f 5 | cut -d ',' -f 1)
+if is_osx
+then
+   MYFULLNAME=$(dscl . -read $HOME RealName | sed -n -e 's/^ *//' -e '$p')
+else
+   MYFULLNAME=$(getent passwd $(whoami) | cut -d ':' -f 5 | cut -d ',' -f 1)
+fi
+export MYFULLNAME
 
 
 # CTRL-D must be used twice to exit the shell
