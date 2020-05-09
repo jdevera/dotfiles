@@ -202,12 +202,7 @@ function showenv()
 #
 function reloadsh()
 {
-   for f in $(declare -F |  awk '{ print $3 }')
-   do
-      unset -f $f
-   done
-   unalias -a
-   KEEP_PROMPT=1 source $HOME/.bashrc
+   exec bash
 }
 #______________________________________________________________________________
 
