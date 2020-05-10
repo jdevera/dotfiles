@@ -66,9 +66,6 @@ complete -o bashdefault -o default -o nospace -F _git tit
 alias jo=jrnl
 alias jot='jrnl --export text | less -RMSFiX'
 
-alias pbcopy='xsel --clipboard --input'
-alias pbpaste='xsel --clipboard --output'
-
 
 alias workon='pew workon $(pew ls | mysplit | fzf)'
 
@@ -77,8 +74,17 @@ alias mux=tmuxinator
 alias syslog='grc tail -F /var/log/syslog'
 alias ifconfig='grc ifconfig'
 
-alias go=xdg-open  # Legacy: from when it was gnome-open, try to get used to xo
-alias xo=xdg-open
-alias start=xdg-open
+if is_osx
+then
+   alias ls='ls -G'
+else
+   alias go=xdg-open  # Legacy: from when it was gnome-open, try to get used to xo
+   alias xo=xdg-open
+   alias start=xdg-open
+
+   alias pbcopy='xsel --clipboard --input'
+   alias pbpaste='xsel --clipboard --output'
+fi
+
 
 # vim: ft=sh fdm=marker expandtab ts=3 sw=3 :
