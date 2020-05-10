@@ -34,7 +34,14 @@ function stripe()
 # @tags: command canbescript
 function stripcolor()
 {
-   sed "s,\x1B\[[0-9;]*[a-zA-Z],,g" "$@"
+   local sed=sed
+   if is_osx
+   then
+      assert_has_command gsed
+      sed=gsed
+   fi
+
+   $sed "s,\x1B\[[0-9;]*[a-zA-Z],,g" "$@"
 }
 
 # @tags: command wrapper
@@ -284,7 +291,13 @@ function _lastdown_porcelain()
 {
    local default_format='%p'
    local format="%T@ ${FORMAT:-$default_format}\\n"
-   find $DDOWN -maxdepth 1 -printf "$format"  |
+   local find_command=find
+   if is_osx
+   then
+      assert_has_command gfind
+      find_command=gfind
+   fi
+   $find_command $DDOWN -maxdepth 1 -printf "$format"  |
       sort -k1 -n |
       grep -v $DDOWN$ |
       tail "$@" |
