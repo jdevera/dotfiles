@@ -160,9 +160,6 @@ endif
 "Keep cursor in same column when jumping from file to file
 set nostartofline
 
-" Set a pdf printer as default printer
-set printdevice=pdfprinter
-
 " New windows (vsplit) on the right of the current one
 set splitright
 
