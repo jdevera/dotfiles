@@ -498,5 +498,11 @@ function abspath()
 }
 
 
+function ppm()  # Poor Person's man
+{
+   local command=$1
+   $command --help | less
+}
+
 # vim: ft=sh fdm=marker expandtab ts=3 sw=3 :
 
