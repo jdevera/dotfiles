@@ -492,5 +492,11 @@ EOF
 }
 
 
+function abspath()
+{
+   python3 -c 'import os, sys; [print(os.path.abspath(path)) for path in sys.argv[1:]]' "$@"
+}
+
+
 # vim: ft=sh fdm=marker expandtab ts=3 sw=3 :
 
