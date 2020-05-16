@@ -14,6 +14,7 @@
     df   = diff
     dc   = diff --cached
     unstash = stash pop
+    cp = cherry-pick
 
     sts  = status --ignore-submodules
     br   = branch
