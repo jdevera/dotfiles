@@ -47,6 +47,7 @@
     gvdiff = "!f() { git diff \"$@\" | gvim - +'se ro ft=git'; }; f"
     mtgv = mergetool -t gvimdiff
     mtv = mergetool -t vimdiff
+    current = symbolic-ref --short HEAD
     upstream = !git rev-parse --abbrev-ref --symbolic-full-name @{u} 2>/dev/null
     fchanged = !git diff --name-only $(git upstream)
 
