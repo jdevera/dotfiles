@@ -17,7 +17,7 @@
     cp = cherry-pick
 
     sts  = status --ignore-submodules
-    br   = branch
+    br   = branches
 
     # Seeing logs
     lg   = log -p
