@@ -89,4 +89,49 @@ function git_has_local_branch()
 }
 
 
+function __newbranch_colorise()
+{
+    local color=$1
+    shift
+    echo $(ansi_color $color)$*$(ansi_color none)
+}
+
+function newbranch()
+{
+    local branch="$1"
+    [[ -n $branch ]] || return 1
+    local upstream="$(git upstream)"
+    local starting_branch=$(command git rev-parse --abbrev-ref HEAD)
+    command git checkout -b "$branch"
+    [[ -z $upstream ]] && return 0
+    command git branch --set-upstream-to="$upstream" HEAD
+
+    echo -en "\nNew branch $(__newbranch_colorise light_cyan "$branch") starting in "
+    echo -en "$(__newbranch_colorise light_purple "$starting_branch") with upstream set to "
+    echo -en "$(__newbranch_colorise light_green "$upstream")\n\n"
+}
+
+function __jirabranch_getbranchname()
+{
+    local issue=$1
+    local issuetitle="$(cut -d'	' -f5 <<< "$issue" | slugify --separator ' ' --stdin)"
+    local prompt="$(cat <<EOP
+NEW BRANCH for $issue
+    Enter a name for the new branch.
+    (spaces will be converted to underscores)
+Name >
+EOP
+)"
+    read -p "$prompt " -e -i "$issuetitle" || return 1
+    local branch="$(awk '{print $1}' <<< "$issue")-${REPLY// /_}"
+    echo $branch
+}
+
+
+function jirabranch()
+{
+    local issue=$(jiralist --no-color --porcelain | fzf -0 -1)
+    local branch=$(__jirabranch_getbranchname "$issue")
+    newbranch "$branch"
+}
 # vim: ft=sh fdm=marker expandtab ts=3 sw=3 :
