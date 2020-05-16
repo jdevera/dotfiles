@@ -32,7 +32,9 @@
     see = "!f() { git show --format=fuller \"$@\" | view - -c \"set fdm=syntax\"; }; f"
     fixup = commit --amend -C HEAD
     econf = config --global -e
-    choosebranch = !git co "$(git branch --list --no-color | cut -c3- | egrep -v '^(resolved|parked)/' | fzf -x)"
+    zbranch = !git branch --list --no-color | cut -c3- | egrep -v '^(resolved|parked)/' | fzf -x
+    choosebranch = !git co "$(git zbranch)"
+    seebranch = !tig "$(git zbranch)"
     cb = !git choosebranch
     bs = branches
     graphviz = "!f() { echo 'digraph git {' ; git log --pretty='format:  %h -> { %p }' \"$@\" | sed 's/[0-9a-f][0-9a-f]*/\"&\"/g' ; echo '}'; }; f"
