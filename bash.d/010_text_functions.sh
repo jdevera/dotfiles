@@ -134,7 +134,9 @@ average ()
 
 field ()
 {
-    awk '{print $'"$1"'}' "$2"
+    local nfield=$1
+    shift
+    awk -v nfield=$nfield '{print $nfield}' "$@"
 }
 
 echoe ()
