@@ -246,6 +246,9 @@ syntax on
 " -----------------------------------------------
 if has('win32') || has('win64')
     set guifont=Lucida\ Console:h12
+elseif has('osx')
+    set macligatures
+    set guifont=Fira\ Code:h16
 elseif has('unix')
     set guifont=Monaco\ 10
 endif
