@@ -48,7 +48,7 @@ function stripcolor()
 function check_home_purity()
 {
    [ -z "$PS1" ] && return
-   purehome
+   has_command purehome && purehome
 }
 
 # @tags: support
