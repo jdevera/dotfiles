@@ -19,10 +19,20 @@ __complete_new()
 link_complete_function new
 # ---------------------------------------------------------------------------
 # }}}
-# Load all completions from linuxbrew {{{
+# Load all completions from homebrew / linuxbrew {{{
 # ---------------------------------------------------------------------------
 source_dir /home/linuxbrew/.linuxbrew/etc/bash_completion.d/
 source_dir ~/.linuxbrew/etc/bash_completion.d/
+
+# Hombrebrew on MacOS:
+if is_osx
+then
+   if [[ -r "/usr/local/etc/profile.d/bash_completion.sh" ]]
+   then
+      export BASH_COMPLETION_COMPAT_DIR="/usr/local/etc/bash_completion.d"
+      source "/usr/local/etc/profile.d/bash_completion.sh"
+   fi
+fi
 # ---------------------------------------------------------------------------
 # }}}
 
