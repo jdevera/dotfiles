@@ -56,6 +56,8 @@
     # Show all aliases from the active configuration
     aliases = !git config --get-regexp '^alias\\.' | sed 's/alias\\.\\([^ ]\\+\\) /alias \\1=/' | showaliases -
 
+    mrpush = push -omerge_request.create
+
 [hub]
     protocol = https
 
