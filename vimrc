@@ -37,91 +37,87 @@ Plug 'jdevera/vim-snippets', {'frozen': 1}
 Plug 'SirVer/ultisnips'
 
 " Surround and repeat (to make the former repeatable)
-Plug 'tpope/vim-repeat'
 Plug 'tpope/vim-surround'
+Plug 'tpope/vim-repeat'
 
-Plug 'junegunn/vim-easy-align'
-Plug 'vim-scripts/camelcasemotion' "TODO: replace with chaoren/vim-wordmotion
+" Interface
 Plug 'godlygeek/csapprox'
-Plug 'hallison/vim-markdown'
 Plug 'majutsushi/tagbar', { 'on' : 'TagbarToggle' }
-" Plug 'vim-scripts/python.vim--Vasiliev', { 'for' : 'python' } "TODO: Replace with python-mode/python-mode
-Plug 'kh3phr3n/python-syntax', { 'for' : 'python' } "TODO: Replace with python-mode/python-mode
-Plug 'scrooloose/nerdcommenter'
-Plug 'scrooloose/nerdtree'
-Plug 'vim-scripts/ShowMarks', { 'on' : 'ShowMarksToggle' } "TODO: Replace with bootleq/ShowMarks
-Plug 'vim-scripts/TaskList.vim', { 'on' : 'TaskList' } "TODO: Replace with gilsondev/searchtasks.vim
-Plug 'tpope/vim-fugitive'
-Plug 'tpope/vim-abolish'
-Plug 'benjifisher/matchit.zip'
-Plug 'neilus/vim-creole'
-Plug 'vim-scripts/toggle_words.vim', { 'on' : 'ToggleWord' }
-Plug 'rking/ag.vim', { 'on' : 'Ag' }
-Plug 'mileszs/ack.vim', { 'on' : 'Ack' }
+Plug 'bootleq/ShowMarks', { 'on' : 'ShowMarksToggle' } " Show vim marks in the gutter
 Plug 'vim-scripts/bufexplorer.zip', { 'on' : ['BufExplorer', 'BufExplorerHorizontalSplit', 'BufExplorerVerticalSplit' ] }
-Plug 'sjl/gundo.vim', { 'on': 'GundoToggle' }
-Plug 'vim-scripts/vcscommand.vim'
-Plug 'vim-scripts/OmniCppComplete'
-Plug 'vim-scripts/SwapHeader'
-Plug 'vim-scripts/DoxygenToolkit.vim'
-Plug 'scrooloose/syntastic'
-Plug 'jceb/vim-orgmode', { 'for' : 'org' }
-Plug 'helino/vim-json', { 'for' : 'json' }
-Plug 'davidhalter/jedi-vim'
-Plug 'tpope/vim-sleuth'
-Plug 'sjl/splice.vim'
-Plug 'luochen1990/rainbow'
-Plug 'Shougo/unite.vim'
-Plug 'Valloric/YouCompleteMe', { 'do' : './install.py --clang-completer' }
-Plug 'vim-scripts/LanguageTool'
+Plug 'techlivezheng/vim-plugin-minibufexpl' " A small window with a list of buffers that appears on top after a number of buffers are open
+Plug 'scrooloose/nerdtree'
+Plug 'simnalamburt/vim-mundo', { 'on': 'MundoToggle' }  " Undo tree visualization
 Plug 'airblade/vim-gitgutter'
-Plug 'junegunn/fzf'
-Plug 'jmcantrell/vim-virtualenv'
-Plug 'vim-scripts/Better-CSS-Syntax-for-Vim', { 'for' : ['css', 'html'] }
-Plug 'techlivezheng/vim-plugin-minibufexpl'
-Plug 'derekwyatt/vim-fswitch'     " Switch between .h and .cpp files
-Plug 'embear/vim-foldsearch'      " Search, and fold all lines without matches
+Plug 'junegunn/goyo.vim', {'on': 'Goyo' } " Distraction-free writing
+
+
+Plug 'AndrewRadev/linediff.vim', {'on': 'Linediff'}  " Diff two separate blocks of text
+Plug 'AndrewRadev/switch.vim', { 'on': ['Switch', 'SwitchReverse'] }  " Switch between words in a group
+Plug 'Valloric/YouCompleteMe'
+Plug 'benjifisher/matchit.zip' " Make % jump to matching pairs that are language aware
+Plug 'chaoren/vim-wordmotion'  " Jump words in camelCase or snake_case
 Plug 'chrisbra/vim-diff-enhanced' " Apply a different slow diff algorithm to vimdiff
-Plug 'vim-scripts/confluencewiki.vim'         " Syntax for Confluence wiki style (jira)
-Plug 'ekalinin/Dockerfile.vim'    " Syntax for Dockerfiles
-Plug 'asciidoc/vim-asciidoc'      " Syntax for ASCII doc
-Plug 'khorser/vim-qfnotes'        " Take notes per line, visible in que quick fix window
-Plug 'mustache/vim-mustache-handlebars' " Mustache templates syntax and abbreviations
-Plug 'nelstrom/vim-markdown-folding'
-Plug 'jelera/vim-javascript-syntax', {'for': ['javascript', 'html']}
-Plug 'othree/javascript-libraries-syntax.vim', {'for': ['javascript', 'html']}
-Plug 'junegunn/goyo.vim'          " Distraction-free writing
+Plug 'davidhalter/jedi-vim'
+Plug 'embear/vim-foldsearch', { 'on': ['Fw', 'Fs', 'Fp', 'FS', 'Fl', 'Fc', 'Fi', 'Fd', 'Fe']}  " Search, and fold all lines without matches
+Plug 'gilsondev/searchtasks.vim', { 'on' : ['SearchTags', 'SearchTagsGrep'] }
+Plug 'godlygeek/tabular' " Simple text alignment
+Plug 'jiangmiao/auto-pairs'
+Plug 'junegunn/fzf', { 'do': {-> fzf#install() } }
+Plug 'junegunn/fzf.vim'
+Plug 'luochen1990/rainbow'  " Rainbow parentheses
+Plug 'rhysd/conflict-marker.vim' " Navigate through merge conflicts and choose which to choose
+Plug 'rking/ag.vim', { 'on' : 'Ag' }
+Plug 'scrooloose/nerdcommenter'
+Plug 'scrooloose/syntastic'
+Plug 'tpope/vim-abolish' " Search and replace several variations of a word with the S command
+Plug 'tpope/vim-fugitive'
+Plug 'tpope/vim-sleuth'
+Plug 'dense-analysis/ale'
+
+
+" Python
+Plug 'vim-python/python-syntax', {'for' : 'python' }
+Plug 'tmhedberg/SimpylFold', {'for' : 'python' } " Correct folding for python
+Plug 'jeetsukumaran/vim-pythonsense', {'for' : 'python' } " Text Objects for python programs
+Plug 'jmcantrell/vim-virtualenv'
+
+
+" File types support
 Plug 'Glench/Vim-Jinja2-Syntax'
-Plug 'mattn/webapi-vim'
-Plug 'mattn/gist-vim'
-Plug 'leafgarland/typescript-vim'
+Plug 'asciidoc/vim-asciidoc'      " Syntax for ASCII doc
+Plug 'cespare/vim-toml'
+Plug 'ekalinin/Dockerfile.vim'    " Syntax for Dockerfiles
+Plug 'elzr/vim-json', { 'for' : 'json' } " This makes JSON more readable
+Plug 'mustache/vim-mustache-handlebars' " Mustache templates syntax and abbreviations
 Plug 'pearofducks/ansible-vim'
+Plug 'plasticboy/vim-markdown'
+Plug 'raimon49/requirements.txt.vim', {'for': 'requirements'}
+Plug 'vim-scripts/Better-CSS-Syntax-for-Vim', { 'for' : ['css', 'html'] }
 
 
 " My own plugins / forks
 Plug 'jdevera/vim-stl-syntax', { 'for' : 'cpp' }
+Plug 'jdevera/qt-highlight-vim', { 'for' : 'cpp' }
+
+Plug 'jdevera/vim-bashmarks-syntax', {'for': 'bashmarks'}
 Plug 'jdevera/vim-cs-explorer'
 Plug 'jdevera/vim-protobuf-syntax'
-Plug 'jdevera/qt-highlight-vim', { 'for' : 'cpp' }
-Plug 'jdevera/vim-bashmarks-syntax', {'for': 'bashmarks'}
 
-" Notetaking plugins I no longer use since I use org-mode
-" Plugin 'vimoutliner/vimoutliner'
-" Plugin 'xolox/vim-notes'
 
 " Colorschemes
-Plug 'tomasr/molokai'
-Plug 'vim-scripts/Mustang2'
-Plug 'vim-scripts/DarkOcean.vim'
-Plug 'obxhdx/vim-github-theme'
 Plug 'altercation/vim-colors-solarized'
-Plug 'vim-scripts/asu1dark.vim'
+Plug 'chriskempson/base16-vim'
+Plug 'flazz/vim-colorschemes'
+Plug 'morhetz/gruvbox'
+Plug 'obxhdx/vim-github-theme'
+Plug 'tomasr/molokai'
 Plug 'vim-scripts/Colorzone'
+Plug 'vim-scripts/DarkOcean.vim'
+Plug 'vim-scripts/Mustang2'
+Plug 'vim-scripts/asu1dark.vim'
 Plug 'vim-scripts/lightcolors'
 Plug 'vim-scripts/print_bw.zip'
-Plug 'morhetz/gruvbox'
-Plug 'flazz/vim-colorschemes'
-Plug 'chriskempson/base16-vim'
 
 
 " Load additional local plugins. The local/bundles.vim file, if it
@@ -339,10 +335,19 @@ set laststatus=2
 " ----------------------------------------------------
 if &diff
     set statusline=[POS=%04l,%04v][%p%%]\ [LEN=%L]\ [F=%F%m%r%h%w]
-elseif exists('*fugitive#statusline')
-    set statusline=%F%m%r%h%w%{fugitive#statusline()}\ %y\ ff:%{(&ff[0])}\ c:%v\ l:%l\ (%p%%\ of\ %L)
 else
-    set statusline=%F%m%r%h%w\ %y\ ff:%{(&ff[0])}\ c:%v\ l:%l\ (%p%%\ of\ %L)
+    let g:virtualenv_stl_format = '[venv:%n]'
+    function! Status_fugitive()
+        return exists('*fugitive#statusline') ?
+                 \ fugitive#statusline() :
+                 \ ''
+    endfunction
+    function! Status_virtualenv()
+        return exists('*virtualenv#statusline') ?
+                    \ virtualenv#statusline() :
+                    \ ''
+    endfunction
+    set statusline=%F%m%r%h%w\ %{Status_fugitive()}%y\ %{Status_virtualenv()}\ ff:%{(&ff[0])}\ c:%v\ l:%l\ (%p%%\ of\ %L)
 endif
 " -----------------------------------------------
 
@@ -361,8 +366,8 @@ silent nnoremap <F5> :botright cwindow<CR>
 " <F4> toggles the directory listing window
 silent nnoremap <F4> :NERDTreeToggle<CR>
 
-" ,gut Toggles Gundo
-silent noremap <Leader>gut :GundoToggle<CR>
+" ,gut Toggles Mundo
+silent noremap <Leader>gut :MundoToggle<CR>
 
 " ,t runs ToggleWord
 silent noremap <Leader>t :ToggleWord<CR>
@@ -372,8 +377,8 @@ silent noremap <leader>#tl <Plug>TaskList
 silent noremap <leader>tl :TaskList<CR>
 
 
-" ,ack uses Ack to search the word under the cursor
-silent noremap <Leader>ack :exec 'Ack '.expand("<cword>")<CR>
+" ,ag uses Ag to search the word under the cursor
+silent noremap <Leader>ag :exec 'Ag '.expand("<cword>")<CR>
 
 " Shift+Tab shows the list of jumps in the tag stack.
 nmap  <C-Tab>  :tags<CR>
@@ -436,9 +441,6 @@ if &diff
     call SetDiffMappings()
 endif
 
-
-nnoremap <silent> <leader>ub :<C-u>Unite -start-insert buffer bookmark<CR>
-nnoremap <silent> <leader>ubf :<C-u>Unite -start-insert buffer file_rec<CR>
 
 " A quick way to build whatever
 nnoremap <C-F9> :make<CR>
@@ -587,9 +589,26 @@ iab redered     rendered
 " {{{ Plugin configuration
 " ----------------------------------------------------------------------------
 
+" SympylFold: Show docstring preview in python folds
+let g:SimpylFold_docstring_preview = 1
 
-" Tasklist: List of markers for tasks
-let g:tlTokenList = ['\<TODO\>', '\<FIXME\>', '\<QUESTION\>', '\<HACK\>', '\<XXXJDV\>']
+" Switch: Toggle words
+autocmd FileType gitrebase let b:switch_custom_definitions =
+    \ [
+    \   [ 'pick', 'reword', 'edit', 'squash', 'fixup', 'exec' ],
+    \ ]
+
+autocmd FileType python let b:switch_custom_definitions =
+    \ [
+    \   ['True', 'False'],
+    \   ['return', 'yield'],
+    \ ]
+
+" Wordmotion: Use only when moving with Leader key
+let g:wordmotion_prefix = '<Leader>'
+
+" Virtualenv: Attempt to detect virtual env and activate it
+let g:virtualenv_auto_activate = 1
 
 " NERDCommenter: Add a space after the comment symbol
 let NERDSpaceDelims=1
@@ -607,29 +626,17 @@ let g:tagbar_autoshowtag = 1
 " Tagbar: map <F9> to toggle tagbar
 nnoremap <silent> <F9> :TagbarToggle<CR>
 
-" VimNotes: Set notes dir in dropbox
-if $DDROPBOX != "" && isdirectory($DDROPBOX)
-    let g:notes_directory=$DDROPBOX . "/vimnotes"
-    let g:notes_shadowdir=g:notes_directory . "/shadow"
-endif
-
-" Doxygen: Autoload doxygen highlighting
-let g:load_doxygen_syntax = 1
-
 " Snipmate: My name for Snippets
 if $MYFULLNAME != ""
     let g:snips_author=$MYFULLNAME
 endif
 
-" Dogmatic: Time in milliseconds before a next arrow key press is counted
-let g:dogmatic_timeout = 120
-
 " XML: Enable folding based on syntax
 let g:xml_syntax_folding = 1
 
 " PythonSyntax: Highlight everything
-let python_highlight_all=1
-let python_slow_sync=1
+let g:python_highlight_all=1
+let g:python_slow_sync=1
 
 " Sh: Assume sh is bash
 let g:is_bash = 1
@@ -637,21 +644,19 @@ let g:is_bash = 1
 " Syntastic: Set per-language checkers
 let g:syntastic_python_checkers = ['flake8', 'pylint', 'python']
 let g:syntastic_python_pylint_rcfile = '$HOME/.pylintrc'
-let g:syntastic_python_pylint_post_args="--max-line-length=120"
-let g:syntastic_python_flake8_post_args="--ignore=E501"
+let g:syntastic_python_pylint_post_args = "--max-line-length=120"
+let g:syntastic_python_flake8_post_args = "--ignore=E501"
+let g:syntastic_python_python_use_codec = 1
 
-" Swapheader: Add mappings that don't clash with my spelling abbrevs
-let g:enableSwapHeaderMap = 0
-
-if ! g:enableSwapHeaderMap
-    noremap  <Leader>sw  :call        SwapHeaderFile(0)<CR>
-    vnoremap <Leader>sw  <C-C>:call   SwapHeaderFile(0)<CR>
-    inoremap <Leader>sw  <C-O>:call   SwapHeaderFile(0)<CR>
-    " Split window
-    noremap  <C-S-F7>  :call       SwapHeaderFile(1)<CR>
-    vnoremap <C-S-F7> <C-C>:call   SwapHeaderFile(1)<CR>
-    inoremap <C-S-F7> <C-O>:call   SwapHeaderFile(1)<CR>
-endif
+" Syntastic: Set behaviour
+let g:syntastic_check_on_open = 1
+let g:syntastic_aggregate_errors = 1
+let g:syntastic_error_symbol = "\u2717"
+let g:syntastic_warning_symbol = "\u26A0"
+let g:syntastic_always_populate_loc_list = 1
+" When set to 3 the error window will be automatically opened when errors are
+" detected, but not closed automatically.
+let g:syntastic_auto_loc_list = 3
 
 " Tagbar: Additional language support:
 "
@@ -702,16 +707,6 @@ let g:UltiSnipsExpandTrigger="<C-Y>"
 " let g:UltiSnipsJumpForwardTrigger="<tab>"
 " let g:UltiSnipsJumpBackwardTrigger="<s-tab>"
 
-" UltiSnips: Unite integration (extracted from help)
-
-function! UltiSnipsCallUnite()
-   Unite -start-insert -winheight=100 -immediately -no-empty ultisnips
-   return ''
-endfunction
-
-inoremap <silent> <F12> <C-R>=(pumvisible()? "\<LT>C-E>":"")<CR><C-R>=UltiSnipsCallUnite()<CR>
-nnoremap <silent> <F12> a<C-R>=(pumvisible()? "\<LT>C-E>":"")<CR><C-R>=UltiSnipsCallUnite()<CR>
-
 " Jedi: Disable features that clash with YoutCompleteMe
 let g:jedi#auto_vim_configuration = 0
 let g:jedi#popup_on_dot = 0
@@ -719,9 +714,6 @@ let g:jedi#popup_select_first = 0
 let g:jedi#completions_enabled = 0
 let g:jedi#completions_command = ""
 let g:jedi#show_call_signatures = "1"
-
-" LanguageTool:
-let g:languagetool_jar='$HOME/other/run/lib/LanguageTool-2.6/languagetool-commandline.jar'
 
 
 " YouCompleteMe:
@@ -732,10 +724,9 @@ let g:ycm_python_binary_path = 'python3'
 
 " VirtualEnv:
 let g:virtualenv_directory = '$HOME/.local/share/virtualenvs/'
+let g:virtualenv_auto_activate = 1
 
 " MiniBufExplorer:
-" Column width in chars
-let g:miniBufExplVSplit = 20
 " Put new window above current or on the left for vertical split:
 let g:miniBufExplBRSplit = 0
 " Require at least 5 buffers before opening the BufExpl window
