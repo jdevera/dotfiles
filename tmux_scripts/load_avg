@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+
+if [[ $(uname -s) = Darwin ]]
+then
+    sysctl -n vm.loadavg | cut -d" " -f2-4
+else
+    cut -d " " -f1-3 /proc/loadavg
+fi
