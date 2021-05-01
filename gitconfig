@@ -41,6 +41,8 @@
     lasttag = describe --tags --abbrev=0
     lt = describe --tags --abbrev=0
     la = "!git config -l | grep alias | cut -c 7- | showaliases -a -"
+    park = "!f() { : git branch; git branch -m \"$1\" \"parked/${1#parked/; }\"; }; f"
+    parkz = !git park "$(git zbranch)"
 
     # Merge TO: Be in your feature and merge it to the branch you choose
     meto = "!f() { : git branch ; local CURRENT=$(git rev-parse --abbrev-ref HEAD); git checkout $1; git merge $CURRENT; }; f"
