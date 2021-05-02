@@ -592,6 +592,15 @@ iab redered     rendered
 " {{{ Plugin configuration
 " ----------------------------------------------------------------------------
 
+" ALE Python: Use flake8 and pylint as linters for Python files
+let g:ale_linters = { 'python': ['flake8', 'pylint'] }
+
+" ALE Python: Tell MyPy not to check for syntax
+" When set to `1`, syntax error messages for mypy will be ignored. This option
+" can be used when running other Python linters which check for syntax errors,
+" as mypy can take a while to finish executing.
+let g:ale_python_mypy_ignore_invalid_syntax = 1
+
 " Ack_vim: Redefine all Ack commands as Ag:
 for command in ['Ack', 'AckAdd', 'AckFromSearch', 'LAck', 'LAckAdd', 'AckFile', 'AckHelp', 'LAckHelp', 'AckWindow', 'LAckWindow']
     execute 'command! -bang -nargs=* ' . substitute(command, 'Ack', 'Ag', '') . ' ' . command . '<bang> <args>'
