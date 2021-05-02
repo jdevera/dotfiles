@@ -600,6 +600,9 @@ endfor
 " Ack_vim: Use Ag
 let g:ackprg = 'ag --vimgrep'
 
+" Fzfvim: Set up command prefix
+let g:fzf_command_prefix = 'F'
+
 " SympylFold: Show docstring preview in python folds
 let g:SimpylFold_docstring_preview = 1
 
