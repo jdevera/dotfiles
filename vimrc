@@ -67,7 +67,7 @@ Plug 'junegunn/fzf', { 'do': {-> fzf#install() } }
 Plug 'junegunn/fzf.vim'
 Plug 'luochen1990/rainbow'  " Rainbow parentheses
 Plug 'rhysd/conflict-marker.vim' " Navigate through merge conflicts and choose which to choose
-Plug 'rking/ag.vim', { 'on' : 'Ag' }
+Plug 'mileszs/ack.vim'
 Plug 'scrooloose/nerdcommenter'
 Plug 'scrooloose/syntastic'
 Plug 'tpope/vim-abolish' " Search and replace several variations of a word with the S command
@@ -588,6 +588,14 @@ iab redered     rendered
 " }}}
 " {{{ Plugin configuration
 " ----------------------------------------------------------------------------
+
+" Ack_vim: Redefine all Ack commands as Ag:
+for command in ['Ack', 'AckAdd', 'AckFromSearch', 'LAck', 'LAckAdd', 'AckFile', 'AckHelp', 'LAckHelp', 'AckWindow', 'LAckWindow']
+    execute 'command! -bang -nargs=* ' . substitute(command, 'Ack', 'Ag', '') . ' ' . command . '<bang> <args>'
+endfor
+
+" Ack_vim: Use Ag
+let g:ackprg = 'ag --vimgrep'
 
 " SympylFold: Show docstring preview in python folds
 let g:SimpylFold_docstring_preview = 1
