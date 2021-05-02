@@ -197,6 +197,9 @@ set nobackup
 " open.
 au BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g`\"" | endif
 
+" Consider all my additional gitconfig files as such
+au BufNewFile,BufRead gitconfig* set filetype=gitconfig
+
 
 " ----------------------------------------------------------------------------
 " }}}
