@@ -9,7 +9,7 @@
     # Essential
     st   = status
     ci   = commit --verbose
-    pms  = commit -a -m 'WIP: POOR MAN STASH'
+    pms  = commit -a -m 'Draft: POOR MAN STASH'
     co   = checkout
     df   = diff
     dc   = diff --cached
