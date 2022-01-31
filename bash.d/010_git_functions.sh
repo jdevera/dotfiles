@@ -120,7 +120,7 @@ function newbranch()
 function __jirabranch_getbranchname()
 {
     local issue=$1
-    local issuetitle="$(cut -d'	' -f5 <<< "$issue" | slugify --separator ' ' --stdin)"
+    local issuetitle="$(cut -d' ' -f2- <<< "$issue" | slugify --separator ' ' --stdin)"
     local prompt="$(cat <<EOP
 NEW BRANCH for $issue
     Enter a name for the new branch.
@@ -136,7 +136,7 @@ EOP
 
 function jirabranch()
 {
-    local issue=$(jiralist --no-color --porcelain | fzf -0 -1)
+    local issue=$(jira mine --porcelain | fzf -0 -1)
     local branch=$(__jirabranch_getbranchname "$issue")
     newbranch "$branch"
 }
