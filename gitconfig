@@ -32,7 +32,9 @@
     see = "!f() { git show --format=fuller \"$@\" | view - -c \"set fdm=syntax\"; }; f"
     fixup = commit --amend -C HEAD
     econf = config --global -e
-    zbranch = !git branch --list --no-color | cut -c3- | egrep -v '^(resolved|parked)/' | fzf -x
+    filtered-branches = !git branch --list --no-color | cut -c3- | egrep -v '^(resolved|parked)/'
+    zbranch = !git filtered-branches | fzf -x
+    zbranches = !git filtered-branches | fzf -x -m
     choosebranch = !git co "$(git zbranch)"
     seebranch = !tig "$(git zbranch)"
     cb = !git choosebranch
