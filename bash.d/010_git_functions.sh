@@ -100,15 +100,21 @@ function newbranch()
 {
     local branch="$1"
     [[ -n $branch ]] || return 1
-    local upstream="$(git upstream)"
+
     local starting_branch=$(command git rev-parse --abbrev-ref HEAD)
+    if ! local upstream="$(command git rev-parse --abbrev-ref --symbolic-full-name @{u} 2>/dev/null)"
+    then
+       upstream=''
+    fi
+
     command git checkout -b "$branch"
-    [[ -z $upstream ]] && return 0
-    command git branch --set-upstream-to="$upstream" HEAD
+    [[ -n $upstream  ]] && \
+       command git branch --set-upstream-to="$upstream" HEAD
 
     echo -en "\nNew branch $(__newbranch_colorise light_cyan "$branch") starting in "
-    echo -en "$(__newbranch_colorise light_purple "$starting_branch") with upstream set to "
-    echo -en "$(__newbranch_colorise light_green "$upstream")\n\n"
+    echo -en "$(__newbranch_colorise light_purple "$starting_branch")"
+    [[ -n $upstream ]] && \
+       echo -en " with upstream set to $(__newbranch_colorise light_green "$upstream")\n\n"
 }
 
 function __jirabranch_getbranchname()
