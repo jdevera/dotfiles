@@ -200,21 +200,58 @@ fi
 
 function prompt_command()
 {
+   # Prep {{{
+   # -------------------------------------------------------------------------
    # As the first command, capture all status info from the previous command IN
-   # ONE GO. Then later break it down. If done in two separate assignments, the
-   # status of the first assignment, and not that of the previos shell command,
-   # will be used instead.
-   local status_capture=( $? "${PIPESTATUS[@]}" )
-   LAST_RC="${status_capture[0]}"
-   LAST_PIPESTATUS=( "${status_capture[@]:1}" )
+   # ONE GO. If done in two separate assignments, the status of the first
+   # assignment, and not that of the previous shell command, will be used
+   # instead.
+   local last_rc=$? last_pipestatus=(${PIPESTATUS[@]})
 
-   if [[ -n $BASH_THEME_CMD ]]; then
-      eval "$BASH_THEME_CMD"
+
+   # If using starship to handle the prompt, then it already captured the
+   # status info in its own variables. Use them here if available, as starship
+   # runs its own prompt command first and the statuses captured above would
+   # correspond to starship handling and not the command executed by the user.
+   if [[ -n $STARSHIP_CMD_STATUS ]]
+   then
+       LAST_RC=$STARSHIP_CMD_STATUS
+   else
+       LAST_RC=$last_rc
    fi
+
+   if [[ -n $STARSHIP_PIPE_STATUS ]]
+   then
+       LAST_PIPESTATUS=(${STARSHIP_PIPE_STATUS[@]})
+   else
+       LAST_PIPESTATUS=(${last_pipestatus[@]})
+   fi
+
+   # Now make sure this function was the first in the PROMPT_COMMAND (unless we
+   # are using Starship). If it wasn't, then there is no garantee that we are
+   # capturing the right thing.
+   if ! [[ $PROMPT_COMMAND =~ ^prompt_command || $PROMPT_COMMAND =~ ^starship_precmd ]]
+   then
+      echoe "Unexpected content in \$PROMPT_COMMAND (prompt_command must be first): $PROMPT_COMMAND"
+   fi
+
+   # ----------------------------------------------------------------------}}}
+
+   # Load the prompt theme if Starship is not running
+   if [[ -z $STARSHIP_CMD_STATUS && -n $bash_theme_cmd ]]; then
+      eval "$bash_theme_cmd"
+   fi
+
+   # Log rich history
    log_bash_persistent_history
 }
 
 export PROMPT_COMMAND=prompt_command
+
+if has_command starship
+then
+   eval "$(starship init bash)"
+fi
 
 
 #############################################################################
