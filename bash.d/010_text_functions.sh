@@ -25,18 +25,16 @@
 #
 mysplit()
 {
-    local DEFAULT_DELIMITER=" "
+    local default_delimiter=" "
 
-    local a_delimiter="${1:-$DEFAULT_DELIMITER}"
+    local a_delimiter="${1:-$default_delimiter}"
     local a_inputfile="$2"
 
     awk -F "$a_delimiter" \
     '{  for(i = 1; i <= NF; i++) {
             print $i
         }
-    }' $a_inputfile
-
-    return $?
+    }' "$a_inputfile"
 }
 ##############################################################################
 
@@ -59,9 +57,9 @@ mysplit()
 #
 myjoin()
 {
-    local DEFAULT_DELIMITER=" "
+    local default_delimiter=" "
 
-    local a_delimiter="${1:-$DEFAULT_DELIMITER}"
+    local a_delimiter="${1:-$default_delimiter}"
     local a_inputfile="$2"
 
 	awk -v usersep="$a_delimiter" '
@@ -74,8 +72,7 @@ myjoin()
 	}
 	END{
 		print "" # Print a new line at the end.
-	}' $a_inputfile
-    return $?
+	}' "$a_inputfile"
 }
 ##############################################################################
 
@@ -99,19 +96,17 @@ myjoin()
 #
 myrmlistitems()
 {
-    local DEFAULT_DELIMITER=" "
+    local default_delimiter=" "
 
     local a_element="$1"
-    local a_delimiter="${2:-$DEFAULT_DELIMITER}"
+    local a_delimiter="${2:-$default_delimiter}"
     local a_inputfile="$3"
 
     [[ -z $a_element ]] && return 1
 
-    mysplit "$a_delimiter" $a_inputfile | \
+    mysplit "$a_delimiter" "$a_inputfile" | \
         grep -v "^$a_element\$" | \
         myjoin "$a_delimiter"
-
-	return $?
 }
 ##############################################################################
 
@@ -136,12 +131,12 @@ field ()
 {
     local nfield=$1
     shift
-    awk -v nfield=$nfield '{print $nfield}' "$@"
+    awk -v nfield="$nfield" '{print $nfield}' "$@"
 }
 
 echoe ()
 {
-    echo $* 1>&2
+    echo "$@" 1>&2
 }
 
 # vim: ft=sh fdm=marker expandtab ts=3 sw=3 :

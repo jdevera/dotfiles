@@ -12,13 +12,11 @@
 # Check if a function given by name is defined in the current shell instance
 function_exists()
 {
-   local a_function_name="$1"
+   local a_function_name=$1
 
    [[ -z $a_function_name ]] && return 1
 
    declare -F "$a_function_name" > /dev/null 2>&1
-
-   return $?
 }
 
 # If the function specified in the first parameter exists, call it with the
@@ -37,7 +35,7 @@ function find_function()
 # Output the names of all functions defined in the current shell
 function dump_functions()
 {
-   declare -f $(declare -F | awk '{print $3}')
+   declare -f "$(declare -F | awk '{print $3}')"
 }
 
 # Show a pretty printed of shell functions, sorted by file and line
@@ -48,7 +46,7 @@ function list_functions()
    shopt -s extdebug
    for f in $(declare -F | awk '{ print $3 }' )
    do
-      declare -F $f
+      declare -F "$f"
    done
    ) |
 
@@ -83,7 +81,7 @@ function __list_functions()
    shopt -s extdebug
    for f in $(declare -F | awk '{ print $3 }' )
    do
-      declare -F $f
+      declare -F "$f"
    done
    ) |
 

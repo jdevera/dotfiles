@@ -39,15 +39,11 @@ function download()
 
 http_server()
 {
-    if has_command python3
-    then
-        python3 -m http.server ${1:-8000}
-    else
-        python -m SimpleHTTPServer ${1:-8000}
-    fi
+    python3 -m http.server "${1:-8000}"
 }
 
 
+# shellcheck source=/dev/null
 function ssh-start-agent()
 {
     local agentfile=~/.ssh/agent

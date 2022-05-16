@@ -39,7 +39,7 @@ log_bash_persistent_history()
 
    # }}}
    # Prevent repetition if $PHIST_SAVE_DUPS is set to 0 {{{
-   if [[ ${PHIST_SAVE_DUPS:-1} -eq 0 ]] && [[ $command_part == $PERSISTENT_HISTORY_LAST ]]
+   if [[ ${PHIST_SAVE_DUPS:-1} -eq 0 ]] && [[ $command_part == "$PERSISTENT_HISTORY_LAST" ]]
    then
       unset PHIST_METADATA
       return
@@ -49,7 +49,8 @@ log_bash_persistent_history()
    if ! has_command rsh-store
    then
       # Write directly to Classic text file for Rich Shell History {{{
-      local DELIM='|'
+      :
+      # local DELIM='|'
       # echo "$date_part $DELIM $PWD $DELIM $LAST_RC $DELIM $command_part" >> ~/.persistent_history
       # }}}
    else
@@ -112,7 +113,7 @@ rhist()
 {
    local n
    [[ -n $1 ]] && n="-n $1"
-   tail $n ~/.persistent_history |
+   tail "$n" ~/.persistent_history |
       color_rhist
 }
 

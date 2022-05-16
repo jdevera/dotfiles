@@ -50,20 +50,23 @@ git-foldiff()
 
 function git-explore()
 {
-    local dest="/tmp/git/$(basename $1 .git)"
+    local dest
+    dest="/tmp/git/$(basename "$1" .git)"
     while [[ -e $dest ]]
     do
        dest=${dest}_
     done
 
-    run_first_of hub git -- clone --depth=1 --recursive $1 $dest && cd "$dest" || return 1
+    run_first_of hub git -- clone --depth=1 --recursive "$1" "$dest" &&
+        cd "$dest" ||
+        return 1
 
     local readme=
     for readme in ./README*
     do
        break
     done
-    [[ -e $readme ]] && run_first_of hless hl view less -- $readme
+    [[ -e $readme ]] && run_first_of hless hl view less -- "$readme"
 }
 
 function in_git_repo()
@@ -75,7 +78,7 @@ function check_in_git_repo()
 {
    if ! in_git_repo
    then
-      echo "Not in a git repository" &>2
+      echoe "Not in a git repository"
       return 1
    fi
    return 0

@@ -67,8 +67,9 @@ pathprepend "$HOME/.cargo/bin"
 
 if has_command brew
 then
-   export MANPATH="$(brew --prefix)/share/man:$MANPATH"
-   export INFOPATH="$(brew --prefix)/share/info:$INFOPATH"
+   MANPATH="$(brew --prefix)/share/man:$MANPATH"
+   INFOPATH="$(brew --prefix)/share/info:$INFOPATH"
+   export MANPATH INFOPATH
 fi
 
 
@@ -91,7 +92,11 @@ fi
 
 # Enable color support of ls and grep
 if [ -x /usr/bin/dircolors ]; then
-    test -r ~/.dircolors && eval "$(dircolors -b ~/.dircolors)" || eval "$(dircolors -b)"
+    if [[ -r ~/.dircolor ]]; then
+        eval "$(dircolors -b ~/.dircolors)"
+    else
+        eval "$(dircolors -b)"
+    fi
     alias ls='ls --color=auto'
     alias grep='grep --color=auto'
     alias fgrep='fgrep --color=auto'
@@ -179,13 +184,15 @@ function theme_simple_prompt_cmd()
    PS1="\[$(ansi_color $color)\]$prompt_symbol\[$(ansi_color none)\] "
    if [[ -e $VIRTUAL_ENV ]]
    then
-      local venvname="$(basename $VIRTUAL_ENV)"
+      local venvname
+      venvname="$(basename "$VIRTUAL_ENV")"
       PS1="{venv:\[$(ansi_color white)\]$venvname\[$(ansi_color none)\]}$PS1"
    fi
 }
 
 theme_simple()
 {
+   # shellcheck disable=SC2034
    BASH_THEME_CMD=theme_simple_prompt_cmd
 }
 # }}}
@@ -206,7 +213,7 @@ function prompt_command()
    # ONE GO. If done in two separate assignments, the status of the first
    # assignment, and not that of the previous shell command, will be used
    # instead.
-   local last_rc=$? last_pipestatus=(${PIPESTATUS[@]})
+   local last_rc=$? last_pipestatus=("${PIPESTATUS[@]}")
 
 
    # If using starship to handle the prompt, then it already captured the
@@ -222,9 +229,9 @@ function prompt_command()
 
    if [[ -n $STARSHIP_PIPE_STATUS ]]
    then
-       LAST_PIPESTATUS=(${STARSHIP_PIPE_STATUS[@]})
+       LAST_PIPESTATUS=("${STARSHIP_PIPE_STATUS[@]}")
    else
-       LAST_PIPESTATUS=(${last_pipestatus[@]})
+       LAST_PIPESTATUS=("${last_pipestatus[@]}")
    fi
 
    # Now make sure this function was the first in the PROMPT_COMMAND (unless we
@@ -370,9 +377,9 @@ shopt -s extglob
 # need it
 if is_osx
 then
-   MYFULLNAME=$(dscl . -read $HOME RealName | sed -n -e 's/^ *//' -e '$p')
+   MYFULLNAME=$(dscl . -read "$HOME" RealName | sed -n -e 's/^ *//' -e '$p')
 else
-   MYFULLNAME=$(getent passwd $(whoami) | cut -d ':' -f 5 | cut -d ',' -f 1)
+   MYFULLNAME=$(getent passwd "$(whoami)" | cut -d ':' -f 5 | cut -d ',' -f 1)
 fi
 export MYFULLNAME
 

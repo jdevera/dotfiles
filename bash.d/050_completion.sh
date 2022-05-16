@@ -13,7 +13,7 @@ link_complete_function ansi_color set_prompt_color
 # ---------------------------------------------------------------------------
 __complete_new()
 {
-   (builtin cd $SOURCE_TEMPLATES && ls) | grep "^$2.*"
+   (builtin cd "$SOURCE_TEMPLATES" && ls) | grep "^$2.*"
 }
 
 link_complete_function new

@@ -88,7 +88,7 @@ function hl()
          break
       fi
    done
-   pygmentize $guess_arg -f terminal256 -P "style=$style" "$@"
+   pygmentize "$guess_arg" -f terminal256 -P "style=$style" "$@"
 }
 
 # @tags: command canbescript
@@ -105,15 +105,16 @@ function hl_style()
    style=${HL_STYLE:-emacs}
    assert_has_command pygmentize || return  1
    assert_has_command fzf || return  1
+   # shellcheck disable=SC2063
    newstyle=$(pygmentize -L styles |
-      grep \* |
+      grep '*' |
       cut -d' ' -f2 |
       sed 's/://' |
       sed "s/$style/$style (current style)/" |
       fzf --preview "pygmentize -g -f terminal256 -P style=\$(echo {}| cut -d ' ' -f1) '$file'")
    if [[ -n $newstyle ]]
    then
-      newstyle=$(echo $newstyle | cut -d ' ' -f1)
+      newstyle=$(echo "$newstyle" | cut -d ' ' -f1)
       echo "New style is $newstyle"
       HL_STYLE=$newstyle
    else
@@ -137,7 +138,8 @@ function hl_style()
 # @tags: command
 function code()
 {
-   local type="$(builtin type -t $1)"
+   local type
+   type="$(builtin type -t "$1")"
    case $type in
       alias)
          echo "$1 is an alias"
@@ -145,7 +147,7 @@ function code()
          ;;
       function)
          echo "$1 is a function"
-         find_function $1 | awk '{ printf("Defined in: %s +%d\n", $3, $2) }'
+         find_function "$1" | awk '{ printf("Defined in: %s +%d\n", $3, $2) }'
          builtin declare -f "$1" | hless -l sh
          ;;
       builtin | keyword)
@@ -153,10 +155,11 @@ function code()
          builtin help "$1"
          ;;
       file)
-         local path="$(which "$1")"
+         local path
+         path="$(which "$1")"
          if head -1 "$path" | grep -q "^#!"; then
             echo "$1 is a script at $path"
-            cat "$path" | hless
+            hless <"$path"
          else
             echo "$1 is a binary at $path"
          fi
@@ -210,6 +213,7 @@ function xf()
 # @tags: command cd
 function cdf()
 {
+   # shellcheck disable=SC2164
    if [[ -e $1 && ! -d $1 ]]; then
       cd "$(dirname "$1")"
    else
@@ -227,15 +231,16 @@ function cdf()
 # @tags: command canbescript
 function whed()
 {
-   if [[ $(builtin type -t $1) == 'function' ]]
+   if [[ $(builtin type -t "$1") == 'function' ]]
    then
-      whedf $1
+      whedf "$1"
       return
    fi
-   local matches="$(which -a "$@" | fzf -0 -1 --multi)"
+   local matches
+   matches="$(which -a "$@" | fzf -0 -1 --multi)"
    if [[ -z $matches ]]
    then
-      echo "No matches found for $@" 1>&2
+      echoe "No matches found for $*"
       return 1
    fi
    $EDITOR "$matches"
@@ -244,13 +249,14 @@ complete -c whed # Complete with command names
 
 function whedf()
 {
-   local match="$(find_function $1 | awk '{ printf("%s +%d\n", $3, $2) }')"
+   local match
+   match="$(find_function "$1" | awk '{ printf("%s +%d\n", $3, $2) }')"
    if [[ -z $match ]]
    then
-      echo "No match found for function $@" 1>&2
+      echoe "No match found for function $*"
       return 1
    fi
-   $EDITOR $match
+   $EDITOR "$match"
 
 }
 #______________________________________________________________________________
@@ -265,7 +271,7 @@ function whedf()
 function rtouch()
 {
    local path="$1"
-   mkdir -p "$(dirname $path)"
+   mkdir -p "$(dirname "$path")"
    touch "$path"
 }
 #______________________________________________________________________________
@@ -279,11 +285,13 @@ function rtouch()
 # @tags: command canbescript
 function eloc()
 {
-   local file="$(locate "$@" |
+   local file=
+   # shellcheck disable=SC2016
+   file=$(locate "$@" |
       fzf --exit-0 -select-1 --extended \
          --preview '[[ -d {} ]] || head -n $LINES {} | less -RMS' \
          --preview-window hidden \
-         --bind ?:toggle-preview)"
+         --bind '?:toggle-preview')
    if [[ -n $file ]]
    then
       $EDITOR "$file"
@@ -307,9 +315,9 @@ function _lastdown_porcelain()
       assert_has_command gfind
       find_command=gfind
    fi
-   $find_command $DDOWN -maxdepth 1 -printf "$format"  |
+   $find_command "$DDOWN" -maxdepth 1 -printf "$format"  |
       sort -k1 -n |
-      grep -v $DDOWN$ |
+      grep -v "$DDOWN"$ |
       tail "$@" |
       cut -d' ' -f2-
 }
@@ -328,7 +336,7 @@ function lastdown()
 {
       FORMAT='%TY-%Tm-%Td %TT %p' _lastdown_porcelain "$@" |
       cut -c-19,31- |
-      _maybe_colout '^(\S+ \S+) ('$DDOWN'/)(.+)$' blue,black,cyan dim,bold,dim
+      _maybe_colout '^(\S+ \S+) ('"$DDOWN"'/)(.+)$' blue,black,cyan dim,bold,dim
 }
 
 function lastdown-pb()
@@ -420,18 +428,20 @@ function ranking()
       rev=''
       shift
    fi
-   sort "$@" | uniq -c | sort -k 1 -n $rev
+   sort "$@" | uniq -c | sort -k 1 -n "$rev"
 }
 
 # @tags: command cd
 function cdz()
 {
-   local dir="$(
+   local dir
+   dir="$(
       awk -F"|" '{printf("%5s\t%s\n", $2, $1);}' "$(__bm_bookmarks_file)"  |
       fzf -1 -0 -x |
       awk -F"\t" '{print $2}'
       )"
-   [[ -n $dir ]] && { echo $dir; cd "$dir"; }
+   # shellcheck disable=SC2164
+   [[ -n $dir ]] && { echo "$dir"; cd "$dir"; }
 }
 
 
@@ -439,6 +449,7 @@ function cdz()
 function vecd()
 {
    [[ -z $VIRTUAL_ENV ]] && return 1
+   # shellcheck disable=SC2164
    cd "$(cat "$VIRTUAL_ENV/.project")"
 }
 
