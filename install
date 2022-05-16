@@ -11,7 +11,7 @@
 #       can be a lengthy process.
 #
 
-THIS_SCRIPT="$(basename $0)"
+THIS_SCRIPT="$(basename "$0")"
 
 ## Download all vim plug-ins
 get_vim_plugins()
@@ -29,8 +29,10 @@ get_vim_plugins()
 ## Run xmodmap with the customisations in ~/.Xmodmap
 apply_xmodmap()
 {
-    echo "Applying custom key bindings"
-    [[ -e ~/.Xmodmap ]] && has_program xmodmap && xmodmap ~/.Xmodmap || true
+    if [[ -e ~/.Xmodmap ]] && has_program xmodmap; then
+        echo "Applying custom key bindings"
+        xmodmap ~/.Xmodmap || true
+    fi
 }
 
 post_install_actions()
@@ -51,7 +53,8 @@ install_home()
     do
         if ! element_exists "$file" "${excluded[@]}"
         then
-            local dest_file_name=$(basename "$file" .tpl)
+            local dest_file_name
+            dest_file_name=$(basename "$file" .tpl)
             local dest_file_path="$dest_dir/.$dest_file_name"
             install_file "$file" "$dest_file_path"
         fi
@@ -67,7 +70,7 @@ overwrite_confirmation()
     then
         REPLY=$DOTFILES_OVERWRITE_REPLY
     else
-        read -p "overwrite ${dest}? [ynaq] "
+        read -r -p "overwrite ${dest}? [ynaq] "
     fi
 }
 
@@ -139,7 +142,7 @@ element_exists()
 
     for i in "${arr[@]}"
     do
-        if [[ $i == $elem ]]
+        if [[ $i == "$elem" ]]
         then
             return 0
         fi
