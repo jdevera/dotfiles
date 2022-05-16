@@ -118,6 +118,7 @@ Plug 'vim-scripts/Mustang2'
 Plug 'vim-scripts/asu1dark.vim'
 Plug 'vim-scripts/lightcolors'
 Plug 'vim-scripts/print_bw.zip'
+Plug 'joshdick/onedark.vim'
 
 
 " Load additional local plugins. The local/bundles.vim file, if it
