@@ -78,7 +78,17 @@ function hl()
 {
    local style
    style=${HL_STYLE:-emacs}
-   pygmentize -g -f terminal256 -P "style=$style" "$@"
+   local guess_arg='-g'
+   local arg
+   for arg in "$@"
+   do
+      if [[ $arg == '-l' ]]
+      then
+         guess_arg=''
+         break
+      fi
+   done
+   pygmentize $guess_arg -f terminal256 -P "style=$style" "$@"
 }
 
 # @tags: command canbescript
