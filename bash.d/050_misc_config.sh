@@ -205,9 +205,41 @@ theme_simple
 fi
 
 
-function prompt_command()
+function precmd_rich_history()
 {
-   # Prep {{{
+   # Introduction {{{
+   # -------------------------------------------------------------------------
+   # I want to capture the return code of the program that run, and also the
+   # PIPESTATUS value.
+   #
+   # This is a race, since anything that gets added to PROMPT_COMMAND before
+   # this function will mean the values that are captured here correspond to
+   # that function rather than the user command.
+   #
+   # Known modifiers of the return code
+   # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   #
+   # Starship
+   # ==========
+   #
+   # A prompt manager, installs a handler precisely to capture the status of
+   # the last run command.
+   # It stores those values in the STARSHIP_CMD_STATUS and STARSHIP_PIPE_STATUS
+   # variables.
+   # It uses Bash-Preexec if present.
+   #
+   # Bash-Preexec
+   # ============
+   #
+   # A Bash library that provides `preexec` and `precmd` hooks functions for
+   # Bash 3.1+ in the style of Zsh.
+   #
+   # It captures both the resturn code and the PIPESTATUS, respectively, in the
+   # __bp_last_ret_value and BP_PIPESTATUS variables.
+   #
+   # Site: https://github.com/rcaloras/bash-preexec
+   #
+   # Prep
    # -------------------------------------------------------------------------
    # As the first command, capture all status info from the previous command IN
    # ONE GO. If done in two separate assignments, the status of the first
@@ -215,50 +247,49 @@ function prompt_command()
    # instead.
    local last_rc=$? last_pipestatus=("${PIPESTATUS[@]}")
 
+   LAST_RC=
+   LAST_PIPESTATUS=
 
    # If using starship to handle the prompt, then it already captured the
    # status info in its own variables. Use them here if available, as starship
    # runs its own prompt command first and the statuses captured above would
    # correspond to starship handling and not the command executed by the user.
-   if [[ -n $STARSHIP_CMD_STATUS ]]
-   then
-       LAST_RC=$STARSHIP_CMD_STATUS
-   else
-       LAST_RC=$last_rc
-   fi
+   [[ -n $STARSHIP_CMD_STATUS ]]  && LAST_RC=$STARSHIP_CMD_STATUS
+   [[ -n $STARSHIP_PIPE_STATUS ]] && LAST_PIPESTATUS=("${STARSHIP_PIPE_STATUS[@]}")
 
-   if [[ -n $STARSHIP_PIPE_STATUS ]]
-   then
-       LAST_PIPESTATUS=("${STARSHIP_PIPE_STATUS[@]}")
-   else
-       LAST_PIPESTATUS=("${last_pipestatus[@]}")
-   fi
+   # If using bash-preexec, save from them.
+   [[ -n $__bp_last_ret_value ]] && LAST_RC=$__bp_last_ret_value
+   [[ -n $BP_PIPESTATUS ]] && LAST_PIPESTATUS=("${BP_PIPESTATUS[@]}");
 
-   # Now make sure this function was the first in the PROMPT_COMMAND (unless we
-   # are using Starship). If it wasn't, then there is no garantee that we are
-   # capturing the right thing.
-   if ! [[ $PROMPT_COMMAND =~ ^prompt_command || $PROMPT_COMMAND =~ ^starship_precmd ]]
-   then
-      echoe "Unexpected content in \$PROMPT_COMMAND (prompt_command must be first): $PROMPT_COMMAND"
-   fi
+   # Otherwise, use the return codes captured at the start of this function.
+   [[ -z $LAST_RC ]] && LAST_RC=$last_rc
+   [[ -z $LAST_PIPESTATUS ]] && LAST_PIPESTATUS=("${last_pipestatus[@]}")
+
 
    # ----------------------------------------------------------------------}}}
+   # Log rich history
+   log_bash_persistent_history
 
+}
+
+function precmd_bash_theme()
+{
    # Load the prompt theme if Starship is not running
    if [[ -z $STARSHIP_CMD_STATUS && -n $bash_theme_cmd ]]; then
       eval "$bash_theme_cmd"
    fi
 
-   # Log rich history
-   log_bash_persistent_history
 }
-
-export PROMPT_COMMAND=prompt_command
 
 if has_command starship
 then
    eval "$(starship init bash)"
+else
+   echo "No starship, this is the path: $PATH"
 fi
+
+precmd_functions+=(precmd_rich_history)
+precmd_functions+=(precmd_bash_theme)
 
 
 #############################################################################
