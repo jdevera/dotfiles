@@ -156,7 +156,9 @@ function showenv()
 #
 function reloadsh()
 {
-   exec bash
+   local option=
+   is_login_shell && option=-l
+   exec bash $option
 }
 #______________________________________________________________________________
 
@@ -215,6 +217,10 @@ pop-path()
 }
 
 
+is_login_shell()
+{
+   shopt -q login_shell
+}
 
 # vim: ft=sh fdm=marker expandtab ts=3 sw=3 :
 
