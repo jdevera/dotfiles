@@ -1,4 +1,5 @@
 # ~/.bashrc: executed by bash(1) for non-login shells.
+# vim: fdm=marker :
 
 # If not running interactively, don't do anything {{{
 [ -z "$PS1" ] && return
@@ -73,4 +74,3 @@ unset bash_times_file
 
 # }}}
 
-# vim: fdm=marker :
