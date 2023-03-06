@@ -61,6 +61,8 @@ source_dir()
 }
 # }}}
 
+source_dir ~/.bash.d/vendor/bash-preexec  # Source bash-preexec first
+
 source_dir ~/.bash.d/local/before
 source_dir ~/.bash.d
 source_dir ~/.bash.d/local/after

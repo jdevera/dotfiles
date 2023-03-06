@@ -1,0 +1,5 @@
+- dir: bash-preexec
+  source: https://github.com/rcaloras/bash-preexec.git
+  hash: a44754f5c3ca76b0330324680670cb8574d2768f
+  files:
+    - bash-preexec.sh
