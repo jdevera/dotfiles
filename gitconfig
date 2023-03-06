@@ -102,6 +102,8 @@
     cmd = "idea merge $LOCAL $REMOTE $BASE $MERGED"
     trustExitCode = true
 
+[core]
+    excludesfile = ~/.gitignore_global
 
 [include]
     path = ~/.gitconfig.user
