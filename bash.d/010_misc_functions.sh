@@ -249,15 +249,16 @@ complete -c whed # Complete with command names
 
 function whedf()
 {
-   local match
-   match="$(find_function "$1" | awk '{ printf("%s +%d\n", $3, $2) }')"
+   local match file line
+   match=$(find_function "$1")
    if [[ -z $match ]]
    then
       echoe "No match found for function $*"
       return 1
    fi
-   $EDITOR "$match"
-
+   file=$(cut -d' ' -f3- <<<"$match")
+   line=$(cut -d' ' -f2  <<<"$match")
+   $EDITOR "$file" "+$line"
 }
 #______________________________________________________________________________
 
