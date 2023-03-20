@@ -69,5 +69,6 @@ else
    alias pbpaste='xsel --clipboard --output'
 fi
 
+alias ag='ag --color-path="1;38;5;201" --color-line-number="1;38;5;81" --color-match="48;5;214;38;5;0"'
 
 # vim: ft=sh fdm=marker expandtab ts=3 sw=3 :
