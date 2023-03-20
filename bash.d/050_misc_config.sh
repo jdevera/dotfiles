@@ -419,7 +419,23 @@ shopt -s extglob
 #############################################################################
 
 # }}}
+# Section: Bash Completion Options {{{
+#############################################################################
+# Cycle through available completions with Tab when there is more than one
+bind 'TAB:menu-complete'
 
+# Cycle in reverse with Shift-Tab
+bind '"\e[Z": menu-complete-backward'
+
+# Also show all available options when there is more thanb one
+bind "set show-all-if-ambiguous on"
+
+# First Tab press will complete until the first point of ambiguity, a second
+# Tab press will start the cycle through the matching options.
+bind "set menu-complete-display-prefix on"
+
+
+# }}}
 # Get my name from the system to make it easily available everywhere I might
 # need it
 if is_osx
