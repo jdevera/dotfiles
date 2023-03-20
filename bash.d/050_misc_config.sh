@@ -117,6 +117,22 @@ then
    eval "$(pyenv init -)"
 fi
 
+
+# Style for hless and hl, my wrappers around pygmentize
+# Get all styles with: pygmentize -L styles
+export HL_STYLE=one-dark
+
+
+# Colours for ls on MacOS
+if is_osx
+then
+   # Use colours in ls output
+   export CLICOLOR=1
+   # And make them look like linux
+   export LSCOLORS=ExGxBxDxCxEgEdxbxgxcxd
+fi
+
+
 #############################################################################
 
 # }}}
@@ -428,14 +444,6 @@ fi
 
 if [[ -z $TMUX && -z $SSH_CLIENT ]]; then
    call_if check_home_purity
-fi
-
-if is_osx
-then
-   # Use colours in ls output
-   export CLICOLOR=1
-   # And make them look like linux
-   export LSCOLORS=ExGxBxDxCxEgEdxbxgxcxd
 fi
 
 # vim: ft=sh fdm=marker expandtab ts=3 sw=3 :
