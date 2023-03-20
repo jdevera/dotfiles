@@ -73,6 +73,10 @@
 [tig]
     diff-context = 10
 
+[tig "bind"]
+    stage = C !git commit --verbose
+    status = C !git commit --verbose
+
 [color "status"]
     added = "green normal bold"
     changed = "red normal bold"
