@@ -38,6 +38,12 @@ export DAPTCACHE=/var/cache/apt/archives
 
 export PROJECT_HOME=$HOME/devel/myforge/projects
 
+# Some MacOS overrides
+if is_osx
+then
+   export DDOWN=$HOME/Downloads
+fi
+
 # Files
 export FSYSLOG=/var/log/syslog
 export FILOG=$DSYSDATA/install.log
