@@ -436,6 +436,19 @@ bind "set menu-complete-display-prefix on"
 
 
 # }}}
+# Section: iTerm2 integration (MacOS only) {{{
+#############################################################################
+if is_osx
+then
+   function iterm2_print_user_vars() {
+      # Set a variable with the current git branch
+      iterm2_set_user_var gitBranch $((git branch 2> /dev/null) | grep \* | cut -c3-)
+   }
+fi
+
+# }}}
+
+
 # Get my name from the system to make it easily available everywhere I might
 # need it
 if is_osx
