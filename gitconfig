@@ -1,5 +1,8 @@
 # vim: ft=gitconfig :
 
+[init]
+    defaultBranch = main
+
 [color]
     diff = auto
     status = auto
