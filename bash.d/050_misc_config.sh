@@ -188,6 +188,33 @@ ansi_color256()
    echo "\033[38;5;$1m"
 }
 
+function colorise() {
+    local OFF="\e[0m"
+    local color=$1
+    shift
+    echo "$(ansi_color "$color")$*$OFF"
+}
+
+function ansi_effect() {
+    local effect
+    case "$1" in
+    bold) effect="\e[1m" ;;
+    italic) effect="\e[3m" ;;
+    underline) effect="\e[4m" ;;
+    strikethrough) effect="\e[9m" ;;
+    none) effect="\e[0m" ;;
+    esac
+    echo "$effect"
+}
+
+function effected() {
+
+    local OFF="\e[0m"
+    local effect=$1
+    shift
+    echo "$(ansi_effect "$effect")$*$OFF"
+}
+
 #THEMES
 
 # THEME: simple prompt {{{
