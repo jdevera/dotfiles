@@ -60,6 +60,8 @@ export NPM_PACKAGES="$HOME/.npm-packages"
 [[ -n $DADMIN ]] && pathprepend "$DADMIN/scripts"
 [[ -n $DOTHER ]] && pathprepend "$DOTHER/run/bin"
 
+pathprepend /usr/local/sbin
+
 # Add user's Cabal binaries to the path
 pathprepend "$HOME/.cabal/bin"
 
