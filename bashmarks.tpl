@@ -1,16 +1,32 @@
 #!/bin/bash
 
+sys::is_linux() {
+    [[ $(uname -s) == Linux ]]
+}
+
+sys::is_macos() {
+    [[ $(uname -s) == Darwin ]]
+}
+
 cat <<EOF
 $HOME/.dotfiles|dot
 $HOME/.vim/bundle|bun
+$HOME/devel/projects|proj
+$HOME/devel/sandbox|sb
+$HOME/devel/contributions|cont
 $HOME/comms/Dropbox|drop
-$HOME/comms/downloads|dow
-$HOME/devel/myforge/projects|proj
-$HOME/devel/myforge|forg
-$HOME/doc|doc
-$HOME/media|med
-$HOME/other/run|run
-$HOME/other|oth
 EOF
+
+if sys::is_macos; then
+    cat <<EOF
+$HOME/Downloads|dow
+EOF
+fi
+
+if sys::is_linux; then
+    cat <<EOF
+$HOME/comms/downloads|dow
+EOF
+fi
 
 # vim: filetype=sh :
