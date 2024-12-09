@@ -30,3 +30,6 @@ Temporary Items
 
 # IntelliJ IDEs
 .idea
+
+# Python files
+*.pyc
