@@ -54,7 +54,7 @@ Plug 'junegunn/goyo.vim', {'on': 'Goyo' } " Distraction-free writing
 
 Plug 'AndrewRadev/linediff.vim', {'on': 'Linediff'}  " Diff two separate blocks of text
 Plug 'AndrewRadev/switch.vim', { 'on': ['Switch', 'SwitchReverse'], 'for': ['gitrebase', 'python'] }  " Switch between words in a group
-Plug 'Valloric/YouCompleteMe'
+Plug 'neoclide/coc.nvim', {'branch': 'release'}
 Plug 'benjifisher/matchit.zip' " Make % jump to matching pairs that are language aware
 Plug 'chaoren/vim-wordmotion'  " Jump words in camelCase or snake_case
 Plug 'chrisbra/vim-diff-enhanced' " Apply a different slow diff algorithm to vimdiff
