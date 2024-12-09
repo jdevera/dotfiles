@@ -6,19 +6,26 @@
 #       y: yes
 #       n: no
 #       q: quit
-#  - SKIP_VIM_PLUGINS
+#  - DOTFILES_SKIP_VIM_PLUGINS
 #       Set to 1 to prevent VIM from opening and installing all plugins, as
 #       can be a lengthy process.
-#
+#  - DOTFILES_CHANGES_REPORT
+#       If set, the count of changed files will be written to this file
 
+DOTFILES_OVERWRITE_REPLY=
+DOTFILES_SKIP_VIM_PLUGINS=
+DOTFILES_CHANGES_REPORT=
+
+INSTALLER_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" &>/dev/null && pwd)"
 THIS_SCRIPT="$(basename "$0")"
+declare -a CHANGED_FILES
 
 ## Download all vim plug-ins
 get_vim_plugins()
 {
     echo "Installing Vim Plugins"
     vim +PlugUpgrade +qa || { echo 'Error upgrading Plug. Will continue.'; }
-    if [[ $SKIP_VIM_PLUGINS -eq 1 ]]
+    if [[ $DOTFILES_SKIP_VIM_PLUGINS -eq 1 ]]
     then
         echo "Skipping Vim plugins installation"
         return
@@ -38,21 +45,26 @@ apply_xmodmap()
 post_install_actions()
 {
     get_vim_plugins
-    apply_xmodmap
+    if sys::is_linux; then
+        apply_xmodmap
+    fi
 }
 
-# Install the dot files into user's home directory
-install_home()
+install_files_from()
 {
-    local dest_dir="$HOME"
-    local excluded=("$THIS_SCRIPT" README.mkd LICENSE TODO.mkd)
+    local src_dir="$1"
+    local dest_dir="$2"
+    shift 2
+
+    # Include the platform directories in the excluded list, as they are
+    # treated separately below.
+    local -a excluded=("$@" _linux _macos)
     replace_all=false
+    cd "$src_dir" || die "Could not change to $src_dir"
 
     local file
-    for file in *
-    do
-        if ! element_exists "$file" "${excluded[@]}"
-        then
+    for file in *; do
+        if ! element_exists "$file" "${excluded[@]}"; then
             local dest_file_name
             dest_file_name=$(basename "$file" .tpl)
             local dest_file_path="$dest_dir/.$dest_file_name"
@@ -60,7 +72,26 @@ install_home()
         fi
     done
 
+    # Install platform specific files
+    if [[ -d "$src_dir/_linux" ]] && sys::is_linux; then
+        install_files_from "$src_dir/_linux" "$dest_dir" "${excluded[@]}"
+    fi
+
+    if [[ -d "$src_dir/_macos" ]] && sys::is_macos; then
+        install_files_from "$src_dir/_macos" "$dest_dir" "${excluded[@]}"
+    fi
+
+}
+# Install the dot files into user's home directory
+install_home()
+{
+    local -a excluded=("$THIS_SCRIPT" README.mkd README README.md LICENSE TODO.mkd)
+    install_files_from "$INSTALLER_DIR" "$HOME" "$THIS_SCRIPT" "${excluded[@]}"
     post_install_actions
+    echo "Installation complete. Changed files: ${#CHANGED_FILES[@]}"
+    if [[ -n $DOTFILES_CHANGES_REPORT ]]; then
+        echo "${#CHANGED_FILES[@]}" > "$DOTFILES_CHANGES_REPORT"
+    fi
 }
 
 overwrite_confirmation()
@@ -84,8 +115,8 @@ install_file()
     if [[ -e $dest_file_path ]] || \
        [[ -L $dest_file_path ]]		  # Can be a broken symlink
     then
-        if [[ -e $dest_file_path ]] && 
-           diff -q "$file" "$dest_file_path" > /dev/null
+        if [[ -e $dest_file_path ]] &&
+            [[ $(readlink -f "$file") == $(readlink -f "$dest_file_path") ]]
         then
             echo "identical $dest_file_path"
         elif $replace_all
@@ -112,7 +143,7 @@ replace_file()
     local file="$1"
     local dest_file_path="$2"
 
-    remove "$dest_file_path"
+    backup "$dest_file_path"
     link_file "$file" "$dest_file_path"
 }
 
@@ -124,12 +155,20 @@ link_file()
 
     if [[ $file =~ \.tpl$ ]]
     then
+        local temp_file
+        temp_file=$(mktemp /tmp/dotfiles.XXXXXX)
         echo "generating $dest_file_path"
-        bash "$file" > "$dest_file_path"
+        if ! ( source "$file" > "$temp_file" ); then
+            echo "Error generating $dest_file_path"
+            rm "$temp_file"
+            return 1
+        fi
+        mv "$temp_file" "$dest_file_path"
     else
         echo "linking $dest_file_path"
         ln -s "$(pwd)/$file" "$dest_file_path"
     fi
+    CHANGED_FILES+=("$dest_file_path")
 }
 
 
@@ -151,24 +190,34 @@ element_exists()
 }
 
 
-remove()
+backup()
 {
     local file="$1"
-    
-    # Don't recursively remove symbolic links to directories,
-    # just real directories.
-    if [[ -d $file ]] && [[ ! -h $file ]]
-    then
-        rm -rf "$file"
-    else
-        rm -f "$file"
-    fi
+    local backup_suffix
+    backup_suffix="bak.$(date "+%Y%m%d%H%M%S")"
+    local backup_file="${file}.${backup_suffix}"
+    mv "$file" "$backup_file"
+    echo "backed up $file to $backup_file"
 }
 
 
 has_program()
 {
     type -t "$1" > /dev/null
+}
+
+die()
+{
+    echo "$*" >&2
+    exit 1
+}
+
+sys::is_linux() {
+    [[ $(uname -s) == Linux ]]
+}
+
+sys::is_macos() {
+    [[ $(uname -s) == Darwin ]]
 }
 
 # Install all configuration files
