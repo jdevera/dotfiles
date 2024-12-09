@@ -42,6 +42,7 @@ export PROJECT_HOME=$HOME/devel/myforge/projects
 if is_osx
 then
    export DDOWN=$HOME/Downloads
+   export PROJECT_HOME=$HOME/devel/projects
 fi
 
 # Files
