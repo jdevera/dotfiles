@@ -473,16 +473,27 @@ function edot
 {
    local dir
    dir=${1:-~/.dotfiles}
-   assert_has_command fzf && \
-   assert_has_command fd && \
+   assert_has_command fzf
+   assert_has_command fd
+
+   local preview_command
+   if has_command bat
+   then
+      preview_command="bat --force-colorization"
+   elif has_command pygmentize
+   then
+      preview_command="pygmentize -g -f terminal256 -P style=emacs"
+   else
+      preview_command='less -r'
+   fi
+
    assert_has_command pygmentize || \
       return 1
    (builtin cd "$dir" && fd -I -tl -tf) |
       fzf \
-      --preview "pygmentize -g -f terminal256 -P style=emacs '$dir/{}'" \
-      --bind "enter:execute(vim '$dir/{}' </dev/tty)"
+      --preview "$preview_command '$dir/{}'" \
+      --bind "enter:execute($EDITOR '$dir/{}' </dev/tty)"
 }
-
 
 
 function run_until_fail()
