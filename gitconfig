@@ -136,3 +136,15 @@
     new = green bold
     whitespace = red reverse
 
+[cola]
+    spellcheck = true
+    fontdiff = FiraCode Nerd Font Mono,16,-1,5,400,0,0,0,0,0,0,0,0,0,0,1
+    hidpi = 0
+    theme = default
+    icontheme = default
+    statusshowtotals = true
+    statusindent = true
+    linebreak = true
+    expandtab = true
+    refreshonfocus = true
+    resizebrowsercolumns = true
