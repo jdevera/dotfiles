@@ -33,9 +33,6 @@ call plug#begin('~/.vim/bundle')
 " Plugins
 " ===========================================================================
 
-Plug 'jdevera/vim-snippets', {'frozen': 1}
-Plug 'SirVer/ultisnips'
-
 " Surround and repeat (to make the former repeatable)
 Plug 'tpope/vim-surround'
 Plug 'tpope/vim-repeat'
@@ -54,11 +51,9 @@ Plug 'junegunn/goyo.vim', {'on': 'Goyo' } " Distraction-free writing
 
 Plug 'AndrewRadev/linediff.vim', {'on': 'Linediff'}  " Diff two separate blocks of text
 Plug 'AndrewRadev/switch.vim', { 'on': ['Switch', 'SwitchReverse'], 'for': ['gitrebase', 'python'] }  " Switch between words in a group
-Plug 'neoclide/coc.nvim', {'branch': 'release'}
 Plug 'benjifisher/matchit.zip' " Make % jump to matching pairs that are language aware
 Plug 'chaoren/vim-wordmotion'  " Jump words in camelCase or snake_case
 Plug 'chrisbra/vim-diff-enhanced' " Apply a different slow diff algorithm to vimdiff
-Plug 'davidhalter/jedi-vim'
 Plug 'embear/vim-foldsearch', { 'on': ['Fw', 'Fs', 'Fp', 'FS', 'Fl', 'Fc', 'Fi', 'Fd', 'Fe']}  " Search, and fold all lines without matches
 Plug 'gilsondev/searchtasks.vim', { 'on' : ['SearchTags', 'SearchTagsGrep'] }
 Plug 'godlygeek/tabular' " Simple text alignment
@@ -69,18 +64,15 @@ Plug 'luochen1990/rainbow'  " Rainbow parentheses
 Plug 'rhysd/conflict-marker.vim' " Navigate through merge conflicts and choose which to choose
 Plug 'mileszs/ack.vim'
 Plug 'scrooloose/nerdcommenter'
-Plug 'scrooloose/syntastic'
 Plug 'tpope/vim-abolish' " Search and replace several variations of a word with the S command
 Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-sleuth'
-Plug 'dense-analysis/ale'
 
 
 " Python
 Plug 'vim-python/python-syntax', {'for' : 'python' }
 Plug 'tmhedberg/SimpylFold', {'for' : 'python' } " Correct folding for python
 Plug 'jeetsukumaran/vim-pythonsense', {'for' : 'python' } " Text Objects for python programs
-Plug 'jmcantrell/vim-virtualenv'
 
 
 " File types support
@@ -337,18 +329,12 @@ set laststatus=2
 if &diff
     set statusline=[POS=%04l,%04v][%p%%]\ [LEN=%L]\ [F=%F%m%r%h%w]
 else
-    let g:virtualenv_stl_format = '[venv:%n]'
     function! Status_fugitive()
         return exists('*fugitive#statusline') ?
                  \ fugitive#statusline() :
                  \ ''
     endfunction
-    function! Status_virtualenv()
-        return exists('*virtualenv#statusline') ?
-                    \ virtualenv#statusline() :
-                    \ ''
-    endfunction
-    set statusline=%F%m%r%h%w\ %{Status_fugitive()}%y\ %{Status_virtualenv()}\ ff:%{(&ff[0])}\ c:%v\ l:%l\ (%p%%\ of\ %L)
+    set statusline=%F%m%r%h%w\ %{Status_fugitive()}%y\ ff:%{(&ff[0])}\ c:%v\ l:%l\ (%p%%\ of\ %L)
 endif
 " -----------------------------------------------
 
@@ -474,15 +460,6 @@ iab redered     rendered
 " {{{ Plugin configuration
 " ----------------------------------------------------------------------------
 
-" ALE Python: Use flake8 and pylint as linters for Python files
-let g:ale_linters = { 'python': ['flake8', 'pylint'] }
-
-" ALE Python: Tell MyPy not to check for syntax
-" When set to `1`, syntax error messages for mypy will be ignored. This option
-" can be used when running other Python linters which check for syntax errors,
-" as mypy can take a while to finish executing.
-let g:ale_python_mypy_ignore_invalid_syntax = 1
-
 " Ack_vim: Redefine all Ack commands as Ag:
 for command in ['Ack', 'AckAdd', 'AckFromSearch', 'LAck', 'LAckAdd', 'AckFile', 'AckHelp', 'LAckHelp', 'AckWindow', 'LAckWindow']
     execute 'command! -bang -nargs=* ' . substitute(command, 'Ack', 'Ag', '') . ' ' . command . '<bang> <args>'
@@ -512,9 +489,6 @@ autocmd FileType python let b:switch_custom_definitions =
 " Wordmotion: Use only when moving with Leader key
 let g:wordmotion_prefix = '<Leader>'
 
-" Virtualenv: Attempt to detect virtual env and activate it
-let g:virtualenv_auto_activate = 1
-
 " NERDCommenter: Add a space after the comment symbol
 let NERDSpaceDelims=1
 
@@ -531,11 +505,6 @@ let g:tagbar_autoshowtag = 1
 " Tagbar: map <F9> to toggle tagbar
 nnoremap <silent> <F9> :TagbarToggle<CR>
 
-" Snipmate: My name for Snippets
-if $MYFULLNAME != ""
-    let g:snips_author=$MYFULLNAME
-endif
-
 " XML: Enable folding based on syntax
 let g:xml_syntax_folding = 1
 
@@ -545,23 +514,6 @@ let g:python_slow_sync=1
 
 " Sh: Assume sh is bash
 let g:is_bash = 1
-
-" Syntastic: Set per-language checkers
-let g:syntastic_python_checkers = ['flake8', 'pylint', 'python']
-let g:syntastic_python_pylint_rcfile = '$HOME/.pylintrc'
-let g:syntastic_python_pylint_post_args = "--max-line-length=120"
-let g:syntastic_python_flake8_post_args = "--ignore=E501"
-let g:syntastic_python_python_use_codec = 1
-
-" Syntastic: Set behaviour
-let g:syntastic_check_on_open = 1
-let g:syntastic_aggregate_errors = 1
-let g:syntastic_error_symbol = "\u2717"
-let g:syntastic_warning_symbol = "\u26A0"
-let g:syntastic_always_populate_loc_list = 1
-" When set to 3 the error window will be automatically opened when errors are
-" detected, but not closed automatically.
-let g:syntastic_auto_loc_list = 3
 
 " Tagbar: Additional language support:
 "
@@ -606,30 +558,6 @@ endif
 
 " Rainbow: Activate
 let g:rainbow_active = 1
-
-" UltiSnips: Set keys
-let g:UltiSnipsExpandTrigger="<C-Y>"
-" let g:UltiSnipsJumpForwardTrigger="<tab>"
-" let g:UltiSnipsJumpBackwardTrigger="<s-tab>"
-
-" Jedi: Disable features that clash with YoutCompleteMe
-let g:jedi#auto_vim_configuration = 0
-let g:jedi#popup_on_dot = 0
-let g:jedi#popup_select_first = 0
-let g:jedi#completions_enabled = 0
-let g:jedi#completions_command = ""
-let g:jedi#show_call_signatures = "1"
-
-
-" YouCompleteMe:
-" When the following options is on, YCM aggressively empties the sign column
-let g:ycm_enable_diagnostic_signs = 0
-" Program name to search for python in the PATH
-let g:ycm_python_binary_path = 'python3'
-
-" VirtualEnv:
-let g:virtualenv_directory = '$HOME/.local/share/virtualenvs/'
-let g:virtualenv_auto_activate = 1
 
 " MiniBufExplorer:
 " Put new window above current or on the left for vertical split:
