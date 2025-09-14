@@ -85,7 +85,7 @@ install_files_from()
 # Install the dot files into user's home directory
 install_home()
 {
-    local -a excluded=("$THIS_SCRIPT" README.mkd README README.md LICENSE TODO.mkd home)
+    local -a excluded=("$THIS_SCRIPT" README README.md LICENSE home)
     install_files_from "$INSTALLER_DIR" "$HOME" "$THIS_SCRIPT" "${excluded[@]}"
     post_install_actions
     echo "Installation complete. Changed files: ${#CHANGED_FILES[@]}"
