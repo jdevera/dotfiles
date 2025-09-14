@@ -111,9 +111,6 @@ if [ -x /usr/bin/dircolors ]; then
     alias egrep='egrep --color=auto'
 fi
 
-# Use a python init file
-[[ -e ~/.pystartup ]] && export PYTHONSTARTUP=~/.pystartup
-
 # Tell node js about the "global" package repo
 NODE_PATH="$NPM_PACKAGES/lib/node_modules:$NODE_PATH"
 
