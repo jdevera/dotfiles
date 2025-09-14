@@ -1,0 +1,11 @@
+#!/usr/bin/env -S uv --quiet run --script
+# /// script
+# requires-python = ">=3.11"
+# dependencies = [
+#     "psutil",
+# ]
+# ///
+
+import psutil
+
+print("{:.2f}%".format(psutil.virtual_memory().percent))
