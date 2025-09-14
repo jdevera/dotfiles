@@ -1,0 +1,6 @@
+.vim/bundle/*
+.vim/local/*
+.vim/tmp/*
+.vim/spell/*
+.bash.d/local/*
+!.bash.d/local/README.md

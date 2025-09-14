@@ -35,5 +35,13 @@ then
 fi
 # ---------------------------------------------------------------------------
 # }}}
+#
+if has_command chezmoi
+then
+   eval "$(chezmoi completion bash)"
+   alias erchoso=chezmoi
+   complete -o default -F __start_chezmoi erchoso
+fi
+
 
 # vim: fdm=marker
