@@ -8,6 +8,7 @@
 
 # MacOS only files
 {{ if ne .chezmoi.os "darwin" }}
+.config/iterm2/
 .bash_profile
 .gvimrc
 {{ end }}
@@ -18,3 +19,6 @@
 .Xmodmap
 .Xresources
 {{ end }}
+
+# Linked iTerm2 File
+.config/iterm2/internal/
