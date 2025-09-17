@@ -5,3 +5,16 @@
 .vim/spell/*
 .bash.d/local/*
 !.bash.d/local/README.md
+
+# MacOS only files
+{{ if ne .chezmoi.os "darwin" }}
+.bash_profile
+.gvimrc
+{{ end }}
+
+
+# Linux only files
+{{ if ne .chezmoi.os "linux" }}
+.Xmodmap
+.Xresources
+{{ end }}
