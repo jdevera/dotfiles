@@ -1,0 +1,13 @@
+$HOME/devel/projects|proj
+$HOME/devel/sandbox|sb
+$HOME/devel/contributions|cont
+
+{{- if eq .chezmoi.os "darwin" }}
+$HOME/Downloads|dow
+$HOME/Library/Application Support|las
+{{- end }}
+
+{{- if eq .chezmoi.os "linux" }}
+$HOME/comms/downloads|dow
+{{- end }}
+
