@@ -1,0 +1,9 @@
+{{- if eq .chezmoi.os "linux" -}}
+#!/bin/sh
+# Xmodmap hash: {{ include "dot_Xmodmap" | sha256sum }}
+
+[ -e "~/.Xmodmap" ] || exit 0
+command -v xmodmap &>/dev/null || exit 0
+echo "Xmodmap: Applying custom key bindings after changes"
+xmodmap ~/.Xmodmap
+{{ end -}}
