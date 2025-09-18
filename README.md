@@ -7,31 +7,24 @@ These are the configuration files I want to have in every Linux box I use.
 Installation instructions come first because it is what I need most of the
 time, but if you are not me, please read on :) 
 
-    git clone git://github.com/jdevera/dotfiles ~/.dotfiles
-    cd ~/.dotfiles
-    bash install
+    sh -c "$(curl -fsLS get.chezmoi.io/lb)" -- init --apply jdevera
 
+## If you are not me
 
-## Contents
+You probably do not want to clone this repo and run it. You probably don't want
+to do that with anybody's dotfile repo. It's in this type of repos' own nature
+to be highly opnionated and tailored to the needs of the individual keeping it.
 
-Most files handle Bash or Vim configuration, but I also share my settings for
-GNU Screen, Tmux, Git, Emacs, the Python interpreter, and others.
+But there is a lot to learn from exploring. So please, explore away! And if you
+have questions, open an issue.
 
-My git configuration file is actually a generator (more on this below).
+## Management
 
-My Vim configuration will install all the plug-ins I have installed.
+I use [chezmoi](https://www.chezmoi.io/) to manage my dotfiles.
 
-### Configuration file generators
+This repository is a mix of configuration files, templates to generate
+configuration files, and script to setup things in a new machine.
 
-There are some configuration files, such as _.gitconfig_ that might contain
-sensitive data or that have contents that vary across different machines. For
-these cases, I don't directly store the configuration file, but a generator
-for it.
-
-These generators very are simple bash scripts that contain a template for the
-file they generate. The values for variable fields are requested during
-execution or they can be provided with environment variables for unattended
-installation.
 
 ### Bash configuration
 
@@ -43,7 +36,7 @@ My _.bashrc_ sources configuration files in this order:
  * Every file under _.bash.d_
  * Every file under _.bash.d/local/after_
 
-Contents of _.bash.d/local_ are not tracked by git, so this is the place to
+Contents of _.bash.d/local_ are not tracked by `chezmoi`, so this is the place to
 add configuration files that are specific for the current machine.
 
 ### Vim configuration
@@ -61,6 +54,9 @@ the [Vim-Scripts.org](http://vim-scripts.org/) project. This means Vim-Plug
 can be used to install any add-on published in the official site.
 
 ### Emacs configuration
+
+> [!NOTE]
+> I have not used Emacs in years, this config is probably broken.
 
 I use [el-get](https://github.com/dimitri/el-get) to manage all the Emacs
 packages that I want installed.
