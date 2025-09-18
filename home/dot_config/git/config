@@ -1,5 +1,12 @@
 # vim: ft=gitconfig :
 
+[core]
+    excludesfile = ~/.config/git/ignore
+
+[include]
+    path = ~/.config/git/config.user
+    path = ~/.config/git/config.local
+
 [init]
     defaultBranch = main
 
@@ -110,13 +117,6 @@
 [mergetool "idea"]
     cmd = "idea merge $LOCAL $REMOTE $BASE $MERGED"
     trustExitCode = true
-
-[core]
-    excludesfile = ~/.gitignore_global
-
-[include]
-    path = ~/.gitconfig.user
-    path = ~/.gitconfig.local
 
 [pager]
     diff = diff-so-fancy | less --tabs=4 -RFX

@@ -33,3 +33,6 @@ Temporary Items
 
 # Python files
 *.pyc
+
+# Local Claude Code files
+**/.claude/settings.local.json
