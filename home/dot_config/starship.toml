@@ -1,0 +1,9 @@
+# Get editor completions based on the config schema
+"$schema" = 'https://starship.rs/config-schema.json'
+
+format = "$all$chezmoi"
+
+[custom.chezmoi]
+when = 'test -n "$CHEZMOI_EXECUTABLE"'
+command = "echo IN-CHEZMOI-CD"
+symbol = "🏡 "
