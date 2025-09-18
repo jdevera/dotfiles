@@ -6,3 +6,11 @@
     email = {{ $email | quote }}
     fname = {{ $fname | quote }}
     ghuser = {{ $ghuser | quote }}
+
+# By default, chezmoi diff will print the contents of scripts that would be run
+# by chezmoi apply. To exclude scripts from the output of chezmoi diff, set
+# diff.exclude in your configuration file, for example:
+[diff]
+    exclude = ["scripts"]
+
+# vim:ft=toml:
