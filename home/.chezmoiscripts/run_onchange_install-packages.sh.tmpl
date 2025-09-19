@@ -16,6 +16,7 @@ sudo apt install -y \
     fd-find \
     tmux \
     vim \
+    starship \
     ;
 
 {{ else if eq .chezmoi.os "darwin" -}}
@@ -30,5 +31,6 @@ brew "ripgrep"
 brew "fd"
 brew "tmux"
 cask "macvim-app"
+brew "starship"
 EOF
 {{ end -}}
