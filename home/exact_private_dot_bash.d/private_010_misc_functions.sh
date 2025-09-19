@@ -537,5 +537,13 @@ function ppm()  # Poor Person's man
    $command --help | less
 }
 
+vispanso() {
+   assert_has_command espanso && edot "$(espanso path config)"
+}
+
+espanso-cfg() {
+   vispanso
+}
+
 # vim: ft=sh fdm=marker expandtab ts=3 sw=3 :
 
