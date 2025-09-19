@@ -7,7 +7,8 @@ if ! command -v apt > /dev/null 2>&1; then
 fi
 
 echo "Installing packages with APT"
-sudo apt install \
+sudo apt update
+sudo apt install -y \
     fzf \
     bat \
     ripgrep \
