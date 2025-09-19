@@ -66,7 +66,7 @@ function git-explore()
     do
        break
     done
-    [[ -e $readme ]] && run_first_of hless hl view less -- "$readme"
+    [[ -e $readme ]] && run_first_of bat hless hl view less -- "$readme"
 }
 
 function in_git_repo()

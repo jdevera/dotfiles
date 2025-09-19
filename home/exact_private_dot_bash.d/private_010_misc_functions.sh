@@ -136,6 +136,33 @@ function hl_style()
 #______________________________________________________________________________
 #
 # @tags: command
+
+function _code_show_function()
+{
+   local function="$1"
+   local highlighter
+   if has_command bat; then
+      highlighter="bat -l bash --style=plain"
+   elif has_command pygmentize; then
+      highlighter="hless -l sh"
+   else
+      highlighter="less -r"
+   fi
+   builtin declare -f "$function" | $highlighter
+}
+
+function _code_show_script()
+{
+   local path="$1"
+   if has_command bat; then
+      bat "$path"
+   elif has_command pygmentize; then
+      hless "$path"
+   else
+      less -Fr "$path"
+   fi
+}
+
 function code()
 {
    local type
@@ -147,8 +174,10 @@ function code()
          ;;
       function)
          echo "$1 is a function"
-         find_function "$1" | awk '{ printf("Defined in: %s +%d\n", $3, $2) }'
-         builtin declare -f "$1" | hless -l sh
+         local function line path
+         read -r function line path <<< "$(find_function "$1")"
+         printf "Defined in: %s +%d\n" "$path" "$line"
+         _code_show_function "$function"
          ;;
       builtin | keyword)
          echo "$1 is a shell $type"
@@ -159,7 +188,7 @@ function code()
          path="$(which "$1")"
          if head -1 "$path" | grep -q "^#!"; then
             echo "$1 is a script at $path"
-            hless <"$path"
+            _code_show_script "$path"
          else
             echo "$1 is a binary at $path"
          fi
