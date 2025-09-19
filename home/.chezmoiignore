@@ -10,7 +10,6 @@
 {{ if ne .chezmoi.os "darwin" }}
 .config/iterm2/
 .bash_profile
-.gvimrc
 {{ end }}
 
 
