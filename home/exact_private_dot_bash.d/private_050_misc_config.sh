@@ -495,14 +495,6 @@ export MYFULLNAME
 # CTRL-D must be used twice to exit the shell
 export IGNOREEOF=1
 
-# Enable programmable completion features asynchronously
-# See http://superuser.com/a/418112 for details
-if [ -f /etc/bash_completion ] && ! shopt -oq posix; then
-   trap 'source /etc/bash_completion ; trap USR1' USR1
-   { sleep 0.1 ; builtin kill -USR1 $$ ; } & disown
-fi
-
-
 if [[ -z $TMUX && -z $SSH_CLIENT ]]; then
    call_if check_home_purity
 fi
