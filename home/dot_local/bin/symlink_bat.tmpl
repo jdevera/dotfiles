@@ -1,0 +1,7 @@
+{{- /*
+bat on debian/ubuntu is called batcat, so this creates a symlink to it
+under ~/.local/bin/bat to keep the name consistent across platforms.
+*/ -}}
+{{ if eq .chezmoi.os "linux" -}}
+{{- lookPath "batcat" -}}
+{{ end -}}
