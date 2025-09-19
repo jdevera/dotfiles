@@ -1,0 +1,27 @@
+{{ if eq .chezmoi.os "linux" -}}
+#!/usr/bin/env bash
+
+if ! command -v apt > /dev/null 2>&1; then
+    echo "APT is not installed" >&2
+    exit 1
+fi
+
+echo "Installing packages with APT"
+sudo apt install \
+    fzf \
+    bat \
+    ripgrep \
+    fd-find \
+    ;
+
+{{ else if eq .chezmoi.os "darwin" -}}
+#!/usr/bin/env bash
+
+echo "Installing packages with Homebrew"
+brew bundle --file=/dev/stdin <<EOF
+brew "fzf"
+brew "bat"
+brew "ripgrep"
+brew "fd"
+EOF
+{{ end -}}
