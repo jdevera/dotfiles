@@ -479,7 +479,7 @@ function edot
    local preview_command
    if has_command bat
    then
-      preview_command="bat --force-colorization"
+      preview_command="bat --color=always --line-range=:500"
    elif has_command pygmentize
    then
       preview_command="pygmentize -g -f terminal256 -P style=emacs"
@@ -487,8 +487,6 @@ function edot
       preview_command='less -r'
    fi
 
-   assert_has_command pygmentize || \
-      return 1
    (builtin cd "$dir" && fd -I -tl -tf) |
       fzf \
       --preview "$preview_command '$dir/{}'" \
