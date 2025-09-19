@@ -9,10 +9,13 @@ fi
 echo "Installing packages with APT"
 sudo apt update
 sudo apt install -y \
+{{- /* Basic programs that are used in dotfiles functions */}}
     fzf \
     bat \
     ripgrep \
     fd-find \
+    tmux \
+    vim \
     ;
 
 {{ else if eq .chezmoi.os "darwin" -}}
@@ -20,9 +23,12 @@ sudo apt install -y \
 
 echo "Installing packages with Homebrew"
 brew bundle --file=/dev/stdin <<EOF
+{{- /* Basic programs that are used in dotfiles functions */}}
 brew "fzf"
 brew "bat"
 brew "ripgrep"
 brew "fd"
+brew "tmux"
+cask "macvim-app"
 EOF
 {{ end -}}
