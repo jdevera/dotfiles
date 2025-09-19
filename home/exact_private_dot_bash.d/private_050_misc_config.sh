@@ -331,7 +331,7 @@ function precmd_bash_theme()
 
 if has_command starship
 then
-   eval "$(starship init bash)"
+   eval -- "$(/usr/bin/starship init bash --print-full-init)"
 else
    echo "No starship, this is the path: $PATH"
 fi
