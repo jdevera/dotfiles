@@ -1,0 +1,4 @@
+[".local/bin/jdvlib.sh"]
+    type = "file"
+    url = '{{ gitHubLatestReleaseAssetURL "jdevera/jdvlib.sh" "jdvlib.sh"  }}'
+    refreshPeriod = "168h"
