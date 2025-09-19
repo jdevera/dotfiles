@@ -3,5 +3,5 @@ fd on debian/ubuntu is called fdfind, so this creates a symlink to it
 under ~/.local/bin/fd to keep the name consistent across platforms.
 */ -}}
 {{ if eq .chezmoi.os "linux" -}}
-{{- lookPath "fd-find" -}}
+{{- lookPath "fdfind" -}}
 {{ end -}}
