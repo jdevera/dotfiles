@@ -1,0 +1,11 @@
+#!/usr/bin/env bash
+if command -v uv > /dev/null 2>&1; then
+    echo "uv installer: uv is already installed"
+    exit 0
+fi
+
+{{ if eq .chezmoi.os "darwin" -}}
+brew install uv
+{{ else }}
+sh -c "$(curl -LsSf https://astral.sh/uv/install.sh )" --no-modify-path
+{{ end -}}
