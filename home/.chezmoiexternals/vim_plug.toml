@@ -1,4 +1,4 @@
-["autoload/plug.vim"]
+[".vim/autoload/plug.vim"]
     type = "file"
     url = "https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim"
     refreshPeriod = "168h"
