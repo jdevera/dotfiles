@@ -19,6 +19,7 @@ sudo apt install -y \
     vim \
     starship \
     bash-completion \
+    jq \
     ;
 
 {{ else if eq .chezmoi.os "darwin" -}}
@@ -36,5 +37,6 @@ brew "tmux"
 cask "macvim-app"
 brew "starship"
 brew "bash-completion@2"
+brew "jq"
 EOF
 {{ end -}}
