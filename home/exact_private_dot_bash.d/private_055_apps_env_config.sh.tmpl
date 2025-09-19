@@ -1,5 +1,5 @@
 {{- if eq .chezmoi.os "darwin" -}}
-# Homebrew configuration {{{
+# Homebrew configuration {{ "{{{" }}
 # ----------------------
 
 # If set, do not print any hints about changing Homebrew’s behaviour with
@@ -17,5 +17,5 @@ export HOMEBREW_AUTO_UPDATE_SECS=604800  # 1 week
 
 
 # If set, do not send analytics data to Homebrew’s servers.
-# }}}
+# {{ "}}}" }}
 {{ end -}}
