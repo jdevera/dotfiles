@@ -1,0 +1,8 @@
+{{ completion "bash" }}
+
+alias erchoso=chezmoi
+if [[ $(type -t compopt) = "builtin" ]]; then
+    complete -o default -F __start_chezmoi erchoso
+else
+    complete -o default -o nospace -F __start_chezmoi erchoso
+fi
