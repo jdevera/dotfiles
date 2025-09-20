@@ -17,6 +17,38 @@
     ui = auto
     interactive = auto
 
+[status]
+    displayCommentPrefix = false
+
+[color "status"]
+    added = "green normal bold"
+    changed = "red normal bold"
+    untracked = "magenta normal bold"
+    header = "cyan normal dim"
+    branch = "normal normal bold"
+
+[color "grep"]
+    context = cyan normal dim
+    selected = normal normal bold
+    filename = magenta normal bold
+    linenumber = green
+    function = blue normal bold
+    match = black yellow dim
+
+[color "diff"]
+    meta = 11
+    frag = magenta bold
+    commit = yellow bold
+    old = red bold
+    new = green bold
+    whitespace = red reverse
+
+[color "diff-highlight"]
+    oldNormal = red bold
+    oldHighlight = red bold 52
+    newNormal = green bold
+    newHighlight = green bold 22
+
 [alias]
     # Essential
     st   = status
@@ -84,24 +116,6 @@
     stage = C !git commit --verbose
     status = C !git commit --verbose
 
-[color "status"]
-    added = "green normal bold"
-    changed = "red normal bold"
-    untracked = "magenta normal bold"
-    header = "cyan normal dim"
-    branch = "normal normal bold"
-
-[status]
-    displayCommentPrefix = false
-
-[color "grep"]
-    context = cyan normal dim
-    selected = normal normal bold
-    filename = magenta normal bold
-    linenumber = green
-    function = blue normal bold
-    match = black yellow dim
-
 [mergetool "splice"]
     cmd = "vim -f $BASE $LOCAL $REMOTE $MERGED -c 'SpliceInit'"
     trustExitCode = true
@@ -117,24 +131,6 @@
 [mergetool "idea"]
     cmd = "idea merge $LOCAL $REMOTE $BASE $MERGED"
     trustExitCode = true
-
-[pager]
-    diff = diff-so-fancy | less --tabs=4 -RFX
-    show = diff-so-fancy | less --tabs=4 -RFX
-
-[color "diff-highlight"]
-    oldNormal = red bold
-    oldHighlight = red bold 52
-    newNormal = green bold
-    newHighlight = green bold 22
-
-[color "diff"]
-    meta = 11
-    frag = magenta bold
-    commit = yellow bold
-    old = red bold
-    new = green bold
-    whitespace = red reverse
 
 [cola]
     spellcheck = true
