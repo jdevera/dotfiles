@@ -8,7 +8,7 @@ fi
 
 echo "Installing packages with APT"
 sudo apt update
-sudo apt install -y \
+sudo apt install --no-upgrade -y \
 {{- /* Basic programs that are used in dotfiles functions */}}
     bash \
     fzf \
@@ -20,13 +20,20 @@ sudo apt install -y \
     starship \
     bash-completion \
     jq \
+    git \
+    tig \
+    curl \
+    wget \
+    rsync \
+    tree \
+    git-delta \
     ;
 
 {{ else if eq .chezmoi.os "darwin" -}}
 #!/usr/bin/env bash
 
 echo "Installing packages with Homebrew"
-brew bundle --file=/dev/stdin <<EOF
+brew bundle --no-upgrade --file=/dev/stdin <<EOF
 {{- /* Basic programs that are used in dotfiles functions */}}
 brew "bash"
 brew "fzf"
@@ -38,5 +45,12 @@ cask "macvim-app"
 brew "starship"
 brew "bash-completion@2"
 brew "jq"
+brew "git"
+brew "tig"
+brew "curl"
+brew "wget"
+brew "rsync"
+brew "tree"
+brew "git-delta"
 EOF
 {{ end -}}
