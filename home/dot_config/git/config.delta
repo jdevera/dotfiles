@@ -1,0 +1,18 @@
+# vim: ft=gitconfig :
+
+[include]
+    path = ~/.config/git/config.delta_themes.gitconfig
+
+[core]
+    pager = delta
+
+[interactive]
+    diffFilter = delta --color-only
+
+[delta]
+    navigate = true  # use n and N to move between diff sections
+    hyperlinks = true
+    ; diff-so-fancy = true
+    features = woolly-mammoth
+
+
