@@ -13,4 +13,11 @@
 [diff]
     exclude = ["scripts"]
 
+# chezmoi provides a hooks.read-source-state.pre hook that allows you to modify
+# your system after chezmoi init has cloned your dotfile repo but before chezmoi
+# has read the source state. This is the perfect time to install your password
+# manager as you can assume that ~/.local/share/chezmoi is populated but has not
+# yet been read.
+[hooks.read-source-state.pre]
+    command = ".local/share/chezmoi/home/.install-one-password.sh"
 # vim:ft=toml:
