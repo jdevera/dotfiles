@@ -15,50 +15,91 @@
 # ------------------------------------------------------------
 # Data
 # ------------------------------------------------------------
-{{- $email := promptStringOnce . "email" "Email address" -}}
-{{- $fname := promptStringOnce . "fname" "Full Name" -}}
-{{- $ghuser := promptStringOnce . "ghuser" "Github User" -}}
+{{- /*
+-----------------------------------------------------------------------------
+Machine information
+-----------------------------------------------------------------------------
+*/ -}}
+{{- $is_macos := eq .chezmoi.os "darwin" -}}
+{{- $is_linux := eq .chezmoi.os "linux" -}}
 
-{{- /* Interactive hosts are hosts I interact directly with, rather than through
-        other machines. */ -}}
+{{- /*
+Interactive hosts are hosts I interact directly with, rather than through other
+machines.
+*/ -}}
 
 {{- $interactive_hosts := list "nexon" -}}
 {{- $is_interactive := false -}}
 
-{{- if eq .chezmoi.os "darwin" -}}
+{{- if $is_macos -}}
 {{-     $is_interactive = true -}}
 {{- else -}}
 {{-     range $interactive_hosts -}}
 {{-         if eq . $.chezmoi.hostname -}}
 {{-             $is_interactive = true -}}
+{{-             break -}}
 {{-         end -}}
 {{-     end -}}
 {{- end }}
 
-{{- /* Headless detection - systems that should NOT have GUI packages */ -}}
+{{- /*
+Headless detection - systems that should NOT have GUI packages
+*/ -}}
+
 {{- $headful_hosts := list "nexon" -}}
 {{- $is_headless := true -}}
 
 {{- /* Never headless on macOS */ -}}
-{{- if eq .chezmoi.os "darwin" -}}
+{{- if $is_macos -}}
 {{-     $is_headless = false -}}
 {{- else -}}
 {{- /* Check if hostname is in explicit headful hosts list */ -}}
 {{-     range $headful_hosts -}}
 {{-         if eq . $.chezmoi.hostname -}}
 {{-             $is_headless = false -}}
+{{-             break -}}
 {{-         end -}}
 {{-     end -}}
 {{- end }}
 
+{{- /* Work machine vs personal machine */ -}}
+{{- $work_hosts := list "nerith" -}}
+{{- $is_work := false -}}
+{{- range $work_hosts -}}
+{{-     if eq . $.chezmoi.hostname -}}
+{{-         $is_work = true -}}
+{{-         break -}}
+{{-     end -}}
+{{- end -}}
+
+{{- /*
+-----------------------------------------------------------------------------
+Personal information
+-----------------------------------------------------------------------------
+*/ -}}
+{{- $identity_entry := "op://dotfiles/Github Identity - Personal"}}
+{{- if $is_work -}}
+{{-     $identity_entry = "op://dotfiles/Github Identity - Work" -}}
+{{- end -}}
+{{- $email := onepasswordRead (printf "%s/email" $identity_entry) -}}
+{{- $first_name := onepasswordRead (printf "%s/first name" $identity_entry) -}}
+{{- $last_name := onepasswordRead (printf "%s/last name" $identity_entry) -}}
+{{- $ghuser := onepasswordRead (printf "%s/github" $identity_entry) -}}
+{{- $full_name := printf "%s %s" $first_name $last_name -}}
+
+{{- /* Data: keep this here for the newline */}}
 [data]
     email = {{ $email | quote }}
-    fname = {{ $fname | quote }}
+    fname = {{ $full_name | quote }}
     ghuser = {{ $ghuser | quote }}
-    is_macos = {{ eq .chezmoi.os "darwin" }}
-    is_linux = {{ eq .chezmoi.os "linux" }}
     is_interactive = {{ $is_interactive }}
     is_headless = {{ $is_headless }}
+    is_macos = {{ $is_macos }}
+    is_linux = {{ $is_linux }}
+    is_work = {{ $is_work }}
+    copy_command = {{ if $is_macos }}"pbcopy"{{ else }}"xsel --clipboard --input"{{ end }}
 
 
-# vim:ft=toml:
+{{/*
+vim:ft=gotexttmpl:
+*/}}
