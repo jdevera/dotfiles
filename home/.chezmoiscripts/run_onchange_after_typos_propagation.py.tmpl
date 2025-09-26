@@ -1,0 +1,57 @@
+{{- if .is_interactive -}}
+#!/usr/bin/env -S uv --quiet run --script
+# /// script
+# requires-python = ">=3.13"
+# dependencies = [
+#     "click",
+#     "pyyaml",
+# ]
+# ///
+# Typos file: ~/.config/typos.tsv
+# Typos file hash: {{ include "dot_config/typos.tsv" | sha256sum }}
+
+import click
+from pathlib import Path
+from csv import DictReader
+import yaml
+
+CONFIG_DIR = Path.home() / ".config"
+TYPOS_FILE = CONFIG_DIR / "typos.tsv"
+ESPANSO_TYPOS_MATCH_FILE = CONFIG_DIR / "espanso" / "match" / "typos.yml"
+
+class EspansoDriver:
+    def __init__(self):
+        self.matches = []
+
+    def add_row(self, row):
+        self.matches.append({
+            "trigger": row["Wrong"],
+            "replace": row["Correct"],
+            "word": True,
+            "propagate_case": True,
+        })
+
+    def write(self, file: Path):
+        with file.open("w") as f:
+            yaml.dump({"matches": self.matches}, f, sort_keys=False)
+
+@click.command()
+def main():
+    click.echo(f"Regenerating typos match file for espanso")
+    espanso_driver = EspansoDriver()
+    typos_count = 0
+    with TYPOS_FILE.open() as f:
+        filtered_lines = (
+            line for line in f
+            if line.strip() and not line.lstrip().startswith("#")
+        )
+        reader = DictReader(filtered_lines, delimiter="\t")
+        for row in reader:
+            espanso_driver.add_row(row)
+            typos_count += 1
+    click.echo(f"Added {typos_count} typos to espanso")
+    espanso_driver.write(ESPANSO_TYPOS_MATCH_FILE)
+
+if __name__ == "__main__":
+    main()
+{{ end -}}

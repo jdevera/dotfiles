@@ -1,0 +1,37 @@
+matches:
+  # Print the current date
+  - trigger: ddt
+    replace: "{{today}}"
+    vars:
+      - name: today
+        type: date
+        params:
+          format: "%Y-%m-%d"
+
+  - trigger: ttm
+    replace: "{{now}}"
+    vars:
+      - name: now
+        type: date
+        params:
+          format: "%H:%M"
+
+  - trigger: tww
+    replace: "W{{weeknum}}"
+    vars:
+      - name: weeknum
+        type: date
+        params:
+          format: "%V"
+
+  - trigger: tyw
+    replace: "{{year}}W{{weeknum}}"
+    vars:
+      - name: weeknum
+        type: date
+        params:
+          format: "%V"
+      - name: year
+        type: date
+        params:
+          format: "%Y"

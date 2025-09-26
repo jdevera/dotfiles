@@ -1,0 +1,7 @@
+matches:
+  - trigger: ",,green"
+    replace: "🟢"
+  - trigger: ",,yellow"
+    replace: "🟡"
+  - trigger: ",,red"
+    replace: "🔴"

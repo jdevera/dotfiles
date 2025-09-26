@@ -19,5 +19,9 @@
 .Xresources
 {{ end }}
 
+{{ if not .is_interactive }}
+.config/espanso/
+{{ end }}
+
 # Linked iTerm2 File
 .config/iterm2/internal/

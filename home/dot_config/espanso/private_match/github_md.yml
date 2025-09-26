@@ -1,0 +1,11 @@
+matches:
+  - trigger: "ghl-note"
+    replace: "> [!NOTE]\n> "
+  - trigger: "ghl-tip"
+    replace: "> [!TIP]\n> "
+  - trigger: "ghl-important"
+    replace: "> [!IMPORTANT]\n> "
+  - trigger: "ghl-warning"
+    replace: "> [!WARNING]\n> "
+  - trigger: "ghl-caution"
+    replace: "> [!CAUTION]\n> "

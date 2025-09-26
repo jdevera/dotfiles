@@ -1,0 +1,12 @@
+# Espanso configuration file
+
+# For a complete introduction, visit the official docs at:
+# https://espanso.org/docs/
+
+# You can use this file to define the global configuration options for espanso.
+# These are the parameters that will be used by default on every application,
+# but you can also override them on a per-application basis.
+
+# --- Search Shortcut
+#
+search_shortcut: CTRL+OPTION+CMD+SPACE

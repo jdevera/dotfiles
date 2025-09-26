@@ -1,0 +1,10 @@
+matches:
+  ## Arrows
+  - trigger: "->"
+    replace: "→"
+  - trigger: "<-"
+    replace: "←"
+  - trigger: "^|"
+    replace: "↑"
+  - trigger: "v|"
+    replace: "↓"
