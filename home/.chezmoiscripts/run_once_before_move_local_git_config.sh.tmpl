@@ -1,0 +1,28 @@
+#!/usr/bin/env bash
+
+# {{ template "dotfiles_bashlib.sh" }}
+
+# Help shellcheck identify the above include
+true || source ../.chezmoitemplates/dotfiles_bashlib.sh
+
+
+# This script is used to move the local git config to the correct location
+# in the home directory.
+
+dot::chezmoi_script_start "move local git config to the correct location"
+
+if [[ ! -f ~/.gitconfig.local ]]; then
+    dot::chezmoi_script_skipped "local git config is not present in legacy location"
+fi
+
+if [[ ! -d ~/.config/git ]]; then
+    dot::step "creating ~/.config/git"
+    mkdir -p ~/.config/git
+fi
+
+dot::step "moving ~/.gitconfig.local to ~/.config/git/config.local"
+
+mv ~/.gitconfig.local ~/.config/git/config.local || \
+    dot::die "failed to move local git config to the correct location"
+
+dot::success "local git config moved to the correct location"

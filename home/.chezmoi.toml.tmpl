@@ -43,7 +43,7 @@
 {{- if eq .chezmoi.os "darwin" -}}
 {{-     $is_headless = false -}}
 {{- else -}}
-{{-     /* Check if hostname is in explicit headful hosts list */ -}}
+{{- /* Check if hostname is in explicit headful hosts list */ -}}
 {{-     range $headful_hosts -}}
 {{-         if eq . $.chezmoi.hostname -}}
 {{-             $is_headless = false -}}

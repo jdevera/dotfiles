@@ -1,9 +1,17 @@
 {{- if eq .chezmoi.os "linux" -}}
-#!/bin/sh
+#!/usr/bin/env bash
 # Xmodmap hash: {{ include "dot_Xmodmap" | sha256sum }}
 
-[ -e "~/.Xmodmap" ] || exit 0
-command -v xmodmap &>/dev/null || exit 0
-echo "Xmodmap: Applying custom key bindings after changes"
+# {{ template "dotfiles_bashlib.sh" }}
+# Help shellcheck identify the above include
+true || source ../.chezmoitemplates/dotfiles_bashlib.sh
+
+dot::chezmoi_script_start "apply custom key bindings (Xmodmap)"
+
+[ -e "~/.Xmodmap" ] || dot::chezmoi_script_skipped "Xmodmap config is not installed"
+dot::has_command xmodmap || dot::chezmoi_script_skipped "xmodmap is not installed"
+
 xmodmap ~/.Xmodmap
+
+dot::success "custom key bindings applied"
 {{ end -}}

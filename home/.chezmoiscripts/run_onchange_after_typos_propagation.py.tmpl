@@ -19,6 +19,9 @@ CONFIG_DIR = Path.home() / ".config"
 TYPOS_FILE = CONFIG_DIR / "typos.tsv"
 ESPANSO_TYPOS_MATCH_FILE = CONFIG_DIR / "espanso" / "match" / "typos.yml"
 
+__CHEZMOI_INDICATOR="𖠿"
+
+
 class EspansoDriver:
     def __init__(self):
         self.matches = []
@@ -37,7 +40,7 @@ class EspansoDriver:
 
 @click.command()
 def main():
-    click.echo(f"Regenerating typos match file for espanso")
+    click.echo(f"{__CHEZMOI_INDICATOR}: regenerating typos match file for espanso")
     espanso_driver = EspansoDriver()
     typos_count = 0
     with TYPOS_FILE.open() as f:

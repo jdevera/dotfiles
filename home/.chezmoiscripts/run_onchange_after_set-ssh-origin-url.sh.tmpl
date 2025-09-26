@@ -1,0 +1,18 @@
+#!/usr/bin/env bash
+
+# {{ template "dotfiles_bashlib.sh" }}
+
+# Help shellcheck identify the above include
+true || source ../.chezmoitemplates/dotfiles_bashlib.sh
+
+dot::chezmoi_script_start "set ssh origin url for chezmoi working tree"
+
+PREVIOUS_ORIGIN=$(git -C "$CHEZMOI_WORKING_TREE" remote get-url origin)
+NEW_ORIGIN="${PREVIOUS_ORIGIN/#https:\/\/github.com\//git@github.com:}"
+
+if [[ "$PREVIOUS_ORIGIN" == "$NEW_ORIGIN" ]]; then
+    dot::chezmoi_script_skipped "origin url for chezmoi working tree was already set to ssh"
+fi
+
+git -C "$CHEZMOI_WORKING_TREE" remote set-url origin "$NEW_ORIGIN"
+dot::success "origin url for chezmoi working tree set to ssh"
