@@ -1,12 +1,3 @@
-{{- $email := promptStringOnce . "email" "Email address" -}}
-{{- $fname := promptStringOnce . "fname" "Full Name" -}}
-{{- $ghuser := promptStringOnce . "ghuser" "Github User" -}}
-
-[data]
-    email = {{ $email | quote }}
-    fname = {{ $fname | quote }}
-    ghuser = {{ $ghuser | quote }}
-
 # By default, chezmoi diff will print the contents of scripts that would be run
 # by chezmoi apply. To exclude scripts from the output of chezmoi diff, set
 # diff.exclude in your configuration file, for example:
@@ -20,4 +11,33 @@
 # yet been read.
 [hooks.read-source-state.pre]
     command = ".local/share/chezmoi/home/.install-one-password.sh"
+
+# ------------------------------------------------------------
+# Data
+# ------------------------------------------------------------
+{{- $email := promptStringOnce . "email" "Email address" -}}
+{{- $fname := promptStringOnce . "fname" "Full Name" -}}
+{{- $ghuser := promptStringOnce . "ghuser" "Github User" -}}
+
+{{- $interactive_hosts := list "nexon" -}}
+{{- $is_interactive := false -}}
+{{- if eq .chezmoi.os "darwin" -}}
+{{- $is_interactive = true -}}
+{{- else -}}
+{{- range $interactive_hosts -}}
+{{- if eq . $.chezmoi.hostname -}}
+{{- $is_interactive = true -}}
+{{- end -}}
+{{- end -}}
+{{- end }}
+
+[data]
+    email = {{ $email | quote }}
+    fname = {{ $fname | quote }}
+    ghuser = {{ $ghuser | quote }}
+    is_macos = {{ eq .chezmoi.os "darwin" }}
+    is_linux = {{ eq .chezmoi.os "linux" }}
+    is_interactive = {{ $is_interactive }}
+
+
 # vim:ft=toml:
