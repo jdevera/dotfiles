@@ -7,7 +7,7 @@
 #
 ##############################################################################
 
-# Status configuration {{{
+# Status configuration {{ "{{{" }}
 # ========================
 
 STATUS_DEFAULT_COLOR=blue
@@ -22,25 +22,25 @@ set  -g status-justify centre
 
 set  -g status-style "bg=default fg=$STATUS_DEFAULT_COLOR"
 
-
 # Status left
 # -----------
 set  -g status-left-length 40
 # Command mode indicator:
-set  -g status-left '#{?client_prefix,#[reverse]<C-b>#[noreverse] ,}'
+set  -g status-left '#{?client_prefix,#[reverse]<C-a>#[noreverse] ,}'
 # Hostname:
-set -ag status-left "[ h:#[fg=blue,bold]#h #[fg=default,default]]"
+set -ag status-left "[󱙝 #[fg=blue,bold]#h#[fg=default,default]]"
 # Session name:
-set -ag status-left '[s:#[fg=blue,bold]#S#[fg=default,default]]'
+set -ag status-left '[󱕯 #[fg=blue,bold]#S#[fg=default,default]]'
 set -ag status-left '['
 
 # Status right
 # ------------
 set  -g status-right-length 55
 set  -g status-right ']'
-set -ag status-right '[#[fg=white,bold]RAM:#(~/.tmux_scripts/used_ram_pct)#[fg=default,default]]'
-set -ag status-right '[#[fg=yellow,bold]#(~/.tmux_scripts/load_avg)#[fg=default,default]]'
-set -ag status-right '[#[fg=cyan,bold]%d/%m %H:%M#[fg=default,default]]'
+# Percentage of RAM in use
+set -ag status-right '[#[fg=green] #[fg=white]#(~/.tmux_scripts/used_ram_pct)#[fg=default,default]]'
+set -ag status-right '[#[fg=yellow]󰓅 #[fg=white]#(~/.tmux_scripts/load_avg)#[fg=default,default]]'
+set -ag status-right '[#[fg=cyan] %d/%m %H:%M#[fg=default,default]]'
 
 setw -g window-status-current-format '#[fg=red,bold](#[fg=white,bold]#I:#W#F#[fg=red,bold])#[fg=default,default]'
 setw -g window-status-current-style bright
@@ -50,7 +50,7 @@ setw -g window-status-activity-style fg=yellow,bold
 setw -g window-status-bell-style fg=yellow,bold
 
 # }}}
-# Mouse configuration {{{
+# Mouse configuration {{ "{{{" }}
 # =======================
 
 
@@ -70,7 +70,7 @@ setw -g window-status-bell-style fg=yellow,bold
 
 
 # }}}
-# Other Config {{{
+# Other Config {{ "{{{" }}
 # ================
 
 # Set the base index from which an unused index should be searched when a new
@@ -78,6 +78,8 @@ setw -g window-status-bell-style fg=yellow,bold
 set -g base-index 1
 set -g pane-base-index 1
 
+{{ if not .is_macos -}}
+{{/*
 # aggresive-resize is helpful but in macos, when using iTerm2 with the Tmux
 # integration, you get an error if the option is on:
 #
@@ -91,9 +93,9 @@ set -g pane-base-index 1
 # I does not seem like it will be changed:
 # https://gitlab.com/gnachman/iterm2/-/issues/2585
 #
-# TODO: Desable this for MacOS only.
-#
-# setw -g aggressive-resize on
+# */ -}}
+setw -g aggressive-resize on
+{{- end }}
 
 # Do not wrap on searches (I added this feature :D )
 setw -g wrap-search off
@@ -112,13 +114,18 @@ set -g default-terminal "screen-256color"
 set-option -ga terminal-overrides ",xterm-256color:Tc"
 
 # }}}
-# Key Bindings {{{
+# Key Bindings {{ "{{{" }}
 # ===============
 
-# Bind the R key to reload this file
-bind-key R run-shell -b ' \
-    tmux source-file ~/.tmux.conf > dev/null; \
-    tmux display-message "Sourced ~/.tmux.conf"'
+# Okay, I admit that C-a is more confortable than C-b as client prefix
+# --------------------------------------------------------------------
+unbind C-b
+set-option -g prefix C-a
+bind-key C-a send-prefix
+
+
+# Bind the r key to reload this file
+bind-key r source-file ~/.tmux.conf
 
 # Use Vim-like keys to resize panes
 unbind-key C-Left;  bind-key -r < resize-pane -L 1
@@ -133,7 +140,8 @@ unbind-key Left;    bind-key -r h select-pane -L
 unbind-key Right;   bind-key -r l select-pane -R
 
 # Use | and _ for vertical and horizontal splits
-unbind-key '"';     bind-key _ split-window    -c "#{pane_current_path}"
+unbind-key '"'
+bind-key _ split-window    -c "#{pane_current_path}"
 
 unbind-key %
 bind-key | split-window -h -c "#{pane_current_path}"
@@ -142,7 +150,7 @@ bind-key | split-window -h -c "#{pane_current_path}"
 # unbind p
 # bind p paste-buffer
 bind-key -T copy-mode-vi v send-keys -X begin-selection
-bind-key -T copy-mode-vi y send-keys -X copy-pipe-and-cancel "xsel --clipboard --input"
+bind-key -T copy-mode-vi y send-keys -X copy-pipe-and-cancel "{{ .copy_command }}"
 
 # Send all history to a file
 bind-key P command-prompt -p 'save history to filename:' -I '~/.tmux.history' 'capture-pane -S -32768 ; save-buffer %1 ; delete-buffer'
@@ -151,4 +159,4 @@ bind-key P command-prompt -p 'save history to filename:' -I '~/.tmux.history' 'c
 bind-key b last
 
 # }}}
-# vim: fdm=marker :
+# vim: fdm=marker ft=tmux :
