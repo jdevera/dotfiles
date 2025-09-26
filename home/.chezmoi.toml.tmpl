@@ -19,16 +19,36 @@
 {{- $fname := promptStringOnce . "fname" "Full Name" -}}
 {{- $ghuser := promptStringOnce . "ghuser" "Github User" -}}
 
+{{- /* Interactive hosts are hosts I interact directly with, rather than through
+        other machines. */ -}}
+
 {{- $interactive_hosts := list "nexon" -}}
 {{- $is_interactive := false -}}
+
 {{- if eq .chezmoi.os "darwin" -}}
-{{- $is_interactive = true -}}
+{{-     $is_interactive = true -}}
 {{- else -}}
-{{- range $interactive_hosts -}}
-{{- if eq . $.chezmoi.hostname -}}
-{{- $is_interactive = true -}}
-{{- end -}}
-{{- end -}}
+{{-     range $interactive_hosts -}}
+{{-         if eq . $.chezmoi.hostname -}}
+{{-             $is_interactive = true -}}
+{{-         end -}}
+{{-     end -}}
+{{- end }}
+
+{{- /* Headless detection - systems that should NOT have GUI packages */ -}}
+{{- $headful_hosts := list "nexon" -}}
+{{- $is_headless := true -}}
+
+{{- /* Never headless on macOS */ -}}
+{{- if eq .chezmoi.os "darwin" -}}
+{{-     $is_headless = false -}}
+{{- else -}}
+{{-     /* Check if hostname is in explicit headful hosts list */ -}}
+{{-     range $headful_hosts -}}
+{{-         if eq . $.chezmoi.hostname -}}
+{{-             $is_headless = false -}}
+{{-         end -}}
+{{-     end -}}
 {{- end }}
 
 [data]
@@ -38,6 +58,7 @@
     is_macos = {{ eq .chezmoi.os "darwin" }}
     is_linux = {{ eq .chezmoi.os "linux" }}
     is_interactive = {{ $is_interactive }}
+    is_headless = {{ $is_headless }}
 
 
 # vim:ft=toml:
