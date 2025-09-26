@@ -1,11 +1,32 @@
 #!/usr/bin/env bash
-if command -v uv > /dev/null 2>&1; then
-    echo "uv installer: uv is already installed"
-    exit 0
+
+# {{ template "dotfiles_bashlib.sh" }}
+
+# Help shellcheck identify the above include
+true || source ../.chezmoitemplates/dotfiles_bashlib.sh
+
+dot::chezmoi_script_start "installation of uv"
+
+if dot::has_command uv; then
+    dot::chezmoi_script_skipped "uv is already installed"
 fi
 
+install_with_curl() {
+    dot::step "installing uv with curl"
+    sh -c "$(curl -LsSf https://astral.sh/uv/install.sh )" --no-modify-path
+}
+
 {{ if eq .chezmoi.os "darwin" -}}
-brew install uv
-{{ else }}
-sh -c "$(curl -LsSf https://astral.sh/uv/install.sh )" --no-modify-path
-{{ end -}}
+if dot::has_command brew; then
+    # This is unlikely to happen on a fresh box, but it's worth a try, if
+    # brew is not yet installed, we still fall back to curl
+    dot::step "installing uv with brew"
+    brew install uv
+else
+    install_with_curl
+fi
+{{- else -}}
+install_with_curl
+{{- end }}
+
+dot::success "uv installed"

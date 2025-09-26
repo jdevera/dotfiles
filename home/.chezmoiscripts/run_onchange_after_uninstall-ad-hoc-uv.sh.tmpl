@@ -1,0 +1,19 @@
+{{ if eq .chezmoi.os "darwin" -}}
+#!/usr/bin/env bash
+
+# {{ template "dotfiles_bashlib.sh" }}
+
+# Help shellcheck identify the above include
+true || source ../.chezmoitemplates/dotfiles_bashlib.sh
+
+dot::chezmoi_script_start "uninstall ad-hoc uv"
+
+if [[ ! -e ~/.local/bin/uv ]]; then
+    dot::chezmoi_script_skipped "ad-hoc uv is not installed"
+fi
+
+dot::step "removing ad-hoc uv from ~/.local/bin"
+rm -f ~/.local/bin/uv || dot::die "failed to remove ad-hoc uv from ~/.local/bin"
+
+dot::success "ad-hoc uv uninstalled"
+{{ end -}}
