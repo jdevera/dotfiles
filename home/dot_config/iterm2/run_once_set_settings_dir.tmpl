@@ -1,11 +1,20 @@
 {{- if eq .chezmoi.os "darwin" -}}
 #!/usr/bin/env bash
 
-echo "Configuring iTerm2 Settings saving"
+# {{ template "dotfiles_bashlib.sh" }}
 
-# Specify the preferences directory
-defaults write com.googlecode.iterm2 PrefsCustomFolder -string "~/.config/iterm2/settings"
+# Help shellcheck identify the above include
+true || source ../.chezmoitemplates/dotfiles_bashlib.sh
+dot::chezmoi_script_start "configure iTerm2 settings saving"
 
-# Tell iTerm2 to use the custom preferences in the directory
-defaults write com.googlecode.iterm2 LoadPrefsFromCustomFolder -bool true
-{{- end -}}
+
+ITERM2_DOMAIN="com.googlecode.iterm2"
+
+dot::step::macos::defaults::set \
+    "$ITERM2_DOMAIN" "PrefsCustomFolder" "string" "~/.config/iterm2/settings" \
+    "specify the preferences directory"
+
+dot::step::macos::defaults::set \
+    "$ITERM2_DOMAIN" "LoadPrefsFromCustomFolder" "boolean" "true" \
+    "tell iTerm2 to load preferences from the directory"
+{{ end -}}

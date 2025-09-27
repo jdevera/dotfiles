@@ -176,3 +176,52 @@ function dot::step::fatal() {
 function dot::has_command() {
     command -v "$1" > /dev/null 2>&1
 }
+
+macos::defaults::matches()
+{
+    local domain key type value
+    domain=$1
+    key=$2
+    type=$3
+    value=$4
+    if [[ $type == "boolean" ]]; then
+        if [[ $value == "true" ]]; then
+            value=1
+        else
+            value=0
+        fi
+    fi
+    if ! current_value=$(defaults read "$domain" "$key" 2>/dev/null); then
+        return 1
+    fi
+    if [[ "$current_value" != "$value" ]]; then
+        return 1
+    fi
+
+    current_type=$(defaults read-type "$domain" "$key")
+    current_type=${current_type#Type is }
+    if [[ "$current_type" != "$type" ]]; then
+        return 1
+    fi
+    return 0
+}
+
+
+dot::step::macos::defaults::set()
+{
+    local domain key type value label
+    domain=$1
+    key=$2
+    type=$3
+    value=$4
+    shift 4
+    label=$*
+    dot::step::start "$label"
+
+    if macos::defaults::matches "$domain" "$key" "$type" "$value"; then
+        dot::step::skipped "already set"
+    else
+        defaults write "$domain" "$key" "-$type" "$value" || dot::step::fatal
+        dot::step::done
+    fi
+}
