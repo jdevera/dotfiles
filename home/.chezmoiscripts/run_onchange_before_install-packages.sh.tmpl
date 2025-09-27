@@ -1,4 +1,4 @@
-{{ if eq .chezmoi.os "linux" -}}
+{{ if .is_linux -}}
 #!/usr/bin/env bash
 
 # {{ template "dotfiles_bashlib.sh" }}
@@ -38,8 +38,10 @@ sudo apt install --no-upgrade -y \
     || dot::step::fatal
 dot::step::done
 
-{{ else if eq .chezmoi.os "darwin" -}}
+{{ else if .is_macos -}}
 #!/usr/bin/env bash
+
+# MacOS build version: {{ output "sw_vers" "--buildVersion" }}
 
 # {{ template "dotfiles_bashlib.sh" }}
 # Help shellcheck identify the above include
