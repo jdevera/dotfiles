@@ -23,6 +23,14 @@ Machine information
 {{- $is_macos := eq .chezmoi.os "darwin" -}}
 {{- $is_linux := eq .chezmoi.os "linux" -}}
 
+{{- $hostname := .chezmoi.hostname -}}
+{{- if $is_macos -}}
+{{- /* Determine the hostname
+    The result of the hostname command on macOS depends on the network that the
+    machine is connected to. For a stable result, use the scutil command */ -}}
+{{-     $hostname = output "scutil" "--get" "ComputerName" | trim -}}
+{{- end -}}
+
 {{- /*
 Interactive hosts are hosts I interact directly with, rather than through other
 machines.
