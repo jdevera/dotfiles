@@ -558,7 +558,12 @@ endif
 
 " Rainbow: Activate
 let g:rainbow_active = 1
-
+" Rainbow: But keep off in some filetypes
+let g:rainbow_conf = {
+\   'separately': {
+\       'gotexttmpl': 0
+\   }
+\}
 " MiniBufExplorer:
 " Put new window above current or on the left for vertical split:
 let g:miniBufExplBRSplit = 0
