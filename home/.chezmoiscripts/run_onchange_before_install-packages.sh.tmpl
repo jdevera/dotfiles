@@ -1,13 +1,21 @@
 {{ if eq .chezmoi.os "linux" -}}
 #!/usr/bin/env bash
 
+# {{ template "dotfiles_bashlib.sh" }}
+# Help shellcheck identify the above include
+true || source ../.chezmoitemplates/dotfiles_bashlib.sh
+
+dot::chezmoi_script_start "install packages with APT"
+
 if ! command -v apt > /dev/null 2>&1; then
-    echo "APT is not installed" >&2
-    exit 1
+    dot::die "APT is not installed"
 fi
 
-echo "Installing packages with APT"
-sudo apt update
+dot::step::start "update package sources"
+sudo apt update || dot::step::fatal
+dot::step::done
+
+dot::step::start "install packages"
 sudo apt install --no-upgrade -y \
 {{- /* Basic programs that are used in dotfiles functions */}}
     bash \
@@ -27,13 +35,26 @@ sudo apt install --no-upgrade -y \
     rsync \
     tree \
     git-delta \
-    ;
+    || dot::step::fatal
+dot::step::done
 
 {{ else if eq .chezmoi.os "darwin" -}}
 #!/usr/bin/env bash
 
-echo "Installing packages with Homebrew"
-brew bundle --no-upgrade --file=/dev/stdin <<EOF
+# {{ template "dotfiles_bashlib.sh" }}
+# Help shellcheck identify the above include
+true || source ../.chezmoitemplates/dotfiles_bashlib.sh
+
+dot::chezmoi_script_start "install packages with Homebrew"
+
+dot::step::start "ensure Homebrew is installed"
+if ! dot::has_command brew; then
+    dot::step::fatal "NOT installed"
+fi
+dot::step::done
+
+dot::step::start "install formulae and casks"
+brew bundle --no-upgrade --file=/dev/stdin <<EOF || dot::step::fatal
 {{- /* Basic programs that are used in dotfiles functions */}}
 brew "bash"
 brew "fzf"
@@ -53,5 +74,9 @@ brew "rsync"
 brew "tree"
 brew "git-delta"
 brew "uv"
+{{ if .is_interactive -}}
+cask "jordanbaird-ice"
+{{- end }}
 EOF
+dot::step::done
 {{ end -}}
