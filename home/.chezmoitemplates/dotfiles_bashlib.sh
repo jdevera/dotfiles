@@ -135,11 +135,15 @@ function dot::chezmoi_script_skipped() {
 }
 
 function dot::step::start() {
+    if [[ -n $__STEP_LABEL ]]; then
+        dot::step::done
+    fi
 	__STEP_NUMBER=$((__STEP_NUMBER + 1))
 	__STEP_LABEL="$1"
     dot::decorate "$COL_STEP" "$__STEP_INDICATOR" "Step $__STEP_NUMBER" "will $__STEP_LABEL" >&2
 }
 
+# shellcheck disable=SC2120 # allow optional arguments
 function dot::step::done() {
     local sep=""
     [[ -n $1 ]] && sep=": "
@@ -161,6 +165,7 @@ function dot::step::error() {
     __STEP_LABEL=""
 }
 
+# shellcheck disable=SC2120 # allow optional arguments
 function dot::step::fatal() {
     local sep=""
     [[ -n $1 ]] && sep=": "

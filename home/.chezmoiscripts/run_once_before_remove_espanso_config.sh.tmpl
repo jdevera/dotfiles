@@ -1,0 +1,29 @@
+{{ if and .is_interactive .is_macos -}}
+#!/usr/bin/env bash
+
+# {{ template "dotfiles_bashlib.sh" }}
+
+# Help shellcheck identify the above include
+true || source ../.chezmoitemplates/dotfiles_bashlib.sh
+
+dot::chezmoi_script_start "remove espanso config from legacy location"
+
+LEGACY_ESPANSO_CONFIG_DIR="$HOME/Library/Application Support/espanso"
+
+if [[ ! -d "$LEGACY_ESPANSO_CONFIG_DIR" ]]; then
+    dot::chezmoi_script_skipped "legacy espanso config directory does not exist"
+fi
+
+BACKUP_PATH="$CHEZMOI_WORKING_TREE/espanso_legacy_config.tar.gz"
+dot::step::start "back up legacy espanso config"
+tar -C "$LEGACY_ESPANSO_CONFIG_DIR" \
+    -czvf "$BACKUP_PATH" . \
+        || dot::step::fatal
+dot::step::done
+
+dot::step::start "remove legacy espanso config dir"
+rm -rf "$LEGACY_ESPANSO_CONFIG_DIR" || dot::step::fatal
+
+dot::info "legacy espanso config dir back up: $BACKUP_PATH"
+dot::step::done
+{{ end -}}
