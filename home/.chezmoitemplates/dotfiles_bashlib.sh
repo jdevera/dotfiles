@@ -1,42 +1,32 @@
 # shellcheck shell=bash
-__STEP_INDICATOR="=>"
-__ERROR_INDICATOR="✗"
-__SUCCESS_INDICATOR="✓"
-__SKIPPED_INDICATOR="⇊"
-__FATAL_INDICATOR="✗"
-__INFO_INDICATOR="ℹ"
-__WARNING_INDICATOR="⚠"
-__DEBUG_INDICATOR="⚙"
-__CHEZMOI_INDICATOR="𖠿"
-
 # Check if the terminal supports color output by:
 # 1. Checking if stdout is a terminal ([[ -t 1 ]])
 # 2. Checking if $TERM is set (test -n "${TERM}")
 # 3. Testing if we can set foreground color 0 (black) using tput
-function __supports_color() {
+function __dot_supports_color() {
     [[ -t 1 ]] && test -n "${TERM}" && tput setaf 0 >& /dev/null
 }
 
-function __should_colorize() {
-    if [[ -n $NO_COLOR ]]; then
-        return 0
-    fi
+function __dot_should_colorize() {
+    [[ -n $NO_COLOR ]] && return 0
     if [[ -n $FORCE_COLOR ]]; then
         return 1
     fi
-    __supports_color
+    __dot_supports_color
 }
 
-function __col() {
+function __dot_col() {
     local color=$1
     shift
-    if __should_colorize; then
+    if __dot_should_colorize; then
         echo -e "\033[${color}m$*\033[0m"
     else
         echo "$*"
     fi
 }
 
+# Colors
+# -----------------------------------------------------------------------------
 COL_BOLD=
 COL_RED=
 COL_GREEN=
@@ -46,7 +36,7 @@ COL_MAGENTA=
 COL_CYAN=
 COL_WHITE=
 COL_RESET=
-if __should_colorize; then
+if __dot_should_colorize; then
     COL_BOLD=$'\e[1m'
     COL_RED=$'\e[1;31m'
     COL_GREEN=$'\e[1;32m'
@@ -63,6 +53,31 @@ COL_WARNING=$COL_YELLOW
 COL_INFO=$COL_CYAN
 COL_CHEZMOI=$COL_BOLD$COL_BLUE
 COL_SKIPPED=$COL_CYAN
+COL_SUCCESS=$COL_GREEN$COL_BOLD
+# -----------------------------------------------------------------------------
+
+# Indicators
+# -----------------------------------------------------------------------------
+__STEP_INDICATOR="=>"
+__ERROR_INDICATOR="✗"
+__SUCCESS_INDICATOR="✓"
+__SKIPPED_INDICATOR="⇊"
+__FATAL_INDICATOR="✗"
+__INFO_INDICATOR="ℹ"
+__WARNING_INDICATOR="⚠"
+__DEBUG_INDICATOR="⚙"
+__CHEZMOI_INDICATOR="𖠿"
+# -----------------------------------------------------------------------------
+
+# Other
+# -----------------------------------------------------------------------------
+__SCRIPT_LABEL=""
+__STEP_LABEL=""
+__STEP_NUMBER=0
+# -----------------------------------------------------------------------------
+
+# Functions
+# -----------------------------------------------------------------------------
 
 function dot::decorate() {
     local color=$1
@@ -80,11 +95,11 @@ function dot::step() {
 }
 
 function dot::error() {
-    dot::decorate "$COL_ERROR" "$__ERROR_INDICATOR" "ERROR" "$*" >&2
+    dot::decorate "$COL_ERROR" "$__ERROR_INDICATOR" "Error" "$*" >&2
 }
 
 function dot::warn() {
-    dot::decorate $COL_WARNING $__WARNING_INDICATOR "WARNING" "$*" >&2
+    dot::decorate "$COL_WARNING" "$__WARNING_INDICATOR" "Warning" "$*" >&2
 }
 
 function dot::skip() {
@@ -101,7 +116,7 @@ function dot::success() {
 }
 
 function dot::info() {
-    dot::decorate "$COL_INFO" "$__INFO_INDICATOR" "INFO" "$*"
+    dot::decorate "$COL_INFO" "$__INFO_INDICATOR" "Info" "$*"
 }
 
 function dot::log() {
@@ -109,13 +124,48 @@ function dot::log() {
 }
 
 function dot::chezmoi_script_start() {
+    __SCRIPT_LABEL="$*"
     echo '-----------------------------------------------'
-    dot::decorate "$COL_CHEZMOI" "$__CHEZMOI_INDICATOR" "" "$*"
+    dot::decorate "$COL_CHEZMOI" "$__CHEZMOI_INDICATOR" "Chezmoi Script" "$__SCRIPT_LABEL" >&2
 }
 
 function dot::chezmoi_script_skipped() {
     dot::skip "$*"
     exit 0
+}
+
+function dot::step::start() {
+	__STEP_NUMBER=$((__STEP_NUMBER + 1))
+	__STEP_LABEL="$1"
+    dot::decorate "$COL_STEP" "$__STEP_INDICATOR" "Step $__STEP_NUMBER" "will $__STEP_LABEL" >&2
+}
+
+function dot::step::done() {
+    local sep=""
+    [[ -n $1 ]] && sep=": "
+    dot::decorate "$COL_SUCCESS" "$__SUCCESS_INDICATOR " "Step $__STEP_NUMBER" "did  $__STEP_LABEL" "$sep$*" >&2
+    __STEP_LABEL=""
+}
+    
+function dot::step::skipped() {
+    local sep=""
+    [[ -n $1 ]] && sep=": "
+    dot::decorate "$COL_SKIPPED" "$__SKIPPED_INDICATOR " "Step $__STEP_NUMBER skipped" "$__STEP_LABEL" "$sep$*" >&2
+    __STEP_LABEL=""
+}
+
+function dot::step::error() {
+    local sep=""
+    [[ -n $1 ]] && sep=": "
+    dot::decorate "$COL_ERROR" "$__ERROR_INDICATOR " "Step $__STEP_NUMBER error" "could not $__STEP_LABEL" "$sep$*" >&2
+    __STEP_LABEL=""
+}
+
+function dot::step::fatal() {
+    local sep=""
+    [[ -n $1 ]] && sep=": "
+    dot::decorate "$COL_ERROR" "$__ERROR_INDICATOR " "Step $__STEP_NUMBER fatal" "could not $__STEP_LABEL" "$sep$*" >&2
+    exit 1
 }
 
 function dot::has_command() {
