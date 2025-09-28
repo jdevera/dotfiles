@@ -19,7 +19,7 @@ dot::step::start "install packages"
 sudo apt install --no-upgrade -y \
 {{ range .packages.linux.apt -}}
     {{ . | quote }} \
-{{ end }}
+{{ end -}}
     || dot::step::fatal
 dot::step::done
 
