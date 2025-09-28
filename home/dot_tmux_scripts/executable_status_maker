@@ -1,0 +1,238 @@
+#!/usr/bin/env -S uv --quiet run --script
+# /// script
+# requires-python = ">=3.13"
+# dependencies = [
+#     "click",
+#     "rich",
+# ]
+# ///
+
+from dataclasses import dataclass, field
+
+import click
+from rich.console import Console, Group
+from rich.panel import Panel
+
+
+@dataclass
+class BorderProfile:
+    point_right: str
+    point_left: str
+
+
+BORDER_PROFILES = {
+    "waveform": BorderProfile(point_right=" ", point_left=" "),
+    "pixelated_big": BorderProfile(point_right=" ", point_left=" "),
+    "pixelated_small": BorderProfile(point_right=" ", point_left=" "),
+    "flame": BorderProfile(point_right=" ", point_left=" "),
+    "plhard": BorderProfile(point_right="", point_left=""),
+    "plsoft": BorderProfile(point_right="", point_left=""),
+    "roundhard": BorderProfile(point_right="", point_left=""),
+    "roundsoft": BorderProfile(point_right="", point_left=""),
+    "tridownhard": BorderProfile(point_right=" ", point_left=" "),
+    "tridownsoft": BorderProfile(point_right=" ", point_left=" "),
+    "triuphard": BorderProfile(point_right="", point_left=" "),
+    "triupsoft": BorderProfile(point_right=" ", point_left=" "),
+}
+
+
+def style(*styles: str, bg: str | None = None, fg: str | None = None) -> str:
+    result = []
+    if bg:
+        result.append(f"bg={bg}")
+    if fg:
+        result.append(f"fg={fg}")
+    if styles:
+        result.extend(styles)
+    return f"#[{','.join(result)}]"
+
+
+@dataclass
+class ConfigString:
+    parts: list[str] = field(default_factory=list)
+
+    def extend(self, *parts: str) -> None:
+        self.parts.extend(list(parts))
+
+    def __str__(self) -> str:
+        return "".join(self.parts)
+
+
+def escape_conditional(part: str) -> str:
+    return part.replace(",", "#,").replace("}", "#}")
+
+
+def conditional(condition, when_true: str | list, when_false=None):
+    result = ["#{?", condition, ","]
+    if isinstance(when_true, str):
+        when_true = [when_true]
+    result.extend([escape_conditional(item) for item in when_true])
+    result.append(",")
+    if when_false:
+        if isinstance(when_false, str):
+            when_false = [when_false]
+        result.extend([escape_conditional(item) for item in when_false])
+    result.append("}")
+    return "".join(result)
+
+
+def add_left_section(bar, content, fg, bg, next_bg, border_profile: BorderProfile):
+    bar.extend(
+        style(fg=fg, bg=bg),
+        content,
+        style(fg=bg, bg=next_bg),
+        border_profile.point_right,
+    )
+
+
+class SectionBgs:
+    COMMAND_PREFIX = "red"
+    HOSTNAME = "lightblue"
+    SESSION_NAME = "darkgreen"
+    DEFAULT = "default"
+    RAM_PCT = "green"
+    LOAD_AVG = "color140"
+    TIME = "cyan"
+
+
+@click.group()
+def cli(): ...
+
+
+@cli.command()
+@click.option(
+    "--border-style", "-b", type=click.Choice(BORDER_PROFILES.keys()), default="plhard"
+)
+def left(border_style: str):
+    """Generate the left status bar"""
+    border_profile = BORDER_PROFILES[border_style]
+    left_bar = ConfigString()
+    left_bar.extend(
+        conditional(
+            "client_prefix",
+            [
+                style("bold", fg="white", bg=SectionBgs.COMMAND_PREFIX),
+                "  ",
+                style("nobold", fg=SectionBgs.COMMAND_PREFIX, bg=SectionBgs.HOSTNAME),
+                border_profile.point_right,
+            ],
+        )
+    )
+
+    add_left_section(
+        left_bar,
+        " 󱙝 #h ",
+        "black",
+        SectionBgs.HOSTNAME,
+        SectionBgs.SESSION_NAME,
+        border_profile,
+    )
+    add_left_section(
+        left_bar,
+        " 󱕯 #S ",
+        "white",
+        SectionBgs.SESSION_NAME,
+        SectionBgs.DEFAULT,
+        border_profile,
+    )
+
+    click.echo(str(left_bar))
+
+
+@cli.command()
+@click.option(
+    "--border-style", "-b", type=click.Choice(BORDER_PROFILES.keys()), default="plhard"
+)
+def right(border_style: str):
+    """Generate the right status bar"""
+    border_profile = BORDER_PROFILES[border_style]
+    right_bar = ConfigString()
+    right_bar.extend(
+        style(fg=SectionBgs.RAM_PCT, bg=SectionBgs.DEFAULT),
+        border_profile.point_left,
+        style(fg="black", bg=SectionBgs.RAM_PCT),
+        "  #(~/.tmux_scripts/used_ram_pct) ",
+        style(fg=SectionBgs.LOAD_AVG, bg=SectionBgs.RAM_PCT),
+        border_profile.point_left,
+        style(fg="black", bg=SectionBgs.LOAD_AVG),
+        " 󰓅 #(~/.tmux_scripts/load_avg) ",
+        style(fg=SectionBgs.TIME, bg=SectionBgs.LOAD_AVG),
+        border_profile.point_left,
+        style(fg="black", bg=SectionBgs.TIME),
+        "  %d/%m %H:%M ",
+    )
+
+    click.echo(str(right_bar))
+
+
+@cli.command()
+def borders():
+    """List border styles with examples"""
+    console = Console()
+
+    def create_left_powerline_demo(sep_char: str, is_soft: bool = False) -> str:
+        if is_soft:
+            return (
+                "[black on yellow] Section 1 [/black on yellow]"
+                f"[black on yellow]{sep_char}[/black on yellow]"
+                "[black on yellow] Section 2 [/black on yellow]"
+                f"[black on yellow]{sep_char}[/black on yellow]"
+                "[black on yellow] Section 3 [/black on yellow]"
+                f"[black on yellow]{sep_char}[/black on yellow]"
+            )
+        return (
+            "[white on red] Section 1 [/white on red]"
+            f"[red on yellow]{sep_char}[/red on yellow]"
+            "[black on yellow] Section 2 [/black on yellow]"
+            f"[yellow on blue]{sep_char}[/yellow on blue]"
+            "[white on blue] Section 3 [/white on blue]"
+            f"[blue on default]{sep_char}[/blue on default]"
+        )
+
+    def create_right_powerline_demo(sep_char: str, is_soft: bool = False) -> str:
+        if is_soft:
+            return (
+                f"[black on yellow]{sep_char}[/black on yellow]"
+                "[black on yellow] Section 1 [/black on yellow]"
+                f"[black on yellow]{sep_char}[/black on yellow]"
+                "[black on yellow] Section 2 [/black on yellow]"
+                f"[black on yellow]{sep_char}[/black on yellow]"
+                "[black on yellow] Section 3 [/black on yellow]"
+            )
+        return (
+            f"[red on default]{sep_char}[/red on default]"
+            "[white on red] Section 1 [/white on red]"
+            f"[yellow on red]{sep_char}[/yellow on red]"
+            "[black on yellow] Section 2 [/black on yellow]"
+            f"[blue on yellow]{sep_char}[/blue on yellow]"
+            "[white on blue] Section 3 [/white on blue]"
+        )
+
+    soft_panels = []
+    hard_panels = []
+    for name, profile in BORDER_PROFILES.items():
+        is_soft = "soft" in name
+        panel = Panel(
+            "\n\n                ".join(
+                [
+                    create_left_powerline_demo(profile.point_right, is_soft),
+                    create_right_powerline_demo(profile.point_left, is_soft),
+                ]
+            ),
+            title=name,
+            border_style="bold",
+        )
+        if is_soft:
+            soft_panels.append(panel)
+        else:
+            hard_panels.append(panel)
+    console.print(
+        Panel(Group(*soft_panels), title="Soft delimiters", border_style="bold")
+    )
+    console.print(
+        Panel(Group(*hard_panels), title="Hard delimiters", border_style="bold")
+    )
+
+
+if __name__ == "__main__":
+    cli()

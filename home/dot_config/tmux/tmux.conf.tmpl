@@ -10,7 +10,7 @@
 # Status configuration {{ "{{{" }}
 # ========================
 
-STATUS_DEFAULT_COLOR=blue
+{{  $status_default_color := "blue" -}}
 
 # Update the status bar every interval seconds.  By default, updates will occur
 # every 15 seconds.  A setting of zero disables redrawing at interval.
@@ -20,27 +20,32 @@ set  -g status-interval 5
 # centre or right justified.
 set  -g status-justify centre
 
-set  -g status-style "bg=default fg=$STATUS_DEFAULT_COLOR"
+set  -g status-style "bg=default fg={{ $status_default_color }}"
 
 # Status left
 # -----------
 set  -g status-left-length 40
 # Command mode indicator:
-set  -g status-left '#{?client_prefix,#[reverse]<C-a>#[noreverse] ,}'
+set  -g status-left "#{?client_prefix,#[bg=red#,fg=white#,bold]  #[bg=lightblue#,fg=red#,nobold] ,}"
 # Hostname:
-set -ag status-left "[󱙝 #[fg=blue,bold]#h#[fg=default,default]]"
+set -ag status-left "#[bg=lightblue,fg=black] 󱙝 #h #[bg=darkgreen,fg=lightblue] "
 # Session name:
-set -ag status-left '[󱕯 #[fg=blue,bold]#S#[fg=default,default]]'
-set -ag status-left '['
+set -ag status-left "#[bg=darkgreen,fg=white] 󱕯 #S #[bg=default,fg=darkgreen]"
 
 # Status right
 # ------------
 set  -g status-right-length 55
-set  -g status-right ']'
+set  -g status-right ''
+
 # Percentage of RAM in use
-set -ag status-right '[#[fg=green] #[fg=white]#(~/.tmux_scripts/used_ram_pct)#[fg=default,default]]'
-set -ag status-right '[#[fg=yellow]󰓅 #[fg=white]#(~/.tmux_scripts/load_avg)#[fg=default,default]]'
-set -ag status-right '[#[fg=cyan] %d/%m %H:%M#[fg=default,default]]'
+set -ag status-right "#[bg=default,fg=green] #[bg=green,fg=black]  #(~/.tmux_scripts/used_ram_pct) #[bg=green,fg=color140] "
+# Load average
+set -ag status-right "#[bg=color140,fg=black] 󰓅 #(~/.tmux_scripts/load_avg) #[bg=color140,fg=cyan] "
+# Time
+set -ag status-right "#[bg=cyan,fg=black]  %d/%m %H:%M"
+
+# Windows Status
+# --------------
 
 setw -g window-status-current-format '#[fg=red,bold](#[fg=white,bold]#I:#W#F#[fg=red,bold])#[fg=default,default]'
 setw -g window-status-current-style bright
@@ -125,7 +130,7 @@ bind-key C-a send-prefix
 
 
 # Bind the r key to reload this file
-bind-key r source-file ~/.tmux.conf
+bind-key r source-file ~/.config/tmux/tmux.conf
 
 # Use Vim-like keys to resize panes
 unbind-key C-Left;  bind-key -r < resize-pane -L 1
