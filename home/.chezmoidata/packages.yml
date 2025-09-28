@@ -1,0 +1,44 @@
+packages:
+  macos:
+    formulae:
+      - bash
+      - bash-completion@2
+      - bat
+      - curl
+      - fd
+      - fzf
+      - git
+      - git-delta
+      - jq
+      - ripgrep
+      - rsync
+      - starship
+      - tig
+      - tmux
+      - tree
+      - uv
+      - wget
+    casks:
+      - macvim-app
+    interactive_casks:
+      - jordanbaird-ice
+      - font-fantasque-sans-mono-nerd-font
+  linux:
+    apt:
+      - bash
+      - fzf
+      - bat
+      - ripgrep
+      - fd-find
+      - tmux
+      - vim
+      - starship
+      - bash-completion
+      - jq
+      - git
+      - tig
+      - curl
+      - wget
+      - rsync
+      - tree
+      - git-delta
