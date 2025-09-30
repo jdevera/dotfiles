@@ -24,11 +24,11 @@ dot::step::done
 dot::step::start "install packages"
 sudo apt install --no-upgrade -y \
 {{- range $package_name := $package_names -}}
-{{-     $package = get $.softwarePackages $package_name -}}
+{{-     $package := get $.softwarePackages $package_name -}}
 {{-     if hasKey $package "apt" -}}
 {{-         $package.apt }} \
 {{     end -}}
-{{- end }}
+{{- end }} \
     || dot::step::fatal
 dot::step::done
 

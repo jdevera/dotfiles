@@ -15,7 +15,7 @@ softwarePackages:
   bash:
     brew: bash
     apt: bash
-  bash-completion@2:
+  bash-completion:
     brew: bash-completion@2
     apt: bash-completion
   bat:
@@ -65,8 +65,10 @@ softwarePackages:
   wget:
     brew: wget
     apt: wget
-  macvim-app:
+  macvim:
     cask: macvim-app
+  vim:
+    apt: vim
   jordanbaird-ice:
     cask: jordanbaird-ice
   font-fantasque-sans-mono-nerd-font:

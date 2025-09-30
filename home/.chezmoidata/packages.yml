@@ -2,7 +2,7 @@ packages:
   darwin:
     all:
       - bash
-      - bash-completion@2
+      - bash-completion
       - bat
       - curl
       - fd
@@ -18,7 +18,7 @@ packages:
       - tree
       - uv
       - wget
-      - macvim-app
+      - macvim
       - tox
       - colout
     interactive:
