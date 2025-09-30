@@ -1,7 +1,7 @@
 {{- if eq .chezmoi.os "darwin" -}}
 #!/usr/bin/env bash
 
-# {{ template "dotfiles_bashlib.sh" }}
+# {{ template "dotfiles_bashlib.sh" . }}
 
 # Help shellcheck identify the above include
 true || source ../.chezmoitemplates/dotfiles_bashlib.sh

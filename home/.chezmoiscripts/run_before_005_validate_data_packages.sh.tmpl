@@ -1,0 +1,43 @@
+{{- /*
+    This script validates that the packages listed in packages.yml are present
+    in the softwarePackages registry.
+    It is run early so that the chezmoi run can be aborted early if the packages
+    are not found in the registry.
+    In successfull chezmoi runs, the packages are validated in the template code
+    and no output is generated for the script to run.
+    In case of missing packages, the script only runs to report the missing
+    packages.
+    From this point on, other scripts do not need to check this again.
+*/ -}}
+{{- if not (hasKey .packages .chezmoi.os) -}}
+{{-     warnf "Packages for %s not found in packages.yml" .chezmoi.os -}}
+{{-     abortEmpty -}}
+{{- end -}}
+{{- $os_packages := get .packages .chezmoi.os -}}
+{{- $packages := $os_packages.all -}}
+{{- if and .is_interactive (hasKey $os_packages "interactive") -}}
+{{-     $packages = concat $packages $os_packages.interactive -}}
+{{- end -}}
+{{- $missing_packages := list -}}
+{{- range $package_name := $packages -}}
+{{- /* Check if the package is in the registry */}}
+{{-     if not (hasKey $.softwarePackages $package_name) }}
+{{-         $missing_packages = append $missing_packages $package_name -}}
+{{-     end }}
+{{- end -}}
+{{- if $missing_packages -}}
+#!/usr/bin/env bash
+
+# {{ template "dotfiles_bashlib.sh" . }}
+# Help shellcheck identify the above include
+true || source ../.chezmoitemplates/dotfiles_bashlib.sh
+
+MISSING_PACKAGES=(
+{{ range $package_name := $missing_packages }}
+{{- $package_name | quote }}
+{{ end -}}
+)
+
+dot::die "Packages from packages.yml not found in softwarePackages: ${MISSING_PACKAGES[*]}"
+
+{{- end -}}

@@ -1,0 +1,70 @@
+$schema: "https://json-schema.org/draft/2020-12/schema"
+title: Package Specs
+type: object
+required:
+  - softwarePackages
+properties:
+  softwarePackages:
+    type: object
+    description: Map of logical package names to installer specifications
+    additionalProperties:
+      type: object
+      description: Installer specifications for a package
+      properties:
+        description:
+          type: string
+          description: Description of the package
+        homepage:
+          type: string
+          description: Homepage of the package
+        brew:
+          type: string
+          description: Homebrew formula name
+        apt:
+          type: string
+          description: Debian/Ubuntu APT package name
+        cask:
+          type: string
+          description: Homebrew cask name
+        uv:
+          $ref: "#/$defs/uvDef"
+        eget:
+          $ref: "#/$defs/egetDef"
+        script:
+          type: string
+          description: |-
+            Shell script to install the package.
+      additionalProperties: false
+additionalProperties: false
+
+$defs:
+  egetDef:
+    type: object
+    required: [source]
+    properties:
+      source:
+        type: string
+        description: |
+          Location of the package (github user/repo, URL, or local path)  
+
+  uvDef:
+    description: |
+      UV package spec: either a string name or an object with name and optional
+      with
+    oneOf:
+      - type: string
+      - type: object
+        required: [name]
+        properties:
+          name:
+            type: string
+            description: Package name
+          with:
+            oneOf:
+              - type: string
+              - type: array
+                items:
+                  type: string
+            description: Additional packages (string or array of strings)
+        additionalProperties: false
+

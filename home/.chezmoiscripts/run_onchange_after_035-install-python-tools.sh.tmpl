@@ -1,0 +1,80 @@
+{{- $os_packages := get .packages .chezmoi.os -}}
+{{- $package_names := $os_packages.all -}}
+{{- if and .is_interactive (hasKey $os_packages "interactive") -}}
+{{-     $package_names = concat $package_names $os_packages.interactive -}}
+{{- end -}}
+{{- $uv_packages := dict -}}
+{{ range $package_name := $package_names -}}
+{{-     $package := get $.softwarePackages $package_name -}}
+{{-     if hasKey $package "uv" -}}
+{{- /*      Convert the uv package spec to a dict if it's a string */}}
+{{-         $uv_package := $package.uv | jq `
+                if type == "string" then 
+                    {name: ., with: []}
+                else
+                    . + {with: (
+                         if has("with") then
+                             if .with | type == "string" then 
+                                 [.with]
+                             else
+                                 .with
+                             end
+                         else
+                            []
+                         end)}
+                end` | first }}
+{{-         $uv_packages = set $uv_packages $package_name $uv_package -}}
+{{-     end -}}
+{{- end -}}
+{{ if $uv_packages -}}
+#!/usr/bin/env bash
+
+# {{ template "dotfiles_bashlib.sh" . }}
+# Help shellcheck identify the above include
+true || source ../.chezmoitemplates/dotfiles_bashlib.sh
+
+dot::chezmoi_script_start "install python tools with uv"
+
+dot::assert_has_commands uv jq yq
+
+currently_installed_tools_json="$(
+    for f in ~/.local/share/uv/tools/*/uv-receipt.toml
+    do
+        yq -p toml -o json "$f"
+    done |
+        jq -s '
+            map(
+                .tool.requirements
+                | select(length>0)
+                | {key: .[0].name, value: (.[1:] | map(.name) | unique)}
+            )
+            | from_entries
+            ')"
+
+function is_already_installed() {
+    local package_name=$1
+    local deps=$2
+    local result="$(echo "$currently_installed_tools_json" |
+        jq --arg pkg "$package_name" \
+           --argjson deps "$deps" \
+           'has($pkg) and ((.[$pkg] | sort) == ($deps | sort))')"
+    [[ $result == true ]]
+}
+
+did_install_anything=false
+{{ range $package_name, $package := $uv_packages -}}
+
+if ! is_already_installed {{ $package_name | quote }} {{ $package.with | toJson | quote }}
+then
+    dot::step::start "install uv tool: {{ $package_name }}"
+    uv tool install {{ range $package.with }}--with {{. | quote}} {{end}}{{ $package.name | quote}}
+    dot::step::done
+    did_install_anything = true
+fi
+{{ end -}}
+
+if [[ $did_install_anything == false ]]; then
+    dot::chezmoi_script_skipped "all uv tools were already installed"
+fi
+
+{{- end -}}{{/* end if $uv_packages */ -}}

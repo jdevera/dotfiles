@@ -1,0 +1,78 @@
+# yaml-language-server: $schema=./.package_specs.schema.yml
+---
+# Software package specs, heavily inspired by InstallDoctor:
+# https://install.doctor/docs/customization/software
+#
+# This file is not meant to be a list of what gets installed, but rather
+# how to install the packages that are requested elsewhere.
+softwarePackages:
+  tox:
+    uv:
+      name: tox
+      with: tox-uv
+  colout:
+    uv: colout
+  bash:
+    brew: bash
+    apt: bash
+  bash-completion@2:
+    brew: bash-completion@2
+    apt: bash-completion
+  bat:
+    brew: bat
+    apt: bat
+  curl:
+    brew: curl
+    apt: curl
+  fd:
+    brew: fd
+    apt: fd-find
+  fzf:
+    brew: fzf
+    apt: fzf
+  git:
+    brew: git
+    apt: git
+  git-delta:
+    brew: git-delta
+    apt: git-delta
+  jq:
+    brew: jq
+    apt: jq
+  ripgrep:
+    brew: ripgrep
+    apt: ripgrep
+  rsync:
+    brew: rsync
+    apt: rsync
+  starship:
+    brew: starship
+    apt: starship
+  tig:
+    brew: tig
+    apt: tig
+  tmux:
+    brew: tmux
+    apt: tmux
+  tree:
+    brew: tree
+    apt: tree
+  uv:
+    brew: uv
+    apt: uv
+    script: >-
+      sh -c "$(curl -LsSf https://astral.sh/uv/install.sh )" --no-modify-path
+  wget:
+    brew: wget
+    apt: wget
+  macvim-app:
+    cask: macvim-app
+  jordanbaird-ice:
+    cask: jordanbaird-ice
+  font-fantasque-sans-mono-nerd-font:
+    cask: font-fantasque-sans-mono-nerd-font
+  yq:
+    homepage: https://github.com/mikefarah/yq
+    brew: yq
+    eget:
+      source: mikefarah/yq

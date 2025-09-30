@@ -1,9 +1,15 @@
-{{ if .is_linux -}}
+{{- $os_packages := get .packages .chezmoi.os -}}
+{{- $package_names := $os_packages.all -}}
+{{- if and .is_interactive (hasKey $os_packages "interactive") -}}
+{{-     $package_names = concat $package_names $os_packages.interactive -}}
+{{- end -}}
 #!/usr/bin/env bash
 
-# {{ template "dotfiles_bashlib.sh" }}
-# Help shellcheck identify the above include
+# {{- template "dotfiles_bashlib.sh" . }}
+# Help shellcheck identify the template code
 true || source ../.chezmoitemplates/dotfiles_bashlib.sh
+
+{{ if .is_linux -}}
 
 dot::chezmoi_script_start "install packages with APT"
 
@@ -17,20 +23,17 @@ dot::step::done
 
 dot::step::start "install packages"
 sudo apt install --no-upgrade -y \
-{{ range .packages.linux.apt -}}
-    {{ . | quote }} \
-{{ end -}}
+{{- range $package_name := $package_names -}}
+{{-     $package = get $.softwarePackages $package_name -}}
+{{-     if hasKey $package "apt" -}}
+{{-         $package.apt }} \
+{{     end -}}
+{{- end }}
     || dot::step::fatal
 dot::step::done
 
 {{ else if .is_macos -}}
-#!/usr/bin/env bash
-
 # MacOS build version: {{ output "sw_vers" "--buildVersion" }}
-
-# {{ template "dotfiles_bashlib.sh" }}
-# Help shellcheck identify the above include
-true || source ../.chezmoitemplates/dotfiles_bashlib.sh
 
 dot::chezmoi_script_start "install packages with Homebrew"
 
@@ -42,16 +45,13 @@ dot::step::done
 
 dot::step::start "install formulae and casks"
 brew bundle --no-upgrade --file=/dev/stdin <<EOF || dot::step::fatal
-{{ range .packages.macos.formulae -}}
-brew {{ . | quote }}
-{{ end }}
-{{ range .packages.macos.casks -}}
-cask {{ . | quote }}
-{{ end }}
-{{ if .is_interactive -}}
-{{ range .packages.macos.interactive_casks -}}
-cask {{ . | quote }}
-{{ end }}
+{{- range $package_name := $package_names -}}
+{{-     $package := get $.softwarePackages $package_name -}}
+{{-     if hasKey $package "brew" }}
+brew {{ $package.brew | quote }}
+{{-     else if hasKey $package "cask" }}
+cask {{ $package.cask | quote }}
+{{-     end -}}
 {{- end }}
 EOF
 dot::step::done

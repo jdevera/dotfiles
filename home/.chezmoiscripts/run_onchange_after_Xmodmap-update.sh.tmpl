@@ -2,7 +2,7 @@
 #!/usr/bin/env bash
 # Xmodmap hash: {{ include "dot_Xmodmap" | sha256sum }}
 
-# {{ template "dotfiles_bashlib.sh" }}
+# {{ template "dotfiles_bashlib.sh" . }}
 # Help shellcheck identify the above include
 true || source ../.chezmoitemplates/dotfiles_bashlib.sh
 

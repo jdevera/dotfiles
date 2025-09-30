@@ -1,6 +1,6 @@
 packages:
-  macos:
-    formulae:
+  darwin:
+    all:
       - bash
       - bash-completion@2
       - bat
@@ -18,27 +18,31 @@ packages:
       - tree
       - uv
       - wget
-    casks:
       - macvim-app
-    interactive_casks:
+      - tox
+      - colout
+    interactive:
       - jordanbaird-ice
       - font-fantasque-sans-mono-nerd-font
   linux:
-    apt:
-      - bash
-      - fzf
-      - bat
-      - ripgrep
-      - fd-find
-      - tmux
-      - vim
-      - starship
-      - bash-completion
-      - jq
-      - git
-      - tig
-      - curl
-      - wget
-      - rsync
-      - tree
-      - git-delta
+    all:
+    - bash
+    - fzf
+    - bat
+    - ripgrep
+    - fd
+    - tmux
+    - vim
+    - starship
+    - bash-completion
+    - jq
+    - git
+    - tig
+    - curl
+    - wget
+    - rsync
+    - tree
+    - git-delta
+    - colout
+    - tox
+  interactive: []

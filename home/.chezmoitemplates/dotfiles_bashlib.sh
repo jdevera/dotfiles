@@ -52,7 +52,7 @@ COL_ERROR=$COL_RED
 COL_WARNING=$COL_YELLOW
 COL_INFO=$COL_CYAN
 COL_CHEZMOI=$COL_BOLD$COL_BLUE
-COL_SKIPPED=$COL_CYAN
+COL_SKIPPED=$COL_MAGENTA
 COL_SUCCESS=$COL_GREEN$COL_BOLD
 # -----------------------------------------------------------------------------
 
@@ -123,10 +123,39 @@ function dot::log() {
     echo "$*" >&2
 }
 
+function dot::path_prepend() {
+    if ! echo "$PATH" | tr ':' '\n' | grep -q "^$1$"; then
+        PATH="$1:$PATH"
+    fi
+}
+
+function dot::macos::setup() {
+    dot::path_prepend "/opt/homebrew/bin"
+    # shellcheck disable=SC2140
+    dot::path_prepend "{{ joinPath (.chezmoi.homeDir ".local" "bin") }}"
+}
+
+function dot::linux::setup() {
+    # shellcheck disable=SC2140
+    dot::path_prepend "{{ joinPath (.chezmoi.homeDir ".local" "bin") }}"
+}
+
+function dot::os::setup() {
+# {{- if .is_macos }}
+    dot::macos::setup
+# {{- else if .is_linux }}
+    dot::linux::setup
+# {{- else }}
+    dot::die "Unsupported OS: {{ .chezmoi.os }}"
+# {{- end }}
+}
+
+
 function dot::chezmoi_script_start() {
     __SCRIPT_LABEL="$*"
     echo '-----------------------------------------------'
     dot::decorate "$COL_CHEZMOI" "$__CHEZMOI_INDICATOR" "Chezmoi Script" "$__SCRIPT_LABEL" >&2
+    dot::os::setup
 }
 
 function dot::chezmoi_script_skipped() {
@@ -175,6 +204,19 @@ function dot::step::fatal() {
 
 function dot::has_command() {
     command -v "$1" > /dev/null 2>&1
+}
+
+function dot::assert_has_commands() {
+    local command
+    local -a missing_commands
+    for command in "$@"; do
+        if ! dot::has_command "$command"; then
+            missing_commands+=("$command")
+        fi
+    done
+    if [[ ${#missing_commands[@]} -gt 0 ]]; then
+        dot::die "commands not found: ${missing_commands[*]}"
+    fi
 }
 
 macos::defaults::matches()

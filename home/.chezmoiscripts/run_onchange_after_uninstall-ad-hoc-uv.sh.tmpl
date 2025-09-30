@@ -1,7 +1,14 @@
 {{ if eq .chezmoi.os "darwin" -}}
+{{ $ad_hoc_uv_path := joinPath .chezmoi.homeDir ".local" "bin" "uv" -}}
+{{ $ad_hoc_uv_hash := "<none>" -}}
+{{ if stat $ad_hoc_uv_path -}}
+{{ $ad_hoc_uv_hash = include $ad_hoc_uv_path | sha256sum -}}
+{{ end -}}
 #!/usr/bin/env bash
 
-# {{ template "dotfiles_bashlib.sh" }}
+# {{ template "dotfiles_bashlib.sh" . }}
+
+# ad-hoc uv hash: {{ $ad_hoc_uv_hash }}
 
 # Help shellcheck identify the above include
 true || source ../.chezmoitemplates/dotfiles_bashlib.sh
@@ -10,6 +17,10 @@ dot::chezmoi_script_start "uninstall ad-hoc uv"
 
 if [[ ! -e ~/.local/bin/uv ]]; then
     dot::chezmoi_script_skipped "ad-hoc uv is not installed"
+fi
+
+if [[ ! -e /opt/homebrew/bin/uv ]]; then
+    dot::chezmoi_script_skipped "brew uv is not installed, will keep the ad-hoc uv"
 fi
 
 dot::step "removing ad-hoc uv from ~/.local/bin"
