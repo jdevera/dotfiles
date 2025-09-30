@@ -44,13 +44,6 @@ function stripcolor()
    $sed "s,\x1B\[[0-9;]*[a-zA-Z],,g" "$@"
 }
 
-# @tags: command wrapper
-function check_home_purity()
-{
-   [ -z "$PS1" ] && return
-   has_command purehome && purehome
-}
-
 # @tags: support
 function bashtimes()
 {
