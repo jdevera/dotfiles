@@ -132,12 +132,12 @@ function dot::path_prepend() {
 function dot::macos::setup() {
     dot::path_prepend "/opt/homebrew/bin"
     # shellcheck disable=SC2140
-    dot::path_prepend "{{ joinPath (.chezmoi.homeDir ".local" "bin") }}"
+    dot::path_prepend "{{ joinPath .chezmoi.homeDir ".local" "bin" }}"
 }
 
 function dot::linux::setup() {
     # shellcheck disable=SC2140
-    dot::path_prepend "{{ joinPath (.chezmoi.homeDir ".local" "bin") }}"
+    dot::path_prepend "{{ joinPath .chezmoi.homeDir ".local" "bin" }}"
 }
 
 function dot::os::setup() {

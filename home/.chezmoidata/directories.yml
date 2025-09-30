@@ -1,0 +1,15 @@
+directories:
+  darwin:
+    - Desktop
+    - Documents
+    - Downloads
+    - Movies
+    - Music
+    - Pictures
+    - Pictures/Screenshots
+  all:
+    - devel
+    - devel/checkout
+    - devel/contributions
+    - devel/projects
+    - devel/sandbox

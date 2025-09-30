@@ -1,0 +1,31 @@
+{{- $dirs := .directories.all -}}
+{{- if hasKey .directories .chezmoi.os -}}
+{{-     $dirs = concat $dirs (get .directories .chezmoi.os) -}}
+{{- end -}}
+#!/usr/bin/env bash
+
+# {{ template "dotfiles_bashlib.sh" . }}
+# Help shellcheck identify the above include
+true || source ../.chezmoitemplates/dotfiles_bashlib.sh
+
+dirs_created=0
+function maybe_create_dir() {
+    local path=$1
+    if [[ ! -d $path ]]; then
+        dot::step "create directory: $path"
+        mkdir -p "$path" || dot::step::fatal
+        dot::step::done
+        dirs_created=$((dirs_created + 1))
+    fi
+}
+
+dot::chezmoi_script_start "create directories at home"
+
+#{{ range $dir := $dirs }}
+#{{- $path := (joinPath $.chezmoi.homeDir $dir) }}
+maybe_create_dir {{ $path | quote }}
+#{{ end }}
+if [[ $dirs_created -eq 0 ]]; then
+    dot::chezmoi_script_skipped "home directories already existed"
+fi
+dot::success "created $dirs_created directories at home"
