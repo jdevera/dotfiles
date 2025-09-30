@@ -163,181 +163,12 @@ export LESS_TERMCAP_us=$'\E[04;38;5;146m' # begin underline
 # Section: Prompt {{{
 #############################################################################
 
-ansi_color()
-{
-   local color
-   case "$1" in
-      black)        color="\e[0;30m";;
-      red)          color="\e[0;31m";;
-      green)        color="\e[0;32m";;
-      brown)        color="\e[0;33m";;
-      blue)         color="\e[0;34m";;
-      purple)       color="\e[0;35m";;
-      cyan)         color="\e[0;36m";;
-      light_gray)   color="\e[0;37m";;
-      dark_gray)    color="\e[1;30m";;
-      light_red)    color="\e[1;31m";;
-      light_green)  color="\e[1;32m";;
-      yellow)       color="\e[1;33m";;
-      light_blue)   color="\e[1;34m";;
-      light_purple) color="\e[1;35m";;
-      light_cyan)   color="\e[1;36m";;
-      white)        color="\e[1;37m";;
-      none)         color="\e[0m";;
-   esac
-   echo "$color"
-}
-
-ansi_color256()
-{
-   echo "\033[38;5;$1m"
-}
-
-function colorise() {
-    local OFF="\e[0m"
-    local color=$1
-    shift
-    echo "$(ansi_color "$color")$*$OFF"
-}
-
-function ansi_effect() {
-    local effect
-    case "$1" in
-    bold) effect="\e[1m" ;;
-    italic) effect="\e[3m" ;;
-    underline) effect="\e[4m" ;;
-    strikethrough) effect="\e[9m" ;;
-    none) effect="\e[0m" ;;
-    esac
-    echo "$effect"
-}
-
-function effected() {
-
-    local OFF="\e[0m"
-    local effect=$1
-    shift
-    echo "$(ansi_effect "$effect")$*$OFF"
-}
-
-#THEMES
-
-# THEME: simple prompt {{{
-function theme_simple_prompt_cmd()
-{
-   local rc=${LAST_RC:-$?}
-   local prompt_symbol=${PROMPT_SYMBOL:-"$ "}
-   local color=yellow
-   [[ $rc -ne 0 ]] && color=light_red
-   PS1="\[$(ansi_color $color)\]$prompt_symbol\[$(ansi_color none)\] "
-   if [[ -e $VIRTUAL_ENV ]]
-   then
-      local venvname
-      venvname="$(basename "$VIRTUAL_ENV")"
-      PS1="{venv:\[$(ansi_color white)\]$venvname\[$(ansi_color none)\]}$PS1"
-   fi
-}
-
-theme_simple()
-{
-   # shellcheck disable=SC2034
-   BASH_THEME_CMD=theme_simple_prompt_cmd
-}
-# }}}
-
-if [[ -z $KEEP_PROMPT ]]; then # KEEP_PROMPT=1 reloadsh will reload without affecting the prompt
-
-PROMPT_SYMBOL=' ⇶ '
-theme_simple
-
-fi
-
-
-function precmd_rich_history()
-{
-   # Introduction {{{
-   # -------------------------------------------------------------------------
-   # I want to capture the return code of the program that run, and also the
-   # PIPESTATUS value.
-   #
-   # This is a race, since anything that gets added to PROMPT_COMMAND before
-   # this function will mean the values that are captured here correspond to
-   # that function rather than the user command.
-   #
-   # Known modifiers of the return code
-   # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   #
-   # Starship
-   # ==========
-   #
-   # A prompt manager, installs a handler precisely to capture the status of
-   # the last run command.
-   # It stores those values in the STARSHIP_CMD_STATUS and STARSHIP_PIPE_STATUS
-   # variables.
-   # It uses Bash-Preexec if present.
-   #
-   # Bash-Preexec
-   # ============
-   #
-   # A Bash library that provides `preexec` and `precmd` hooks functions for
-   # Bash 3.1+ in the style of Zsh.
-   #
-   # It captures both the resturn code and the PIPESTATUS, respectively, in the
-   # __bp_last_ret_value and BP_PIPESTATUS variables.
-   #
-   # Site: https://github.com/rcaloras/bash-preexec
-   #
-   # Prep
-   # -------------------------------------------------------------------------
-   # As the first command, capture all status info from the previous command IN
-   # ONE GO. If done in two separate assignments, the status of the first
-   # assignment, and not that of the previous shell command, will be used
-   # instead.
-   local last_rc=$? last_pipestatus=("${PIPESTATUS[@]}")
-
-   LAST_RC=
-   LAST_PIPESTATUS=
-
-   # If using starship to handle the prompt, then it already captured the
-   # status info in its own variables. Use them here if available, as starship
-   # runs its own prompt command first and the statuses captured above would
-   # correspond to starship handling and not the command executed by the user.
-   [[ -n $STARSHIP_CMD_STATUS ]]  && LAST_RC=$STARSHIP_CMD_STATUS
-   [[ -n $STARSHIP_PIPE_STATUS ]] && LAST_PIPESTATUS=("${STARSHIP_PIPE_STATUS[@]}")
-
-   # If using bash-preexec, save from them.
-   [[ -n $__bp_last_ret_value ]] && LAST_RC=$__bp_last_ret_value
-   [[ -n $BP_PIPESTATUS ]] && LAST_PIPESTATUS=("${BP_PIPESTATUS[@]}");
-
-   # Otherwise, use the return codes captured at the start of this function.
-   [[ -z $LAST_RC ]] && LAST_RC=$last_rc
-   [[ -z $LAST_PIPESTATUS ]] && LAST_PIPESTATUS=("${last_pipestatus[@]}")
-
-
-   # ----------------------------------------------------------------------}}}
-   # Log rich history
-   log_bash_persistent_history
-
-}
-
-function precmd_bash_theme()
-{
-   # Load the prompt theme if Starship is not running
-   if [[ -z $STARSHIP_CMD_STATUS && -n $bash_theme_cmd ]]; then
-      eval "$bash_theme_cmd"
-   fi
-
-}
-
 if has_command starship
 then
    eval -- "$(starship init bash --print-full-init)"
 else
    echo "No starship, this is the path: $PATH"
 fi
-
-precmd_functions+=(precmd_rich_history)
-precmd_functions+=(precmd_bash_theme)
 
 
 #############################################################################
@@ -495,9 +326,6 @@ export MYFULLNAME
 # CTRL-D must be used twice to exit the shell
 export IGNOREEOF=1
 
-if [[ -z $TMUX && -z $SSH_CLIENT ]]; then
-   call_if check_home_purity
-fi
 
 # vim: ft=sh fdm=marker expandtab ts=3 sw=3 :
 
