@@ -1,4 +1,4 @@
-#{{ if .is_linux -}}
+#{{ if .is_linux }}
 [".local/bin/yq"]
     type = "archive-file"
     url = '{{ gitHubLatestReleaseAssetURL "mikefarah/yq" (printf "yq_%s_%s.tar.gz" .chezmoi.os .chezmoi.arch) }}'
