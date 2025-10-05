@@ -1,0 +1,64 @@
+{{- $scriptsDir := joinPath .chezmoi.homeDir ".local" "share" "misc-scripts" -}}
+{{- $files := list -}}
+{{- range $file := glob (joinPath $scriptsDir "*") -}}
+{{-   if not (hasPrefix (base $file) ".") -}}
+{{-     $files = append $files (base $file) -}}
+{{-   end -}}
+{{- end -}}
+#!/usr/bin/env bash
+
+# Scripts in misc-scripts repo:
+{{ range $file := $files -}}
+# {{ $file }}
+{{ end }}
+
+# {{ template "dotfiles_bashlib.sh" . }}
+# Help shellcheck identify the above include
+true || source ../.chezmoitemplates/dotfiles_bashlib.sh
+
+dot::chezmoi_script_start "create symlinks for misc scripts"
+
+SCRIPTS_DIR="{{ .chezmoi.homeDir }}/.local/share/misc-scripts"
+BIN_DIR="{{ .chezmoi.homeDir }}/.local/bin"
+
+# Ensure bin directory exists
+mkdir -p "$BIN_DIR"
+
+# Create symlinks for files with shebangs in repo root
+if [[ -d "$SCRIPTS_DIR" ]]; then
+    cd "$SCRIPTS_DIR" || dot::die "could not cd to scripts directory"
+    
+    # Use glob to get all files in root directory
+    for script in *; do
+        # Skip if it's a directory or doesn't exist
+        [[ -d "$script" ]] && continue
+        [[ ! -f "$script" ]] && continue
+        
+        # Check if file has a shebang
+        if head -n1 "$script" | grep -q "^#!"; then
+            script_path="$SCRIPTS_DIR/$script"
+            symlink_path="$BIN_DIR/$script"
+            
+            # Check if symlink already exists
+            if [[ -L "$symlink_path" ]]; then
+                # Check if it points to the same file
+                current_target=$(readlink "$symlink_path")
+                if [[ "$current_target" != "$script_path" ]]; then
+                    dot::warn "symlink $script already exists and points to $current_target (not $script_path), skipping"
+                    continue
+                else
+                    # Symlink already points to the right place, skip
+                    continue
+                fi
+            fi
+            
+            # Create new symlink
+            ln -s "$script_path" "$symlink_path"
+            echo "Linked: $script"
+        fi
+    done
+    
+    dot::success "misc scripts symlinked"
+else
+    dot::chezmoi_script_skipped "misc-scripts directory not found"
+fi

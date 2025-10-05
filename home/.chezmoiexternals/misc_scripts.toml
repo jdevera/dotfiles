@@ -1,0 +1,4 @@
+[".local/share/misc-scripts"]
+    type = "git-repo"
+    url = "https://github.com/jdevera/misc-scripts"
+    refreshPeriod = "24h"
