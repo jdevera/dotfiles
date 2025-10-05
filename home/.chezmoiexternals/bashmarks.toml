@@ -1,0 +1,4 @@
+[".bash.d/200_tool_bashmarks.sh"]
+type = "file"
+url = "https://raw.githubusercontent.com/jdevera/bashmarks/refs/heads/master/bashmarks.sh"
+refreshPeriod = "730h" # 1 month is more than enough
