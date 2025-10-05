@@ -35,8 +35,8 @@ function _cd_init()
 _ONDIR_PATH=$(which ondir || echo :)
 _cd_ondir()
 {
-   # echo eval "\$(\"$_ONDIR_PATH/ondir\" \"$OLDPWD\" \"$PWD\")"
-   eval "$("$_ONDIR_PATH" "$OLDPWD" "$PWD")"
+   local ondir_path=${_ONDIR_PATH:-':'}
+   eval "$("$ondir_path" "$OLDPWD" "$PWD")"
 }
 
 _cd_echo()
