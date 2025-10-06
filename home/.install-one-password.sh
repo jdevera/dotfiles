@@ -35,7 +35,7 @@ has_command op && exit 0
 
 SYSTEM="$(uname -s | tr '[:upper:]' '[:lower:]')"
 
-__INSTALL_DIR=~/.local/bin
+__INSTALL_DIR="$HOME/.local/bin"
 __STEP_NUMBER=0
 __STEP_LABEL=""
 __TMP_DIR=""
@@ -57,10 +57,6 @@ step_start() {
 
 step_done() {
 	log "✓ $__STEP_LABEL $*"
-}
-
-step_skipped() {
-	log "✓ SKIPPED: $__STEP_LABEL $*"
 }
 
 step_fatal() {
@@ -188,6 +184,7 @@ step_done " : $OP_VERSION"
 step_start "create temp dir for 1Password CLI distribution"
 __TMP_DIR=$(mktemp -d)
 [ -n "$__TMP_DIR" ] || step_fatal
+trap 'rm -rf "$__TMP_DIR"' EXIT
 step_done " : $__TMP_DIR"
 
 step_start "get the 1Password CLI URL"
@@ -199,20 +196,27 @@ step_start "download the 1Password CLI"
 checked_step \
 	curl -SL --progress-bar "$OP_URL" -o "$__TMP_DIR/op.zip"
 
-step_start "ensure unzip is installed"
-checked_step \
-	ensure_command unzip unzip
+if is_macos; then
+	# unzip is included by default on macOS, no need to install
+	has_command unzip || die "unzip not found (should be in /usr/bin/unzip on macOS)"
+else
+	step_start "ensure unzip is installed"
+	checked_step \
+		ensure_command unzip unzip
+fi
 
 step_start "unzip the 1Password CLI"
 checked_step \
 	unzip -d "$__TMP_DIR/op" "$__TMP_DIR/op.zip"
 
+# We can try to install gpg in linux systems, because they have a package
+# manager built in. MacOS has Brew, but it is not installed by default.
+# By the time this is run, it can be very early in the setup process, so
+# we cannot assume that Brew is installed.
 if ! has_command gpg && [ "$SYSTEM" = "linux" ]; then
 	step_start "install gpg"
 	checked_step \
 		ensure_command gpg gpg
-else
-	log "WARNING: gpg is not installed, skipping signature verification"
 fi
 
 if has_command gpg; then
@@ -227,7 +231,11 @@ else
 	log "WARNING: gpg is not installed, skipping signature verification"
 fi
 
-step_start "move the 1Password CLI to $__INSTALL_DIR op"
+step_start "ensure installation directory exists"
+checked_step \
+	mkdir -p "$__INSTALL_DIR"
+
+step_start "move the 1Password CLI to $__INSTALL_DIR"
 checked_step \
 	mv "$__TMP_DIR/op/op" "$__INSTALL_DIR/op"
 
@@ -239,6 +247,12 @@ step_start "check the 1Password CLI is installed"
 checked_step \
 	op --version
 
-step_start "cleanup: remove the temp dir"
-checked_step \
-	rm -rf "$__TMP_DIR"
+case ":$PATH:" in
+	*:"$__INSTALL_DIR":*)
+		log "✓ $__INSTALL_DIR is already in PATH"
+		;;
+	*)
+		log "WARNING: $__INSTALL_DIR is not in PATH. Add it to your shell profile:"
+		log "  export PATH=\"\$PATH:$__INSTALL_DIR\""
+		;;
+esac
