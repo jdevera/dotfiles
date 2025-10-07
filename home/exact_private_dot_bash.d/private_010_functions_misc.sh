@@ -324,54 +324,6 @@ function eloc()
 
 
 #______________________________________________________________________________
-# Show the most recently downloaded files. With colours!
-#______________________________________________________________________________
-#
-# @tags: command canbescript
-function _lastdown_porcelain()
-{
-   local default_format='%p'
-   local format="%T@ ${FORMAT:-$default_format}\\n"
-   local find_command=find
-   if is_osx
-   then
-      assert_has_command gfind
-      find_command=gfind
-   fi
-   $find_command "$DDOWN" -maxdepth 1 -printf "$format"  |
-      sort -k1 -n |
-      grep -v "$DDOWN"$ |
-      tail "$@" |
-      cut -d' ' -f2-
-}
-
-function _maybe_colout()
-{
-   if has_command colout
-   then
-      colout "$@"
-   else
-      cat
-   fi
-}
-
-function lastdown()
-{
-      FORMAT='%TY-%Tm-%Td %TT %p' _lastdown_porcelain "$@" |
-      cut -c-19,31- |
-      _maybe_colout '^(\S+ \S+) ('"$DDOWN"'/)(.+)$' blue,black,cyan dim,bold,dim
-}
-
-function lastdown-pb()
-{
-   FORMAT='%p' _lastdown_porcelain -1 |
-   head -c -1 | # remove new line before copying
-   xsel --primary --input
-}
-#______________________________________________________________________________
-
-
-#______________________________________________________________________________
 # Check whether the argument is a runnable command: shell built-in, alias,
 # function, or file in the PATH
 #______________________________________________________________________________
