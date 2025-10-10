@@ -49,6 +49,66 @@ log() {
 	echo "[BOOTSTRAP 1Password] $*" >&2
 }
 
+DOWNLOADER=""
+
+select_downloader() {
+	if [ -n "$DOWNLOADER" ]; then
+		return
+	fi
+	if has_command curl; then
+		DOWNLOADER="curl"
+	elif has_command wget; then
+		DOWNLOADER="wget"
+	else
+		die "missing command curl or wget, cannot download files"
+	fi
+}
+
+download_to_stdout() {
+	select_downloader
+	url=$1
+	case "$DOWNLOADER" in
+	curl)
+		curl -fsSL "$url"
+		;;
+	wget)
+		wget -qO- "$url"
+		;;
+	*)
+		die "unsupported downloader: $DOWNLOADER"
+		;;
+	esac
+}
+
+download_to_file() {
+	select_downloader
+	url=$1
+	dest=$2
+	case "$DOWNLOADER" in
+	curl)
+		curl -fSL --progress-bar "$url" -o "$dest"
+		;;
+	wget)
+		wget -qO "$dest" "$url"
+		;;
+	*)
+		die "unsupported downloader: $DOWNLOADER"
+		;;
+	esac
+}
+
+do_sudo() {
+	if [ "$(id -u)" -eq 0 ]; then
+		"$@"
+		return
+	fi
+	if has_command sudo; then
+		sudo "$@"
+	else
+		die "missing command sudo, cannot run: $*"
+	fi
+}
+
 step_start() {
 	__STEP_NUMBER=$((__STEP_NUMBER + 1))
 	__STEP_LABEL="$1"
@@ -116,7 +176,7 @@ get_arch() {
 }
 
 get_latest_op_version() {
-	curl -sSL https://app-updates.agilebits.com/check/1/0/CLI2/en/2.0.0/N |
+	download_to_stdout https://app-updates.agilebits.com/check/1/0/CLI2/en/2.0.0/N |
 		grep -Eo '[0-9]+\.[0-9]+\.[0-9]+'
 }
 
@@ -137,14 +197,11 @@ apt_install() {
 	if ! has_command apt-get; then
 		die "missing command apt-get, cannot install $__package"
 	fi
-	if ! has_command sudo; then
-		die "missing command sudo, cannot install $__package"
-	fi
 	if [ "$__NEED_PACKAGE_CACHE_UPDATE" = 1 ]; then
-		sudo apt-get update --quiet --quiet
+		do_sudo apt-get update --quiet --quiet
 		__NEED_PACKAGE_CACHE_UPDATE=0
 	fi
-	sudo apt-get install --no-install-recommends --quiet -y "$__package"
+	do_sudo apt-get install --no-install-recommends --quiet -y "$__package"
 
 }
 
@@ -194,7 +251,7 @@ step_done " : $OP_URL"
 
 step_start "download the 1Password CLI"
 checked_step \
-	curl -SL --progress-bar "$OP_URL" -o "$__TMP_DIR/op.zip"
+	download_to_file "$OP_URL" "$__TMP_DIR/op.zip"
 
 if is_macos; then
 	# unzip is included by default on macOS, no need to install
@@ -208,28 +265,6 @@ fi
 step_start "unzip the 1Password CLI"
 checked_step \
 	unzip -d "$__TMP_DIR/op" "$__TMP_DIR/op.zip"
-
-# We can try to install gpg in linux systems, because they have a package
-# manager built in. MacOS has Brew, but it is not installed by default.
-# By the time this is run, it can be very early in the setup process, so
-# we cannot assume that Brew is installed.
-if ! has_command gpg && [ "$SYSTEM" = "linux" ]; then
-	step_start "install gpg"
-	checked_step \
-		ensure_command gpg gpg
-fi
-
-if has_command gpg; then
-	step_start "download the 1Password CLI keys"
-	checked_step \
-		gpg --keyserver keyserver.ubuntu.com --receive-keys 3FEF9748469ADBE15DA7CA80AC2D62742012EA22
-
-	step_start "verify the 1Password CLI signature"
-	checked_step \
-		gpg --verify "$__TMP_DIR/op/op.sig" "$__TMP_DIR/op/op"
-else
-	log "WARNING: gpg is not installed, skipping signature verification"
-fi
 
 step_start "ensure installation directory exists"
 checked_step \

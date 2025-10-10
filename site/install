@@ -1,0 +1,84 @@
+#!/bin/sh
+
+set -eu
+
+DOTFILES_REPO=${DOTFILES_REPO:-jdevera}
+PWM_MANAGER_INSTALLER='https://raw.githubusercontent.com/jdevera/dotfiles/refs/heads/main/home/.install-one-password.sh'
+CHEZMOI_INSTALL_URL='https://get.chezmoi.io/lb'
+
+DOWNLOADER=''
+
+log() {
+  printf '[chezmoi bootstrap] %s\n' "$*" >&2
+}
+
+case ":${PATH:-}:" in
+  *:"$HOME/.local/bin":*)
+    ;;
+  *)
+    PATH="$HOME/.local/bin:${PATH:-}"
+    export PATH
+    ;;
+esac
+
+error() {
+  printf '%s\n' "$1" >&2
+  exit 1
+}
+
+ensure_downloader() {
+  if [ -n "$DOWNLOADER" ]; then
+    return
+  fi
+  if command -v curl >/dev/null 2>&1; then
+    DOWNLOADER='curl'
+  elif command -v wget >/dev/null 2>&1; then
+    DOWNLOADER='wget'
+  else
+    error 'This installer needs curl or wget to download required scripts.'
+  fi
+}
+
+fetch_to_file() {
+  url=$1
+  dest=$2
+
+  ensure_downloader
+
+  case "$DOWNLOADER" in
+    curl)
+      curl -fsSL "$url" -o "$dest"
+      ;;
+    wget)
+      wget -qO "$dest" "$url"
+      ;;
+  esac
+}
+
+INSTALLER=$(mktemp)
+CHEZMOI_SCRIPT=''
+cleanup() {
+  rm -f "$INSTALLER"
+  if [ -n "${CHEZMOI_SCRIPT:-}" ]; then
+    rm -f "$CHEZMOI_SCRIPT"
+  fi
+}
+trap cleanup EXIT INT TERM
+
+if [ -n "${PWM_INSTALLER_FILE:-}" ] && [ -f "$PWM_INSTALLER_FILE" ]; then
+  cp "$PWM_INSTALLER_FILE" "$INSTALLER"
+  log "using password manager installer from $PWM_INSTALLER_FILE"
+else
+  fetch_to_file "$PWM_MANAGER_INSTALLER" "$INSTALLER"
+  log "downloaded password manager installer from $PWM_MANAGER_INSTALLER"
+fi
+
+log "running password manager installer"
+sh "$INSTALLER"
+
+CHEZMOI_SCRIPT=$(mktemp)
+fetch_to_file "$CHEZMOI_INSTALL_URL" "$CHEZMOI_SCRIPT"
+log "downloaded chezmoi installer from $CHEZMOI_INSTALL_URL"
+
+log "running chezmoi installer"
+sh "$CHEZMOI_SCRIPT" -- init --apply "$DOTFILES_REPO"
