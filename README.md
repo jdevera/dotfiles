@@ -7,7 +7,7 @@ These are the configuration files I want to have in every Linux box I use.
 Installation instructions come first because it is what I need most of the
 time, but if you are not me, please read on :) 
 
-    sh -c "$(curl -fsLS get.chezmoi.io/lb)" -- init --apply jdevera
+    sh -c "$(curl -fsLS jdevera.casa/install)"
 
 ## If you are not me
 
