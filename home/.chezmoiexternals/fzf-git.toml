@@ -1,0 +1,6 @@
+[".bash.d/90_externals_fzf_git.sh"]
+    type = "file"
+    url = 'https://github.com/junegunn/fzf-git.sh/raw/refs/heads/main/fzf-git.sh'
+    refreshPeriod = "168h" # 1 Week
+    private = true
+    
