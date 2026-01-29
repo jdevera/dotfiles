@@ -1,7 +1,6 @@
 .vim/bundle/*
 .vim/local/*
 !.vim/local/README
-.vim/tmp/*
 .vim/spell/*
 .bash.d/local/*
 !.bash.d/local/README.md
