@@ -6,8 +6,8 @@
 " ---------------------------------------------------------------------------
 
 " {{{ Start declaring the encoding of this very file
-scriptencoding utf-8
 set encoding=utf-8
+scriptencoding utf-8
 
 " }}}
 " {{{ One setting to rule them all
@@ -188,7 +188,7 @@ set nobackup
 au BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g`\"" | endif
 
 " Consider all my additional gitconfig files as such
-au BufNewFile,BufRead gitconfig* set filetype=gitconfig
+au BufNewFile,BufRead .config/git/config* set filetype=gitconfig
 
 
 " ----------------------------------------------------------------------------
@@ -329,12 +329,7 @@ set laststatus=2
 if &diff
     set statusline=[POS=%04l,%04v][%p%%]\ [LEN=%L]\ [F=%F%m%r%h%w]
 else
-    function! Status_fugitive()
-        return exists('*fugitive#statusline') ?
-                 \ fugitive#statusline() :
-                 \ ''
-    endfunction
-    set statusline=%F%m%r%h%w\ %{Status_fugitive()}%y\ ff:%{(&ff[0])}\ c:%v\ l:%l\ (%p%%\ of\ %L)
+    set statusline=%F%m%r%h%w\ %{fugitive#statusline()}%y\ ff:%{(&ff[0])}\ c:%v\ l:%l\ (%p%%\ of\ %L)
 endif
 " -----------------------------------------------
 
@@ -577,6 +572,9 @@ let g:plug_timeout = 1000
 
 " Mustache: Load abreviations to complete code
 let g:mustache_abbreviations = 1
+
+" VimMarkdown: folding level
+let g:vim_markdown_folding_level = 3
 
 " ----------------------------------------------------------------------------
 " }}}
