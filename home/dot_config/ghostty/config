@@ -1,0 +1,33 @@
+# Ghostty Configuration
+# Docs: https://ghostty.org/docs/config/reference
+# Reload: Cmd+Shift+, (comma) on macOS, Ctrl+Shift+, (comma) on Linux
+
+# Theme
+# Run `ghostty +list-themes` to see all available themes
+theme = Catppuccin Mocha
+
+# Font
+font-family = FantasqueSansM Nerd Font Mono
+font-size = 19
+
+# Window
+# Makes the titlebar blend with terminal background
+macos-titlebar-style = transparent
+window-padding-x = 6
+window-padding-y = 6
+
+# Cursor
+cursor-style = block
+cursor-style-blink = false
+
+# Mouse
+mouse-hide-while-typing = true
+copy-on-select = true
+
+# Quick Terminal (dropdown from anywhere)
+# Toggle with Ctrl+` from any app
+keybind = global:ctrl+grave_accent=toggle_quick_terminal
+quick-terminal-position = bottom
+# Format: height,width (for bottom/top position)
+quick-terminal-size = 25%,70%
+quick-terminal-autohide = true
