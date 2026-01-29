@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+is_ai_agent && return
+
 function cd
 {
     builtin cd "$@" &&
@@ -32,16 +34,15 @@ function _cd_init()
 
 
 # Load the path to ondir for faster access from now on. Replace with a noop if ondir is not available
-_ONDIR_PATH=$(which ondir || echo :)
+_ONDIR_PATH=$(which ondir || true)
 _cd_ondir()
 {
-   local ondir_path=${_ONDIR_PATH:-':'}
-   eval "$("$ondir_path" "$OLDPWD" "$PWD")"
+    [[ -n $_ONDIR_PATH ]] && eval "$("$_ONDIR_PATH" "$OLDPWD" "$PWD")"
 }
 
 _cd_echo()
 {
-    [[ $PWD != $OLDPWD ]] && echo "$PWD (from $OLDPWD)"
+    [[ $PWD != "$OLDPWD" ]] && echo "$PWD (from $OLDPWD)"
 }
 
 cd .
