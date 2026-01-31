@@ -5,6 +5,13 @@
 # Palettes must be defined _after_ this line
 palette = "catppuccin_macchiato"
 
+[custom.window_title]
+description = "Set window title to current directory (fixes title not resetting after git diff, less, etc.)"
+when = true
+command = 'printf "\\033]2;%s\\007" "$(starship module directory 2>/dev/null | sed "s/\\x1b\\[[0-9;]*m//g" | tr -d "\\n")"'
+format = "$output"
+shell = ["sh"]
+
 [custom.chezmoi]
 disabled = false
 when = 'test -n "$CHEZMOI_EXECUTABLE"'

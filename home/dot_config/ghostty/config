@@ -22,7 +22,8 @@ cursor-style-blink = false
 
 # Mouse
 mouse-hide-while-typing = true
-copy-on-select = true
+# Use "clipboard" instead of "true" to copy to system clipboard on macOS (changed in 1.1.0)
+copy-on-select = clipboard
 
 # Quick Terminal (dropdown from anywhere)
 # Toggle with Ctrl+` from any app
@@ -31,3 +32,20 @@ quick-terminal-position = bottom
 # Format: height,width (for bottom/top position)
 quick-terminal-size = 25%,70%
 quick-terminal-autohide = true
+
+# Shell Integration Features
+# Ghostty auto-injects shell integration for supported shells (bash, zsh, fish, elvish).
+#
+# Available features:
+#   cursor   - Sets cursor to a blinking bar at the shell prompt
+#   sudo     - Wraps sudo to preserve terminfo, so terminal features work in sudo commands
+#   title    - Updates window/tab title via shell integration
+#   no-title - Disables the title feature
+#
+# Why no-title: Starship (my prompt) overwrites PS1 entirely, which wipes out any
+# title escape sequences Ghostty's shell integration adds. Instead, window titles
+# are handled via a custom Starship module [custom.window_title] in starship.toml.
+# This also works around Ghostty's lack of title push/pop (CSI 22/23) support for
+# programs using alternate screen mode (git diff, less, vim, etc.).
+# See: https://github.com/ghostty-org/ghostty/discussions/2667
+shell-integration-features = cursor,sudo,no-title
