@@ -279,8 +279,9 @@ let g:my_terminal_diff_colorscheme = 'github'
 " Show line numbers
 set number
 
-" Highlight search terms
+" Highlight search terms and show matches while typing
 set hlsearch
+set incsearch
 
 " Show matching brackets
 set showmatch
