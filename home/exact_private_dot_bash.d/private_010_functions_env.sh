@@ -145,7 +145,7 @@ function link_complete_function()
 # DEPENDS-ON: showaliases
 function showenv()
 {
-   printenv | grep = | showaliases -a -
+   printenv | grep '=' | showaliases -a -
 }
 #______________________________________________________________________________
 

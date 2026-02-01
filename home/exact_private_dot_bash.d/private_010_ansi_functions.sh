@@ -27,7 +27,7 @@ function ansi_color()
 # @tags: canbescript
 function ansi_color256()
 {
-   echo "\033[38;5;$1m"
+   printf '\033[38;5;%sm' "$1"
 }
 
 # @tags: canbescript
