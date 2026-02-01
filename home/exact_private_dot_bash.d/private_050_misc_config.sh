@@ -215,10 +215,10 @@ HISTFILESIZE=20000
 # ==========
 # A colon-separated list of patterns used to decide which command lines should
 # be saved on the history list. Each pattern is anchored at the beginning of
-# the line and must match the complete line (no implicit `*' is appended). Each
+# the line and must match the complete line (no implicit '*' is appended). Each
 # pattern is tested against the line after the checks specified by HISTCONTROL
-# are applied. In addition to the normal shell pattern matching characters, `&'
-# matches the previous history line. `&' may be escaped using a backslash; the
+# are applied. In addition to the normal shell pattern matching characters, '&'
+# matches the previous history line. '&' may be escaped using a backslash; the
 # backslash is removed before attempting a match. The second and subsequent
 # lines of a multi-line compound command are not tested, and are added to the
 # history regardless of the value of HISTIGNORE.
