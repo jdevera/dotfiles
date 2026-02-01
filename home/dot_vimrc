@@ -30,6 +30,10 @@ endif
 " Use the built-in matchit plugin (make % jump to matching pairs)
 packadd! matchit
 
+" Set updatetime early so plugins (minibufexpl) don't override it
+" This improves gitgutter responsiveness (default is 4000ms)
+set updatetime=100
+
 call plug#begin('~/.vim/bundle')
 
 " ===========================================================================
