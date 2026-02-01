@@ -35,12 +35,16 @@ quick-terminal-autohide = true
 
 # Shell Integration Features
 # Ghostty auto-injects shell integration for supported shells (bash, zsh, fish, elvish).
+# Features not listed use their defaults. Prefix with "no-" to disable.
 #
 # Available features:
-#   cursor   - Sets cursor to a blinking bar at the shell prompt
-#   sudo     - Wraps sudo to preserve terminfo, so terminal features work in sudo commands
-#   title    - Updates window/tab title via shell integration
-#   no-title - Disables the title feature
+#   cursor       - Sets cursor to a blinking bar at the shell prompt
+#   sudo         - Wraps sudo to preserve terminfo, so terminal features work in sudo commands
+#   title        - Updates window/tab title via shell integration
+#   ssh-terminfo - Installs Ghostty's terminfo on remote hosts when SSHing, enabling full
+#                  terminal features (colors, cursor styles, etc.). Successful installs are cached.
+#   ssh-env      - Falls back to TERM=xterm-256color if terminfo installation fails,
+#                  ensuring compatibility with any remote host.
 #
 # Why no-title: Starship (my prompt) overwrites PS1 entirely, which wipes out any
 # title escape sequences Ghostty's shell integration adds. Instead, window titles
@@ -48,4 +52,4 @@ quick-terminal-autohide = true
 # This also works around Ghostty's lack of title push/pop (CSI 22/23) support for
 # programs using alternate screen mode (git diff, less, vim, etc.).
 # See: https://github.com/ghostty-org/ghostty/discussions/2667
-shell-integration-features = cursor,sudo,no-title
+shell-integration-features = cursor,sudo,no-title,ssh-terminfo,ssh-env
