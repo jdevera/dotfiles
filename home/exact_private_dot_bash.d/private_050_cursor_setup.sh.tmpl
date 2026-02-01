@@ -1,5 +1,6 @@
 __SHELL_INTEGRATION_PATH={{ output "cursor" "--locate-shell-integration-path" "bash" | trim | quote }}
 if [[ -f "$__SHELL_INTEGRATION_PATH" && -n $VSCODE_PID ]]; then
+    # shellcheck disable=SC1090
     source "$__SHELL_INTEGRATION_PATH"
 fi
 unset __SHELL_INTEGRATION_PATH
