@@ -235,7 +235,7 @@ syntax on
 " Set my preferred font for GUI
 " -----------------------------------------------
 if has('win32') || has('win64')
-    set guifonit=Lucida\ Console:h12
+    set guifont=Lucida\ Console:h12
 elseif has('gui_macvim')
     set macligatures
     set guifont=FiraCodeNFM-Reg:h16
