@@ -27,6 +27,9 @@ endif
 " }}}
 " {{{ Plugins configuration (must precede others)
 
+" Use the built-in matchit plugin (make % jump to matching pairs)
+packadd! matchit
+
 call plug#begin('~/.vim/bundle')
 
 " ===========================================================================
@@ -51,7 +54,6 @@ Plug 'junegunn/goyo.vim', {'on': 'Goyo' } " Distraction-free writing
 
 Plug 'AndrewRadev/linediff.vim', {'on': 'Linediff'}  " Diff two separate blocks of text
 Plug 'AndrewRadev/switch.vim', { 'on': ['Switch', 'SwitchReverse'], 'for': ['gitrebase', 'python'] }  " Switch between words in a group
-Plug 'benjifisher/matchit.zip' " Make % jump to matching pairs that are language aware
 Plug 'chaoren/vim-wordmotion'  " Jump words in camelCase or snake_case
 Plug 'chrisbra/vim-diff-enhanced' " Apply a different slow diff algorithm to vimdiff
 Plug 'embear/vim-foldsearch', { 'on': ['Fw', 'Fs', 'Fp', 'FS', 'Fl', 'Fc', 'Fi', 'Fd', 'Fe']}  " Search, and fold all lines without matches
