@@ -3,11 +3,11 @@
 #
 # FILE:         020_misc_functions.sh
 #
-# DESCRIPTION:  
+# DESCRIPTION:
 #
 #############################################################################
 
-# @tags: support
+# @tags: canbescript
 function show_parent_dirs()
 {
    pwd | awk '
@@ -32,6 +32,7 @@ function stripe()
 }
 
 # @tags: command canbescript
+# DEPENDS-ON: is_osx, assert_has_command
 function stripcolor()
 {
    local sed=sed
@@ -44,7 +45,7 @@ function stripcolor()
    $sed "s,\x1B\[[0-9;]*[a-zA-Z],,g" "$@"
 }
 
-# @tags: support
+# @tags: canbescript
 function bashtimes()
 {
    [[ -f /tmp/bashtimes.$$ ]] || return 1
@@ -85,12 +86,14 @@ function hl()
 }
 
 # @tags: command canbescript
+# DEPENDS-ON: hl
 function hless()
 {
    hl "$@" | less -FiXRM
 }
 
 # Choose the style to use for hl and hless
+# @tags: command
 function hl_style()
 {
    local file style newstyle
@@ -114,86 +117,6 @@ function hl_style()
       echo "No style chosen, $style remains"
    fi
 }
-
-
-#______________________________________________________________________________
-#
-# Find the type of executable "thing" that the shell will use and try to
-# describe it in its output:
-#
-# For an alias, print its definition
-# For a function, print its code
-# For a shell builtin, print its help text
-# For a script, print the source
-# For a binary executable file, print nothing.
-#______________________________________________________________________________
-#
-# @tags: command
-
-function _code_show_function()
-{
-   local function="$1"
-   local highlighter
-   if has_command bat; then
-      highlighter="bat -l bash --style=plain"
-   elif has_command pygmentize; then
-      highlighter="hless -l sh"
-   else
-      highlighter="less -r"
-   fi
-   builtin declare -f "$function" | $highlighter
-}
-
-function _code_show_script()
-{
-   local path="$1"
-   if has_command bat; then
-      bat "$path"
-   elif has_command pygmentize; then
-      hless "$path"
-   else
-      less -Fr "$path"
-   fi
-}
-
-function code()
-{
-   local type
-   type="$(builtin type -t "$1")"
-   case $type in
-      alias)
-         echo "$1 is an alias"
-         builtin alias "$1" | sed 's/^[^=]\+=//'
-         ;;
-      function)
-         echo "$1 is a function"
-         local function line path
-         read -r function line path <<< "$(find_function "$1")"
-         printf "Defined in: %s +%d\n" "$path" "$line"
-         _code_show_function "$function"
-         ;;
-      builtin | keyword)
-         echo "$1 is a shell $type"
-         builtin help "$1"
-         ;;
-      file)
-         local path
-         path="$(which "$1")"
-         if head -1 "$path" | grep -q "^#!"; then
-            echo "$1 is a script at $path"
-            _code_show_script "$path"
-         else
-            echo "$1 is a binary at $path"
-         fi
-         ;;
-      *)
-         echo "I don't know what $1 is"
-         return 1
-         ;;
-   esac
-}
-complete -c code # Complete with command names
-#______________________________________________________________________________
 
 
 #______________________________________________________________________________
@@ -222,65 +145,6 @@ function xf()
          return 1
          ;;
     esac
-}
-#______________________________________________________________________________
-
-
-#______________________________________________________________________________
-#
-# CD into the parent directory of a file, or to the given path if it already is
-# a directory.
-#______________________________________________________________________________
-#
-# @tags: command cd
-function cdf()
-{
-   # shellcheck disable=SC2164
-   if [[ -e $1 && ! -d $1 ]]; then
-      cd "$(dirname "$1")"
-   else
-      cd "$1"
-   fi
-}
-#______________________________________________________________________________
-
-
-#______________________________________________________________________________
-#
-# which + editor = whed
-#______________________________________________________________________________
-#
-# @tags: command canbescript
-function whed()
-{
-   if [[ $(builtin type -t "$1") == 'function' ]]
-   then
-      whedf "$1"
-      return
-   fi
-   local matches
-   matches="$(which -a "$@" | fzf -0 -1 --multi)"
-   if [[ -z $matches ]]
-   then
-      echoe "No matches found for $*"
-      return 1
-   fi
-   $EDITOR "$matches"
-}
-complete -c whed # Complete with command names
-
-function whedf()
-{
-   local match file line
-   match=$(find_function "$1")
-   if [[ -z $match ]]
-   then
-      echoe "No match found for function $*"
-      return 1
-   fi
-   file=$(cut -d' ' -f3- <<<"$match")
-   line=$(cut -d' ' -f2  <<<"$match")
-   $EDITOR "$file" "+$line"
 }
 #______________________________________________________________________________
 
@@ -328,13 +192,15 @@ function eloc()
 # function, or file in the PATH
 #______________________________________________________________________________
 #
-# @tags: support
+# @tags: canbescript
 function has_command()
 {
    type "$1" >& /dev/null
 }
 #______________________________________________________________________________
 
+# @tags: canbescript
+# DEPENDS-ON: has_command, echoe
 function assert_has_command()
 {
    local command
@@ -355,7 +221,8 @@ function assert_has_command()
 # arguments are passed directly to the command that is found first, if any.
 #______________________________________________________________________________
 #
-# @tags: support
+# @tags: canbescript
+# DEPENDS-ON: has_command
 function run_first_of()
 {
    local cmd=
@@ -406,102 +273,10 @@ function ranking()
    sort "$@" | uniq -c | sort -k 1 -n "$rev"
 }
 
-# @tags: command cd
-function cdz()
-{
-   local dir
-   dir="$(
-      awk -F"|" '{printf("%5s\t%s\n", $2, $1);}' "$(__bm_bookmarks_file)"  |
-      fzf -1 -0 -x |
-      awk -F"\t" '{print $2}'
-      )"
-   # shellcheck disable=SC2164
-   [[ -n $dir ]] && { echo "$dir"; cd "$dir"; }
-}
 
-
-# @tags: command virtualenv
-function vecd()
-{
-   [[ -z $VIRTUAL_ENV ]] && return 1
-   # shellcheck disable=SC2164
-   cd "$(cat "$VIRTUAL_ENV/.project")"
-}
-
-##############################################################################
-#
-# FUNCTION:     activate-venv
-#
-# DESCRIPTION:  Activate a Python virtual environment by searching for a .venv
-#               directory starting from the current directory and traversing
-#               up the directory tree. Stops searching at the git repository
-#               root (if in a repo) or the filesystem root.
-#
-# PARAMETERS:   -h, --help: Show usage information
-#
-# DEPENDS-ON:   echoe
-#
-##############################################################################
-# @tags: command virtualenv
-function activate-venv()
-{
-   if [[ "$1" == "-h" || "$1" == "--help" ]]; then
-      cat <<'EOF'
-Usage: activate-venv
-
-Activate a Python virtual environment by searching for a .venv directory.
-
-Searches from the current directory upward until:
-  - A .venv directory is found (activates it)
-  - A .git directory is found (stops at git root)
-  - The filesystem root is reached
-
-On success, prints the path of the activated virtualenv.
-On failure, prints an error to stderr and returns 1.
-EOF
-      return 0
-   fi
-
-   local dir="$PWD"
-
-   while [[ "$dir" != "/" ]]; do
-      # Check for .venv in current directory
-      if [[ -d "$dir/.venv" ]]; then
-         echo "Activating: $dir/.venv"
-         # shellcheck disable=SC1091
-         source "$dir/.venv/bin/activate"
-         return 0
-      fi
-
-      # Stop at git root
-      if [[ -d "$dir/.git" ]]; then
-         break
-      fi
-
-      # Move up one directory
-      dir="$(dirname "$dir")"
-   done
-
-   echoe "No .venv found (searched up to git root or /)"
-   return 1
-}
-
-# tags: network command
-function getfavicon()
-{
-   local url="$1/favicon.ico"
-   local name="$2"
-   if [[ -z $name ]]; then
-      name="$(python -c 'import sys,urlparse; print urlparse.urlparse(sys.argv[1]).netloc.replace(".", "_")' "$1")"
-   fi
-   local favdir="$DDOWN/favicons"
-   mkdir -p "$favdir"
-   DDOWN="$favdir" download "$url" && mv "$favdir/favicon.ico" "$favdir/${name}.ico"
-}
-
-
-# tags: command canbescript
-function edot
+# @tags: command canbescript
+# DEPENDS-ON: assert_has_command, has_command
+function edot()
 {
    local dir
    dir=${1:-~/.dotfiles}
@@ -526,6 +301,7 @@ function edot
 }
 
 
+# @tags: command canbescript
 function run_until_fail()
 {
    local -i times=0
@@ -543,7 +319,8 @@ function run_until_fail()
 
 
 # This is a very hacky way to unset a readonly variable. With GDB!
-function unset_readonly_var
+# @tags: command
+function unset_readonly_var()
 {
    local var=$1
    cat << EOF| sudo gdb
@@ -555,25 +332,30 @@ EOF
 }
 
 
+# @tags: command canbescript
 function abspath()
 {
    python3 -c 'import os, sys; [print(os.path.abspath(path)) for path in sys.argv[1:]]' "$@"
 }
 
 
+# @tags: command canbescript
 function ppm()  # Poor Person's man
 {
    local command=$1
    $command --help | less
 }
 
-vispanso() {
+# @tags: command canbescript
+# DEPENDS-ON: assert_has_command, edot
+function vispanso() {
    assert_has_command espanso && edot "$(espanso path config)"
 }
 
-espanso-cfg() {
+# @tags: command canbescript
+# DEPENDS-ON: vispanso
+function espanso-cfg() {
    vispanso
 }
 
 # vim: ft=sh fdm=marker expandtab ts=3 sw=3 :
-

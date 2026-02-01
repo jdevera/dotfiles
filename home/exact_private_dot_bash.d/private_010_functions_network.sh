@@ -21,7 +21,8 @@
 #
 ##############################################################################
 #
-getip4()
+# @tags: command canbescript network
+function getip4()
 {
     local a_interface=${1:?"network interface argument missing"}
 
@@ -31,19 +32,22 @@ getip4()
 ##############################################################################
 
 
+# @tags: command canbescript network
 function download()
 {
     wget --no-use-server-timestamps --no-clobber --directory-prefix="$DDOWN" "$@"
 }
 
 
-http_server()
+# @tags: command canbescript network
+function http_server()
 {
     python3 -m http.server "${1:-8000}"
 }
 
 
 # shellcheck source=/dev/null
+# @tags: command network
 function ssh-start-agent()
 {
     local agentfile=~/.ssh/agent
@@ -61,6 +65,20 @@ function ssh-start-agent()
     source $agentfile > /dev/null
     echo "Agent running with PID $SSH_AGENT_PID"
     ssh-add
+}
+
+# @tags: command canbescript network
+# DEPENDS-ON: download
+function getfavicon()
+{
+   local url="$1/favicon.ico"
+   local name="$2"
+   if [[ -z $name ]]; then
+      name="$(python -c 'import sys,urlparse; print urlparse.urlparse(sys.argv[1]).netloc.replace(".", "_")' "$1")"
+   fi
+   local favdir="$DDOWN/favicons"
+   mkdir -p "$favdir"
+   DDOWN="$favdir" download "$url" && mv "$favdir/favicon.ico" "$favdir/${name}.ico"
 }
 
 # vim: ft=sh fdm=marker expandtab ts=4 sw=4 :
