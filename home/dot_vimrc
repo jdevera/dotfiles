@@ -45,7 +45,6 @@ Plug 'tpope/vim-surround'
 Plug 'tpope/vim-repeat'
 
 " Interface
-Plug 'godlygeek/csapprox'
 Plug 'majutsushi/tagbar', { 'on' : 'TagbarToggle' }
 Plug 'bootleq/ShowMarks', { 'on' : 'ShowMarksToggle' } " Show vim marks in the gutter
 Plug 'vim-scripts/bufexplorer.zip', { 'on' : ['BufExplorer', 'BufExplorerHorizontalSplit', 'BufExplorerVerticalSplit' ] }

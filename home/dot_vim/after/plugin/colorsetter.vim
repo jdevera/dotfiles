@@ -4,19 +4,16 @@
 "
 " -----------------------------------------------------------------------------
 "
-" Description:  The setting of the colorscheme needs to be in an after plug-in
-" so that the CSApprox plug-in, if present, has already been loaded when we
-" get to this point.
+" Description:  Sets the colorscheme based on environment.
 "
 " The preferred colorschemes can be specified in the .vimrc file with the
 " global variables:
-
+"
 "   * g:my_gui_colorscheme for the colorscheme to load if Vim is running with
-"   a GUI or if CSApprox is installed and the terminal supports more 88 colours
-"   or more.
-
+"   a GUI or if termguicolors is enabled (true color terminal).
+"
 "   * g:my_terminal_colorscheme for the colorscheme to load if Vim is running
-"   on a terminal and there is no support for enough colours.
+"   on a terminal without true color support.
 "
 " -----------------------------------------------------------------------------
 
@@ -39,20 +36,16 @@ if !exists('g:my_terminal_diff_colorscheme')
    let g:my_terminal_diff_colorscheme = g:my_gui_colorscheme
 endif
 " -----------------------------------------------------------------------------
-    
-if has("gui_running") || 
-    \ (&t_Co >= 88 && exists('g:CSApprox_loaded'))
-    " Even when Vim is running on a terminal, GUI colorschemes might still
-    " look good if the terminal supports enough colours and the CSApprox
-    " plug-in is installed.
+
+if has("gui_running") || &termguicolors
+    " GUI or true color terminal - use rich colorscheme
     if &diff
        exe 'colorscheme' g:my_gui_diff_colorscheme
     else
        exe 'colorscheme' g:my_gui_colorscheme
     endif
 else
-    " Set a colour scheme suitable for dark backgrounds
-    " since my terminals always have dark backgrounds.
+    " Limited color terminal - use simpler colorscheme
     if &diff
        exe 'colorscheme' g:my_terminal_diff_colorscheme
     else
