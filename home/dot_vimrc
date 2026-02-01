@@ -255,12 +255,10 @@ if has("gui_running")
 endif
 
 
-" Allow the use of colours for themes
+" Enable true color support for modern terminals
 " -----------------------------------------------
-if &term =~ '^\(xterm\|screen\|xterm-color\)$'
-    set t_Co=256
-    set t_AB=^[[48;5;%dm
-    set t_AF=^[[38;5;%dm
+if has('termguicolors')
+    set termguicolors
 endif
 
 
