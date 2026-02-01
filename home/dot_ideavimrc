@@ -1,3 +1,33 @@
-# More info https://github.com/JetBrains/ideavim/tree/master/doc
+" IdeaVim configuration
+" More info https://github.com/JetBrains/ideavim/tree/master/doc
 
+" Emulated plugins
 Plug 'tpope/vim-surround'
+
+" Use comma as leader (matching vimrc)
+let mapleader = ","
+
+" Search settings
+set incsearch
+set hlsearch
+
+" Keep context lines when scrolling (matching vimrc)
+set scrolloff=4
+
+" Show line numbers
+set number
+
+" Smart line joining (IDE aware)
+set ideajoin
+
+" System clipboard integration
+set clipboard+=unnamed
+
+" Use ; as : (matching vimrc - easier on Spanish keyboards)
+nnoremap ; :
+
+" Use space to toggle folds (matching vimrc)
+nnoremap <space> za
+
+" Quick access to vimrc
+nmap <Leader>rc :e ~/.ideavimrc<CR>
