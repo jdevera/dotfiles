@@ -189,12 +189,13 @@ set directory^=~/.vim/tmp/swap
 set nobackup
 
 
-" When opening a file, go to the last known position when the file was last
-" open.
-au BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g`\"" | endif
-
-" Consider all my additional gitconfig files as such
-au BufNewFile,BufRead .config/git/config* set filetype=gitconfig
+augroup vimrc_behaviour
+    autocmd!
+    " When opening a file, go to the last known position when the file was last open
+    autocmd BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g`\"" | endif
+    " Consider all my additional gitconfig files as such
+    autocmd BufNewFile,BufRead .config/git/config* set filetype=gitconfig
+augroup END
 
 
 " ----------------------------------------------------------------------------
