@@ -26,7 +26,8 @@
 #
 ##############################################################################
 #
-git-foldiff()
+# @tags: command canbescript
+function git-foldiff()
 {
    local view=${VIEW:-view}
 
@@ -48,6 +49,8 @@ git-foldiff()
 
 
 
+# @tags: command cd
+# DEPENDS-ON: run_first_of, hless, hl
 function git-explore()
 {
     local dest
@@ -69,11 +72,14 @@ function git-explore()
     [[ -e $readme ]] && run_first_of bat hless hl view less -- "$readme"
 }
 
+# @tags: canbescript
 function in_git_repo()
 {
    git rev-parse &> /dev/null
 }
 
+# @tags: canbescript
+# DEPENDS-ON: echoe, in_git_repo
 function check_in_git_repo()
 {
    if ! in_git_repo

@@ -23,7 +23,8 @@
 #
 ##############################################################################
 #
-mysplit()
+# @tags: canbescript filter
+function mysplit()
 {
     local default_delimiter=" "
 
@@ -55,7 +56,8 @@ mysplit()
 #
 ##############################################################################
 #
-myjoin()
+# @tags: canbescript filter
+function myjoin()
 {
     local default_delimiter=" "
 
@@ -94,7 +96,8 @@ myjoin()
 # DEPENDS-ON:   mysplit myjoin
 ##############################################################################
 #
-myrmlistitems()
+# @tags: canbescript filter
+function myrmlistitems()
 {
     local default_delimiter=" "
 
@@ -116,25 +119,30 @@ myrmlistitems()
 ##############################################################################
 # Commodity wrappers
 #
-touppercase() { tr '[:lower:]' '[:upper:]'; }
-tolowercase() { tr '[:upper:]' '[:lower:]'; }
+# @tags: command canbescript filter
+function touppercase() { tr '[:lower:]' '[:upper:]'; }
+# @tags: command canbescript filter
+function tolowercase() { tr '[:upper:]' '[:lower:]'; }
 #
 ##############################################################################
 
 
-average ()
+# @tags: command canbescript filter
+function average()
 {
     awk '{total+=$0}END{printf("%.2f\n",total/NR);}'
 }
 
-field ()
+# @tags: command canbescript filter
+function field()
 {
     local nfield=$1
     shift
     awk -v nfield="$nfield" '{print $nfield}' "$@"
 }
 
-echoe ()
+# @tags: canbescript
+function echoe()
 {
     echo "$@" 1>&2
 }

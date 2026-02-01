@@ -1,4 +1,5 @@
-ansi_color()
+# @tags: canbescript
+function ansi_color()
 {
    local color
    case "$1" in
@@ -23,11 +24,14 @@ ansi_color()
    echo "$color"
 }
 
-ansi_color256()
+# @tags: canbescript
+function ansi_color256()
 {
    echo "\033[38;5;$1m"
 }
 
+# @tags: canbescript
+# DEPENDS-ON: ansi_color
 function colorise() {
     local OFF="\e[0m"
     local color=$1
@@ -35,6 +39,7 @@ function colorise() {
     echo "$(ansi_color "$color")$*$OFF"
 }
 
+# @tags: canbescript
 function ansi_effect() {
     local effect
     case "$1" in
@@ -47,6 +52,7 @@ function ansi_effect() {
     echo "$effect"
 }
 
+# @tags: canbescript
 function effected() {
 
     local OFF="\e[0m"

@@ -35,12 +35,12 @@ function _cd_init()
 
 # Load the path to ondir for faster access from now on. Replace with a noop if ondir is not available
 _ONDIR_PATH=$(which ondir || true)
-_cd_ondir()
+function _cd_ondir()
 {
     [[ -n $_ONDIR_PATH ]] && eval "$("$_ONDIR_PATH" "$OLDPWD" "$PWD")"
 }
 
-_cd_echo()
+function _cd_echo()
 {
     [[ $PWD != "$OLDPWD" ]] && echo "$PWD (from $OLDPWD)"
 }

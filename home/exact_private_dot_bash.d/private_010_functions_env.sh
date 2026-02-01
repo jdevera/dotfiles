@@ -29,7 +29,7 @@
 # DEPENDS-ON:   myrmlistitems
 #______________________________________________________________________________
 #
-addtopath()
+function addtopath()
 {
     local a_directory="$1"
     local a_position="$2"
@@ -61,8 +61,10 @@ addtopath()
 #______________________________________________________________________________
 # Convenience wrappers for addtopath
 #
-pathappend()  { addtopath "$1" end; }
-pathprepend() { addtopath "$1" beg; }
+# @tags: command
+function pathappend()  { addtopath "$1" end; }
+# @tags: command
+function pathprepend() { addtopath "$1" beg; }
 #______________________________________________________________________________
 
 
@@ -78,7 +80,8 @@ pathprepend() { addtopath "$1" beg; }
 # DEPENDS-ON:   myrmlistitems
 #______________________________________________________________________________
 #
-delfrompath()
+# @tags: command
+function delfrompath()
 {
     local a_directory=$1
 
@@ -115,6 +118,7 @@ delfrompath()
 #     will use also __complete_foo to complete bar
 #______________________________________________________________________________
 #
+# DEPENDS-ON: has_command, function_exists
 function link_complete_function()
 {
    local command=$1
@@ -137,6 +141,8 @@ function link_complete_function()
 # PARAMETERS:   None
 #______________________________________________________________________________
 #
+# @tags: command canbescript
+# DEPENDS-ON: showaliases
 function showenv()
 {
    printenv | grep = | showaliases -a -
@@ -154,6 +160,8 @@ function showenv()
 # PARAMETERS:   None
 #______________________________________________________________________________
 #
+# @tags: command
+# DEPENDS-ON: is_login_shell
 function reloadsh()
 {
    local option=
@@ -171,6 +179,7 @@ function reloadsh()
 #
 # Run env-save outside of tmux and then env-load inside.
 #______________________________________________________________________________
+# @tags: command canbescript
 function env-save()
 {
    export |
@@ -179,6 +188,7 @@ function env-save()
       > "/tmp/${USER}.env"
 }
 
+# @tags: command
 function env-load()
 {
    # shellcheck disable=SC1090
@@ -186,7 +196,7 @@ function env-load()
 }
 #______________________________________________________________________________
 
-__ensure_path_stack()
+function __ensure_path_stack()
 {
    if ! [[ "$(declare -p PATH_STACK 2>/dev/null)" =~ "declare -a" ]]
    then
@@ -194,14 +204,18 @@ __ensure_path_stack()
       PATH_STACK=()
    fi
 }
-push-path()
+# @tags: command
+# DEPENDS-ON: __ensure_path_stack
+function push-path()
 {
    __ensure_path_stack
    PATH_STACK+=("$PATH")
    echo "Pushed PATH: $PATH"
 }
 
-pop-path()
+# @tags: command
+# DEPENDS-ON: __ensure_path_stack, echoe
+function pop-path()
 {
    __ensure_path_stack
    local size=${#PATH_STACK[@]}
@@ -217,7 +231,8 @@ pop-path()
 }
 
 
-is_login_shell()
+# @tags: canbescript
+function is_login_shell()
 {
    shopt -q login_shell
 }

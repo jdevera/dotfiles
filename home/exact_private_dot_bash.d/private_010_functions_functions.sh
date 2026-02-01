@@ -10,7 +10,8 @@
 
 
 # Check if a function given by name is defined in the current shell instance
-function_exists()
+# @tags: canbescript
+function function_exists()
 {
    local a_function_name=$1
 
@@ -27,18 +28,21 @@ function call_if()
 }
 
 # Find the location where a function has been defined
+# @tags: canbescript
 function find_function()
 {
    ( shopt -s extdebug; declare -F "$@" )
 }
 
 # Output the names of all functions defined in the current shell
+# @tags: command canbescript
 function dump_functions()
 {
    declare -f "$(declare -F | awk '{print $3}')"
 }
 
 # Show a pretty printed of shell functions, sorted by file and line
+# @tags: command canbescript
 function list_functions()
 {
    # Get the functions with the origin files and lines
@@ -74,6 +78,7 @@ function list_functions()
 
 
 # List all defined functions in a format that can be easily viewed in vim
+# @tags: canbescript
 function __list_functions()
 {
    # Get the functions with the origin files and lines
@@ -120,6 +125,7 @@ function __list_functions()
 
 
 # View all defined functions in vim
+# @tags: command canbescript
 function viewfuncs()
 {
    eval "$(__list_functions)" | view - +'se ft=sh fdm=marker'
