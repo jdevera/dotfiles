@@ -22,9 +22,13 @@ description = "In a 'chezmoi cd' shell"
 [character]
 # Note the use of Catppuccin color 'peach'
 # Catppuccin symbol: 󰄛
-success_symbol = "[[󰋑](green) ❯](peach)"
-error_symbol = "[[󰋔](red) ❯](peach)"
-vimcmd_symbol = "[ ❮](subtext1)" # For use with zsh-vi-mode
+# Using > instead of ❯ due to a width calculation bug between Starship and Ghostty.
+# The Unicode arrow causes cursor positioning issues when navigating bash history.
+# See: https://github.com/starship/starship/issues/6923
+# See: https://github.com/ghostty-org/ghostty/discussions/5823
+success_symbol = "[[󰋑](green) >](peach)"
+error_symbol = "[[󰋔](red) >](peach)"
+vimcmd_symbol = "[ <](subtext1)" # For use with zsh-vi-mode
 
 
 [directory]
