@@ -20,6 +20,10 @@ window-padding-y = 6
 cursor-style = block
 cursor-style-blink = false
 
+# Keyboard
+# Left Option = Alt (for shortcuts), Right Option = special characters (å, ñ, etc.)
+macos-option-as-alt = left
+
 # Mouse
 mouse-hide-while-typing = true
 # Use "clipboard" instead of "true" to copy to system clipboard on macOS (changed in 1.1.0)
