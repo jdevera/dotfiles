@@ -1,24 +1,648 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="dark" data-ctp-flavor="macchiato">
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Jacobo's Dotfiles</title>
-        <link
-                rel="stylesheet"
-                href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css"
-                >
+        <style>
+            /* Base reset */
+            *, *::before, *::after { box-sizing: border-box; }
+            html { font-size: 100%; }
+            body {
+                margin: 0;
+                font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+                font-size: 1.125rem;
+                line-height: 1.6;
+            }
+            .container {
+                max-width: 800px;
+                margin: 0 auto;
+                padding: 2rem 1rem;
+            }
+            a { text-decoration: none; }
+            a:hover { text-decoration: underline; }
+            h1, h2, h3 { margin-top: 0; }
+            pre, code { font-family: ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, monospace; }
+
+            /* Catppuccin Latte */
+            [data-ctp-flavor="latte"] {
+                --ctp-rosewater: #dc8a78;
+                --ctp-flamingo: #dd7878;
+                --ctp-pink: #ea76cb;
+                --ctp-mauve: #8839ef;
+                --ctp-red: #d20f39;
+                --ctp-maroon: #e64553;
+                --ctp-peach: #fe640b;
+                --ctp-yellow: #df8e1d;
+                --ctp-green: #40a02b;
+                --ctp-teal: #179299;
+                --ctp-sky: #04a5e5;
+                --ctp-sapphire: #209fb5;
+                --ctp-blue: #1e66f5;
+                --ctp-lavender: #7287fd;
+                --ctp-text: #4c4f69;
+                --ctp-subtext1: #5c5f77;
+                --ctp-subtext0: #6c6f85;
+                --ctp-overlay2: #7c7f93;
+                --ctp-overlay1: #8c8fa1;
+                --ctp-overlay0: #9ca0b0;
+                --ctp-surface2: #acb0be;
+                --ctp-surface1: #bcc0cc;
+                --ctp-surface0: #ccd0da;
+                --ctp-base: #eff1f5;
+                --ctp-mantle: #e6e9ef;
+                --ctp-crust: #dce0e8;
+            }
+
+            /* Catppuccin Frappé */
+            [data-ctp-flavor="frappe"] {
+                --ctp-rosewater: #f2d5cf;
+                --ctp-flamingo: #eebebe;
+                --ctp-pink: #f4b8e4;
+                --ctp-mauve: #ca9ee6;
+                --ctp-red: #e78284;
+                --ctp-maroon: #ea999c;
+                --ctp-peach: #ef9f76;
+                --ctp-yellow: #e5c890;
+                --ctp-green: #a6d189;
+                --ctp-teal: #81c8be;
+                --ctp-sky: #99d1db;
+                --ctp-sapphire: #85c1dc;
+                --ctp-blue: #8caaee;
+                --ctp-lavender: #babbf1;
+                --ctp-text: #c6d0f5;
+                --ctp-subtext1: #b5bfe2;
+                --ctp-subtext0: #a5adce;
+                --ctp-overlay2: #949cbb;
+                --ctp-overlay1: #838ba7;
+                --ctp-overlay0: #737994;
+                --ctp-surface2: #626880;
+                --ctp-surface1: #51576d;
+                --ctp-surface0: #414559;
+                --ctp-base: #303446;
+                --ctp-mantle: #292c3c;
+                --ctp-crust: #232634;
+            }
+
+            /* Catppuccin Macchiato */
+            [data-ctp-flavor="macchiato"] {
+                --ctp-rosewater: #f4dbd6;
+                --ctp-flamingo: #f0c6c6;
+                --ctp-pink: #f5bde6;
+                --ctp-mauve: #c6a0f6;
+                --ctp-red: #ed8796;
+                --ctp-maroon: #ee99a0;
+                --ctp-peach: #f5a97f;
+                --ctp-yellow: #eed49f;
+                --ctp-green: #a6da95;
+                --ctp-teal: #8bd5ca;
+                --ctp-sky: #91d7e3;
+                --ctp-sapphire: #7dc4e4;
+                --ctp-blue: #8aadf4;
+                --ctp-lavender: #b7bdf8;
+                --ctp-text: #cad3f5;
+                --ctp-subtext1: #b8c0e0;
+                --ctp-subtext0: #a5adcb;
+                --ctp-overlay2: #939ab7;
+                --ctp-overlay1: #8087a2;
+                --ctp-overlay0: #6e738d;
+                --ctp-surface2: #5b6078;
+                --ctp-surface1: #494d64;
+                --ctp-surface0: #363a4f;
+                --ctp-base: #24273a;
+                --ctp-mantle: #1e2030;
+                --ctp-crust: #181926;
+            }
+
+            /* Catppuccin Mocha */
+            [data-ctp-flavor="mocha"] {
+                --ctp-rosewater: #f5e0dc;
+                --ctp-flamingo: #f2cdcd;
+                --ctp-pink: #f5c2e7;
+                --ctp-mauve: #cba6f7;
+                --ctp-red: #f38ba8;
+                --ctp-maroon: #eba0ac;
+                --ctp-peach: #fab387;
+                --ctp-yellow: #f9e2af;
+                --ctp-green: #a6e3a1;
+                --ctp-teal: #94e2d5;
+                --ctp-sky: #89dceb;
+                --ctp-sapphire: #74c7ec;
+                --ctp-blue: #89b4fa;
+                --ctp-lavender: #b4befe;
+                --ctp-text: #cdd6f4;
+                --ctp-subtext1: #bac2de;
+                --ctp-subtext0: #a6adc8;
+                --ctp-overlay2: #9399b2;
+                --ctp-overlay1: #7f849c;
+                --ctp-overlay0: #6c7086;
+                --ctp-surface2: #585b70;
+                --ctp-surface1: #45475a;
+                --ctp-surface0: #313244;
+                --ctp-base: #1e1e2e;
+                --ctp-mantle: #181825;
+                --ctp-crust: #11111b;
+            }
+
+            /* Theme variables */
+            :root {
+                --code-bg: var(--ctp-mantle);
+                --code-border: var(--ctp-surface0);
+                --code-header-bg: var(--ctp-crust);
+                --button-bg: var(--ctp-surface0);
+                --button-hover: var(--ctp-surface1);
+                --button-success: var(--ctp-green);
+                --accent: var(--ctp-mauve);
+                --accent-light: var(--ctp-lavender);
+            }
+
+            html, body {
+                background: var(--ctp-base);
+                color: var(--ctp-text);
+                transition: background-color 0.3s ease, color 0.3s ease;
+            }
+
+            /* Theme switcher */
+            .theme-switcher {
+                position: fixed;
+                top: 1rem;
+                right: 1rem;
+                display: flex;
+                align-items: center;
+                gap: 0.5rem;
+                padding: 0.4rem 0.6rem;
+                background: var(--ctp-mantle);
+                border: 1px solid var(--ctp-surface0);
+                border-radius: 6px;
+                font-size: 0.75rem;
+                z-index: 100;
+                transition: background-color 0.3s ease, border-color 0.3s ease;
+            }
+
+            .theme-switcher .theme-label {
+                color: var(--ctp-subtext0);
+                font-weight: 500;
+            }
+
+            .theme-switcher select {
+                appearance: none;
+                -webkit-appearance: none;
+                background: var(--ctp-surface0);
+                color: var(--ctp-text);
+                border: 1px solid var(--ctp-surface1);
+                border-radius: 4px;
+                padding: 0.25rem 1.5rem 0.25rem 0.5rem;
+                font-size: 0.75rem;
+                cursor: pointer;
+                margin: 0;
+                background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%236c7086' stroke-width='2'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+                background-repeat: no-repeat;
+                background-position: right 0.4rem center;
+                transition: background-color 0.2s ease, border-color 0.2s ease;
+            }
+
+            .theme-switcher select:hover {
+                background-color: var(--ctp-surface1);
+                border-color: var(--ctp-surface2);
+            }
+
+            .theme-switcher select:focus {
+                outline: none;
+                border-color: var(--ctp-mauve);
+            }
+
+            /* Layout */
+            .hero {
+                text-align: center;
+                margin-bottom: 2rem;
+            }
+
+            .hero h1 {
+                margin-bottom: 0.5rem;
+                color: var(--ctp-text);
+            }
+
+            .hero .subtitle {
+                color: var(--ctp-subtext0);
+                font-size: 1.1rem;
+                margin: 0;
+            }
+
+            .links {
+                display: flex;
+                gap: 1rem;
+                justify-content: center;
+                margin-bottom: 2rem;
+            }
+
+            .links a {
+                display: inline-flex;
+                align-items: center;
+                gap: 0.5rem;
+                color: var(--ctp-blue);
+            }
+
+            .links a:hover {
+                color: var(--ctp-lavender);
+            }
+
+            /* Code block */
+            .code-block {
+                position: relative;
+                background: var(--code-bg);
+                border-radius: 8px;
+                border: 1px solid var(--code-border);
+                overflow: hidden;
+                transition: background-color 0.3s ease, border-color 0.3s ease;
+            }
+
+            .code-block pre {
+                margin: 0;
+                padding: 1.25rem;
+                padding-right: 5rem;
+                background: transparent;
+                overflow-x: auto;
+            }
+
+            .code-block code {
+                font-size: 0.95rem;
+                line-height: 1.5;
+                color: var(--ctp-text);
+            }
+
+            .code-header {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                padding: 0.5rem 1rem;
+                background: var(--code-header-bg);
+                border-bottom: 1px solid var(--code-border);
+                transition: background-color 0.3s ease, border-color 0.3s ease;
+            }
+
+            .code-label {
+                color: var(--accent);
+                font-size: 0.8rem;
+            }
+
+            .copy-button {
+                display: inline-flex;
+                align-items: center;
+                gap: 0.4rem;
+                padding: 0.4rem 0.75rem;
+                font-size: 0.8rem;
+                font-weight: 500;
+                cursor: pointer;
+                background: var(--button-bg);
+                color: var(--ctp-subtext0);
+                border: 1px solid var(--code-border);
+                border-radius: 6px;
+                transition: all 0.15s ease;
+            }
+
+            .copy-button:hover {
+                background: var(--button-hover);
+                color: var(--ctp-text);
+            }
+
+            .copy-button.copied {
+                background: var(--button-success);
+                border-color: var(--button-success);
+                color: var(--ctp-crust);
+            }
+
+            .copy-button svg {
+                width: 14px;
+                height: 14px;
+            }
+
+            /* Syntax highlighting (pre-rendered) */
+            .token.function { color: var(--ctp-blue); }
+            .token.string { color: var(--ctp-green); }
+            .token.variable { color: var(--ctp-peach); }
+            .token.parameter { color: var(--ctp-text); }
+
+            /* Content sections */
+            .install-section {
+                max-width: 700px;
+                margin: 0 auto;
+            }
+
+            .install-section h2 {
+                text-align: center;
+                color: var(--ctp-text);
+            }
+
+            .install-section > p {
+                text-align: center;
+                color: var(--ctp-subtext0);
+            }
+
+            .note {
+                margin-top: 1.5rem;
+                padding: 1rem;
+                background: var(--ctp-mantle);
+                border-radius: 8px;
+                border-left: 4px solid var(--accent);
+                font-size: 0.9rem;
+                transition: background-color 0.3s ease, border-color 0.3s ease;
+            }
+
+            .note strong {
+                color: var(--accent-light);
+            }
+
+            .note a {
+                color: var(--accent-light);
+            }
+
+            /* GitHub Widget */
+            .github-widget {
+                max-width: 700px;
+                margin: 2rem auto 0;
+                padding: 1rem 1.25rem;
+                background: var(--code-bg);
+                border-radius: 8px;
+                border: 1px solid var(--code-border);
+                transition: background-color 0.3s ease, border-color 0.3s ease;
+            }
+
+            .github-header {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                margin-bottom: 0.75rem;
+            }
+
+            .github-header h3 {
+                margin: 0;
+                font-size: 0.9rem;
+                color: var(--accent-light);
+                display: flex;
+                align-items: center;
+                gap: 0.5rem;
+            }
+
+            .github-header h3 svg {
+                width: 16px;
+                height: 16px;
+            }
+
+            .github-stats {
+                display: flex;
+                gap: 1rem;
+                font-size: 0.8rem;
+            }
+
+            .stat {
+                display: flex;
+                align-items: center;
+                gap: 0.3rem;
+                color: var(--ctp-overlay1);
+            }
+
+            .stat svg {
+                width: 14px;
+                height: 14px;
+            }
+
+            .stat .value {
+                color: var(--ctp-text);
+                font-weight: 500;
+            }
+
+            .recent-commits {
+                border-top: 1px solid var(--ctp-surface0);
+                padding-top: 0.75rem;
+            }
+
+            .commits-label {
+                font-size: 0.7rem;
+                color: var(--ctp-overlay0);
+                margin-bottom: 0.5rem;
+                text-transform: uppercase;
+                letter-spacing: 0.05em;
+            }
+
+            .commit-list {
+                list-style: none;
+                padding: 0;
+                margin: 0;
+                display: flex;
+                flex-direction: column;
+                gap: 0.35rem;
+            }
+
+            .commit-list li {
+                display: flex;
+                align-items: baseline;
+                gap: 0.5rem;
+                font-size: 0.8rem;
+            }
+
+            .commit-sha {
+                color: var(--accent);
+                font-size: 0.75rem;
+                flex-shrink: 0;
+            }
+
+            .commit-sha:hover {
+                color: var(--accent-light);
+            }
+
+            .commit-message {
+                color: var(--ctp-subtext0);
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                flex: 1;
+            }
+
+            .commit-time {
+                color: var(--ctp-overlay0);
+                font-size: 0.7rem;
+                flex-shrink: 0;
+            }
+
+            .loading {
+                color: var(--ctp-overlay0);
+                font-style: italic;
+                font-size: 0.85rem;
+            }
+
+            .error {
+                color: var(--ctp-red);
+                font-size: 0.85rem;
+            }
+
+            /* Footer */
+            .footer {
+                max-width: 700px;
+                margin: 3rem auto 1rem;
+                padding-top: 1.5rem;
+                border-top: 1px solid var(--ctp-surface0);
+                text-align: center;
+                font-size: 0.85rem;
+                color: var(--ctp-overlay1);
+            }
+
+            .footer a {
+                color: var(--ctp-overlay1);
+            }
+
+            .footer a:hover {
+                color: var(--ctp-text);
+            }
+        </style>
     </head>
     <body>
+        <div class="theme-switcher">
+            <span class="theme-label">Theme</span>
+            <select id="flavor-select" onchange="switchFlavor(this.value)" title="Select theme">
+                <option value="latte">Catppuccin Latte (light)</option>
+                <option value="frappe">Catppuccin Frappé (dark)</option>
+                <option value="macchiato" selected>Catppuccin Macchiato (dark)</option>
+                <option value="mocha">Catppuccin Mocha (dark)</option>
+            </select>
+        </div>
+
         <main class="container">
-            <h1>Jacobo's Dotfiles</h1>
+            <header class="hero">
+                <h1>Jacobo's Dotfiles</h1>
+                <p class="subtitle">Config files for a consistent environment</p>
+            </header>
 
-            <p>
-            <a href="https://github.com/jdevera/dotfiles">View on GitHub</a>
-            </p>
+            <nav class="links">
+                <a href="https://github.com/jdevera/dotfiles">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
+                    </svg>
+                    View on GitHub
+                </a>
+            </nav>
 
-            <h2>Installation</h2>
-            <pre><code>sh -c "$(curl -fsLS jdevera.casa/install)"</code></pre>
+            <section class="install-section">
+                <h2>Installation</h2>
+                <p>Run this command in your terminal to bootstrap your environment:</p>
+
+                <div class="code-block">
+                    <div class="code-header">
+                        <span class="code-label">bash</span>
+                        <button class="copy-button" onclick="copyCommand(this)">
+                            <svg class="copy-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                                <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                            </svg>
+                            <svg class="check-icon" style="display:none" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <polyline points="20 6 9 17 4 12"></polyline>
+                            </svg>
+                            <span class="button-text">Copy</span>
+                        </button>
+                    </div>
+                    <pre><code><span class="token function">sh</span> <span class="token parameter">-c</span> <span class="token string">"<span class="token variable">$(curl -fsLS jdevera.casa/install)</span>"</span></code></pre>
+                </div>
+
+                <div class="note">
+                    <strong>Note:</strong> This will install <a href="https://1password.com/downloads/command-line" target="_blank" rel="noopener">1Password CLI</a> for secrets management, then use <a href="https://www.chezmoi.io/" target="_blank" rel="noopener">chezmoi</a> to apply the dotfiles configuration.
+                </div>
+            </section>
+
+            <section class="github-widget" id="github-widget">
+                <div id="widget-content">
+                    <p class="loading">Loading repository data...</p>
+                </div>
+            </section>
+
+            <footer class="footer">
+                Made with 💙 by Jacobo and <a href="https://claude.ai/code" target="_blank" rel="noopener">Claude Code</a> 🤖
+                · Colored by <a href="https://catppuccin.com/" target="_blank" rel="noopener">Catppuccin</a> 🐱
+            </footer>
         </main>
+
+        <script>
+            // Theme switcher
+            function switchFlavor(flavor) {
+                document.documentElement.setAttribute('data-ctp-flavor', flavor);
+                localStorage.setItem('ctp-flavor', flavor);
+            }
+
+            // Load saved flavor on page load (default: macchiato)
+            const savedFlavor = localStorage.getItem('ctp-flavor') || 'macchiato';
+            document.documentElement.setAttribute('data-ctp-flavor', savedFlavor);
+            document.getElementById('flavor-select').value = savedFlavor;
+
+            // Copy button
+            function copyCommand(button) {
+                const code = button.closest('.code-block').querySelector('code');
+                navigator.clipboard.writeText(code.textContent).then(() => {
+                    button.querySelector('.copy-icon').style.display = 'none';
+                    button.querySelector('.check-icon').style.display = 'block';
+                    button.querySelector('.button-text').textContent = 'Copied!';
+                    button.classList.add('copied');
+                    setTimeout(() => {
+                        button.querySelector('.copy-icon').style.display = 'block';
+                        button.querySelector('.check-icon').style.display = 'none';
+                        button.querySelector('.button-text').textContent = 'Copy';
+                        button.classList.remove('copied');
+                    }, 2000);
+                });
+            }
+
+            // GitHub Widget
+            const REPO = 'jdevera/dotfiles';
+
+            fetch(`https://api.github.com/repos/${REPO}`)
+                .then(r => r.json())
+                .then(repo => fetch(`https://api.github.com/repos/${REPO}/commits?per_page=5`)
+                    .then(r => r.json())
+                    .then(commits => {
+                        const timeAgo = d => {
+                            const s = Math.floor((Date.now() - new Date(d)) / 1000);
+                            for (const [l, v] of [['y',31536000],['mo',2592000],['w',604800],['d',86400],['h',3600],['m',60]])
+                                if (s >= v) return Math.floor(s/v) + l;
+                            return 'now';
+                        };
+                        document.getElementById('widget-content').innerHTML = `
+                            <div class="github-header">
+                                <h3>
+                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                                        <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
+                                    </svg>
+                                    Repository Activity
+                                </h3>
+                                <div class="github-stats">
+                                    <div class="stat">
+                                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                            <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+                                        </svg>
+                                        <span class="value">${repo.stargazers_count}</span>
+                                    </div>
+                                    <div class="stat">
+                                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                            <circle cx="12" cy="18" r="3"/><circle cx="6" cy="6" r="3"/><circle cx="18" cy="6" r="3"/>
+                                            <path d="M18 9v1a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2V9"/><path d="M12 12v3"/>
+                                        </svg>
+                                        <span class="value">${repo.forks_count}</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="recent-commits">
+                                <div class="commits-label">Recent commits</div>
+                                <ul class="commit-list">
+                                    ${commits.map(c => `
+                                        <li>
+                                            <a href="https://github.com/${REPO}/commit/${c.sha}" target="_blank" rel="noopener" class="commit-sha">${c.sha.slice(0,7)}</a>
+                                            <span class="commit-message">${c.commit.message.split('\n')[0].replace(/</g,'&lt;')}</span>
+                                            <span class="commit-time">${timeAgo(c.commit.author.date)}</span>
+                                        </li>
+                                    `).join('')}
+                                </ul>
+                            </div>
+                        `;
+                    }))
+                .catch(() => {
+                    document.getElementById('widget-content').innerHTML = '<p class="error">Could not load repository data</p>';
+                });
+        </script>
     </body>
 </html>
