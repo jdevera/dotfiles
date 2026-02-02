@@ -10,6 +10,12 @@ theme = Catppuccin Mocha
 font-family = FantasqueSansM Nerd Font Mono
 font-size = 19
 
+# Grapheme Width
+# Use legacy (wcswidth-style) width calculation to match what bash expects.
+# This fixes prompt display issues when navigating history with Nerd Font icons.
+# Note: Changes require a new terminal - existing terminals keep their setting.
+grapheme-width-method = legacy
+
 # Window
 # Makes the titlebar blend with terminal background
 macos-titlebar-style = transparent
@@ -50,10 +56,7 @@ quick-terminal-autohide = true
 #   ssh-env      - Falls back to TERM=xterm-256color if terminfo installation fails,
 #                  ensuring compatibility with any remote host.
 #
-# Why no-title: Starship (my prompt) overwrites PS1 entirely, which wipes out any
-# title escape sequences Ghostty's shell integration adds. Instead, window titles
-# are handled via a custom Starship module [custom.window_title] in starship.toml.
-# This also works around Ghostty's lack of title push/pop (CSI 22/23) support for
-# programs using alternate screen mode (git diff, less, vim, etc.).
-# See: https://github.com/ghostty-org/ghostty/discussions/2667
-shell-integration-features = cursor,sudo,no-title,ssh-terminfo,ssh-env
+# Title handling: Ghostty's preexec sets the title to the running command (vim, less, etc.),
+# and Starship's [custom.window_title] module resets it to the directory when the prompt renders.
+# These complement each other - preexec fires before a command, Starship fires after.
+shell-integration-features = cursor,sudo,title,ssh-terminfo,ssh-env
