@@ -60,3 +60,15 @@ quick-terminal-autohide = true
 # and Starship's [custom.window_title] module resets it to the directory when the prompt renders.
 # These complement each other - preexec fires before a command, Starship fires after.
 shell-integration-features = cursor,sudo,title,ssh-terminfo,ssh-env
+
+# Splits
+# All split settings are hot-reloadable (Cmd+Shift+,), no restart needed.
+# Color of the divider line between split panes. Hex (#RRGGBB) or X11 color name.
+# If unset, auto-derived from background (often invisible on dark themes).
+split-divider-color = #6c7086
+# Opacity of unfocused splits (0.15–1.0). Lower = more dimming. 1.0 = no dimming.
+# Default: 0.7
+unfocused-split-opacity = 0.7
+# Color overlaid on unfocused splits at (1 - opacity) strength. If unset, uses the
+# terminal background color. Set to a contrasting color to tint inactive splits.
+unfocused-split-fill = #45475a
