@@ -58,19 +58,9 @@ setw -g window-status-bell-style fg=yellow,bold
 # Mouse configuration {{ "{{{" }}
 # =======================
 
-
-# If on, tmux captures the mouse and allows panes to be resized by dragging on
-# their borders.
-#set-option -g mouse-resize-pane   on
-
-# If on, tmux captures the mouse and when a window is split into multiple panes
-# the mouse may be used to select the current pane.  The mouse click is also
-# passed through to the application as normal.
-#set-option -g mouse-select-pane   on
-
-# If on, clicking the mouse on a window name in the status line will select
-# that window.
-#set-option -g mouse-select-window on
+# Enable mouse support: scroll to enter copy mode, click to select panes/windows,
+# drag to resize panes. Works over SSH.
+set -g mouse on
 
 
 
