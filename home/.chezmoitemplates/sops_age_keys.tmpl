@@ -1,0 +1,8 @@
+{{- $keys := list
+    "op://dotfiles/SOPS Age key - homelab/private-key"
+-}}
+{{- range $i, $key := $keys -}}
+{{- if $i }}
+{{ end -}}
+{{- onepasswordRead $key -}}
+{{- end -}}
