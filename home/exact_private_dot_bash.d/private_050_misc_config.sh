@@ -165,7 +165,28 @@ export LESS_TERMCAP_us=$'\E[04;38;5;146m' # begin underline
 
 if has_command starship
 then
+   # Use ASCII-safe prompt config for terminals with Unicode rendering issues
+   # See: https://github.com/starship/starship/issues/6923
+   if [[ "$TERM_PROGRAM" == "ghostty" ]]; then
+      export STARSHIP_CONFIG="$HOME/.config/starship-ascii-prompt.toml"
+   fi
    eval -- "$(starship init bash --print-full-init)"
+   # For ASCII prompt: capture and format exit status for starship custom modules
+   # Must be prepended AFTER starship init (which sets its own PROMPT_COMMAND)
+   if [[ "$TERM_PROGRAM" == "ghostty" ]]; then
+      __starship_exit_status_hook() {
+         local exit_status=$?
+         if [[ $exit_status -eq 0 ]]; then
+            export __STARSHIP_EXIT_OK=1
+            export __STARSHIP_EXIT_FMT=""
+         else
+            export __STARSHIP_EXIT_OK=""
+            export __STARSHIP_EXIT_FMT=$(printf "[%3d]" "$exit_status")
+         fi
+         return $exit_status
+      }
+      PROMPT_COMMAND="__starship_exit_status_hook;${PROMPT_COMMAND}"
+   fi
 else
    echo "No starship, this is the path: $PATH"
 fi
