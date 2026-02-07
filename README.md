@@ -1,68 +1,99 @@
-# Jacobo de Vera's Dot Files
+# 🏠 Jacobo's Dotfiles
 
-These are the configuration files I want to have in every Linux box I use.
+> Accumulated shell wisdom, bad habits, and strong opinions since 2010
 
-## Installation
+My config files for Linux and macOS. Managed with the wonderful
+[chezmoi](https://www.chezmoi.io/). Seriously, if you're not using it,
+you're missing out.
 
-Installation instructions come first because it is what I need most of the
-time, but if you are not me, please read on :) 
+## ⚡ Installation
 
-    sh -c "$(curl -fsLS jdevera.casa/install)"
+For me (hi, future me!):
 
-## If you are not me
+```sh
+sh -c "$(curl -fsLS jdevera.casa/install)"
+```
 
-You probably do not want to clone this repo and run it. You probably don't want
-to do that with anybody's dotfile repo. It's in this type of repos' own nature
-to be highly opnionated and tailored to the needs of the individual keeping it.
+## ⚠️ For Everyone Else
 
-But there is a lot to learn from exploring. So please, explore away! And if you
-have questions, open an issue.
+**Don't.** Seriously.
 
-## Management
+Dotfiles are like underwear: highly personal, and you probably don't want mine.
+If you clone and run this, you will get *my* shell, *my* keybindings, *my* aliases,
+and a very confused terminal. A friend tried this once. It did not end well.
 
-I use [chezmoi](https://www.chezmoi.io/) to manage my dotfiles.
+But! Feel free to explore, steal ideas, and get inspired to start your own.
+That's the spirit of dotfiles repos. Questions? Open an issue.
 
-This repository is a mix of configuration files, templates to generate
-configuration files, and script to setup things in a new machine.
+## 🛠️ Common Commands
 
+| Command | What it does |
+|---------|--------------|
+| `chezmoi apply` | Make it so |
+| `chezmoi diff` | What would change? |
+| `chezmoi update` | Pull + apply |
+| `chezmoi cd` | Teleport to source dir |
 
-### Bash configuration
+---
 
-My bash configuration files live in the _.bash.d_ directory.
+## 🐚 Shell
 
-My _.bashrc_ sources configuration files in this order:
+### Bash
 
- * Every file under _.bash.d/local/before_
- * Every file under _.bash.d_
- * Every file under _.bash.d/local/after_
+Config lives in `.bash.d/`, loaded in order:
+1. `.bash.d/local/before/*` (machine-specific, untracked)
+2. `.bash.d/*` (the good stuff)
+3. `.bash.d/local/after/*` (machine-specific overrides)
 
-Contents of _.bash.d/local_ are not tracked by `chezmoi`, so this is the place to
-add configuration files that are specific for the current machine.
+*"But isn't sourcing multiple files slow?"* I tested concatenating everything
+into one file in 2026. The difference was negligible. Modularity wins.
 
-### Vim configuration
+To apply changes: `chezmoi apply`, then `rlsh` to reload in the current shell.
 
-I am using [Junegunn Choi's Vim-Plug](https://github.com/junegunn/vim-plug) to
-manage my Vim plug-ins and keep them up to date.
+### Starship Prompt ✨
 
-With Vim-Plug, I only have to point, in my _.vimrc_ file, to the git
-repositories of all the Vim add-ons I want to have installed and it takes care
-or the rest. Vim-Plug clones each add-on under its own directory and adds it
-to Vim's runtime path.
+Fancy prompt with [Starship](https://starship.rs/), Catppuccin colors, and
+Nerd Font icons.
 
-All add-ons in the official Vim's website are actively mirrored in github by
-the [Vim-Scripts.org](http://vim-scripts.org/) project. This means Vim-Plug
-can be used to install any add-on published in the official site.
+Two flavors generated from one template:
+- **Full Unicode:** Hearts 󰋑, fancy arrows ❯, the works
+- **ASCII-safe:** For terminals that can't handle the truth
+  (I'm looking at you Ghostty 👀. I love you, but why?!)
 
-### Emacs configuration
+The shell auto-detects and switches configs.
 
-> [!NOTE]
-> I have not used Emacs in years, this config is probably broken.
+---
 
-I use [el-get](https://github.com/dimitri/el-get) to manage all the Emacs
-packages that I want installed.
+## 📝 Editors
 
-With the right configuration, I simply have to open Emacs and the packages
-will be installed if they are not already.
+### Vim
+
+Plugins managed with [vim-plug](https://github.com/junegunn/vim-plug).
+Point at repos, it handles the rest.
+
+### Emacs
+
+> 💀 *Haven't touched this in years. Here be dragons.*
+
+Uses [el-get](https://github.com/dimitri/el-get). Probably broken.
+
+---
+
+## 🖥️ Terminal Emulators
+
+### iTerm2 (macOS)
+
+Prefs sync to `~/.config/iterm2/settings/`.
+
+**Gotcha:** Sync is one-way while running. To apply dotfile changes:
+1. Quit iTerm2
+2. `chezmoi apply`
+3. Reopen
+
+### Ghostty
+
+Has Unicode rendering quirks, so the shell auto-switches to ASCII-safe prompt.
+Config is just a file, no weird sync dance needed.
 
 <!--
 vim:linebreak:textwidth=78:spell:
