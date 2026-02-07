@@ -1,0 +1,11 @@
+{{- /* SOPS age keys from 1Password */ -}}
+{{- $keys := list
+    "op://dotfiles/SOPS Age key - homelab/private-key"
+-}}
+
+{{- /* Output keys, one per line */ -}}
+{{- range $i, $key := $keys -}}
+{{- if $i }}
+{{ end -}}
+{{- onepasswordRead $key -}}
+{{- end -}}
