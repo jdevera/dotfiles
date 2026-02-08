@@ -1,0 +1,61 @@
+#!/usr/bin/env bash
+
+# dotfiles.bashmarks hash: {{ include "dot_config/bashmarks/dotfiles.bashmarks.tmpl" | sha256sum }}
+
+# {{ template "dotfiles_bashlib.sh" . }}
+
+# Help shellcheck identify the above include
+true || source ../.chezmoitemplates/dotfiles_bashlib.sh
+
+# This script removes duplicate entries from local.bashmarks that already exist
+# in dotfiles.bashmarks. It runs whenever dotfiles.bashmarks changes.
+
+dot::chezmoi_script_start "deduplicate bashmarks"
+
+DOTFILES="$HOME/.config/bashmarks/dotfiles.bashmarks"
+LOCAL="$HOME/.config/bashmarks/local.bashmarks"
+
+if [[ ! -f "$LOCAL" ]]; then
+    dot::chezmoi_script_skipped "no local.bashmarks file"
+fi
+
+if [[ ! -f "$DOTFILES" ]]; then
+    dot::chezmoi_script_skipped "no dotfiles.bashmarks file"
+fi
+
+# Build list of bookmark names from dotfiles (second field after |)
+dotfiles_names=$(grep -v '^#' "$DOTFILES" 2>/dev/null | grep -v '^$' | cut -d'|' -f2)
+
+if [[ -z "$dotfiles_names" ]]; then
+    dot::chezmoi_script_skipped "no bookmarks in dotfiles.bashmarks"
+fi
+
+# Process line by line, preserving order and context
+dot::step::start "remove duplicates from local.bashmarks"
+tmpfile=$(mktemp)
+removed=0
+
+while IFS= read -r line || [[ -n "$line" ]]; do
+    # Keep empty lines
+    if [[ -z "$line" ]]; then
+        echo "$line" >> "$tmpfile"
+        continue
+    fi
+    # Keep comments and #include lines
+    if [[ "$line" == \#* ]]; then
+        echo "$line" >> "$tmpfile"
+        continue
+    fi
+    # Check if bookmark name exists in dotfiles
+    name=$(echo "$line" | cut -d'|' -f2)
+    if echo "$dotfiles_names" | grep -qx "$name"; then
+        ((removed++))  # Skip this line (duplicate)
+    else
+        echo "$line" >> "$tmpfile"  # Keep unique entries
+    fi
+done < "$LOCAL"
+
+mv "$tmpfile" "$LOCAL"
+dot::step::done
+
+dot::success "removed $removed duplicate entries from local.bashmarks"

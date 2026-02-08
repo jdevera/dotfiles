@@ -1,0 +1,19 @@
+#!/bin/bash
+# Ensure local.bashmarks includes dotfiles.bashmarks
+
+INCLUDE_LINE='#include ~/.config/bashmarks/dotfiles.bashmarks'
+
+# Read current contents (empty if file doesn't exist)
+current=$(cat)
+
+# Check if include line already exists
+if echo "$current" | grep -qF "$INCLUDE_LINE"; then
+    # Already has the include, output as-is
+    echo "$current"
+else
+    # Add include at the top
+    echo "$INCLUDE_LINE"
+    if [ -n "$current" ]; then
+        echo "$current"
+    fi
+fi

@@ -1,0 +1,33 @@
+#!/usr/bin/env bash
+
+# {{ template "dotfiles_bashlib.sh" . }}
+
+# Help shellcheck identify the above include
+true || source ../.chezmoitemplates/dotfiles_bashlib.sh
+
+# This script migrates ~/.bashmarks to the new XDG-style location
+# It only moves the file; deduplication happens in a separate run_onchange_after_ script
+
+dot::chezmoi_script_start "migrate bashmarks to XDG location"
+
+OLD_FILE="$HOME/.bashmarks"
+NEW_DIR="$HOME/.config/bashmarks"
+NEW_FILE="$NEW_DIR/local.bashmarks"
+
+if [[ ! -f "$OLD_FILE" ]]; then
+    dot::chezmoi_script_skipped "no ~/.bashmarks file to migrate"
+fi
+
+if [[ -f "$NEW_FILE" ]]; then
+    dot::chezmoi_script_skipped "local.bashmarks already exists, migration already done"
+fi
+
+dot::step::start "create bashmarks config directory"
+mkdir -p "$NEW_DIR" || dot::step::fatal
+dot::step::done
+
+dot::step::start "move ~/.bashmarks to new location"
+mv "$OLD_FILE" "$NEW_FILE" || dot::step::fatal
+dot::step::done
+
+dot::success "migrated ~/.bashmarks to $NEW_FILE"
