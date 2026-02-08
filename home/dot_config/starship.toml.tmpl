@@ -1,1 +1,1 @@
-{{- template "starship.toml.tmpl" (dict "ascii_prompt" false) -}}
+{{- template "starship.toml.tmpl" (merge (dict "ascii_prompt" false) .) -}}

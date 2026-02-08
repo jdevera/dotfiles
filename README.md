@@ -62,6 +62,28 @@ Two flavors generated from one template:
 
 The shell auto-detects and switches configs.
 
+**Layered config architecture:**
+
+```
+nerd-font-symbols.toml   (preset from starship.rs, stored in repo)
+        ↓ merge
+starship.yml             (custom: palettes, character symbols, modules)
+        ↓ merge
+starship.toml            (final output)
+```
+
+Nerd Font symbols live in a separate file so they won't get corrupted
+if tools mangle the template. Customizations are in YAML, merged at apply time.
+
+**Checking for preset updates:**
+
+```sh
+./tools/starship-diff
+```
+
+Compares your config against the upstream nerd-font-symbols preset.
+Shows new symbols you might want to add.
+
 ---
 
 ## 📝 Editors

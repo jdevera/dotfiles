@@ -1,0 +1,216 @@
+#!/usr/bin/env -S uv run --script
+# /// script
+# requires-python = ">=3.11"
+# dependencies = ["click"]
+# ///
+"""
+starship-diff - Compare starship config against the upstream nerd-font-symbols preset
+
+Compares only the keys that exist in the preset (symbol definitions).
+Extra keys in your config (palettes, custom modules, etc.) are ignored.
+"""
+
+import sys
+import tempfile
+import tomllib
+import urllib.request
+from pathlib import Path
+
+import click
+
+PRESET_URL = "https://starship.rs/presets/toml/nerd-font-symbols.toml"
+DEFAULT_CONFIG = Path.home() / ".config/starship.toml"
+
+
+def flatten_dict(d: dict, parent_key: str = "", sep: str = ".") -> dict:
+    """Flatten nested dict to dot notation keys."""
+    items = []
+    for k, v in sorted(d.items()):
+        new_key = f"{parent_key}{sep}{k}" if parent_key else k
+        if isinstance(v, dict):
+            items.extend(flatten_dict(v, new_key, sep).items())
+        else:
+            items.append((new_key, v))
+    return dict(items)
+
+
+def format_value(v) -> str:
+    """Format a value for display."""
+    if isinstance(v, str):
+        return f'"{v}"'
+    elif isinstance(v, bool):
+        return "true" if v else "false"
+    elif isinstance(v, list):
+        return "[" + ", ".join(format_value(x) for x in v) + "]"
+    else:
+        return str(v)
+
+
+def unicode_annotation(s: str) -> str:
+    """Create a Unicode annotation showing codepoints for non-ASCII chars."""
+    if not isinstance(s, str):
+        return ""
+    codepoints = [f"U+{ord(c):04X}" for c in s if ord(c) > 127]
+    return f"({', '.join(codepoints)})" if codepoints else ""
+
+
+def download_preset(dest: Path, url: str) -> None:
+    """Download the preset from a URL."""
+    click.secho("==> ", fg="blue", nl=False)
+    click.echo(f"Downloading preset from {url}...")
+    req = urllib.request.Request(url, headers={"User-Agent": "starship-diff/1.0"})
+    with urllib.request.urlopen(req) as response:
+        dest.write_bytes(response.read())
+
+
+def load_toml(path: Path) -> dict:
+    """Load and parse a TOML file."""
+    with open(path, "rb") as f:
+        return tomllib.load(f)
+
+
+def show_diff(local_flat: dict, upstream_flat: dict) -> bool:
+    """
+    Show differences, considering only keys from upstream (preset).
+    Extra keys in local are ignored.
+    Returns True if different.
+    """
+    preset_keys = set(upstream_flat.keys())
+
+    new_in_upstream = []
+    changed = []
+
+    for key in sorted(preset_keys):
+        in_local = key in local_flat
+        upstream_val = upstream_flat[key]
+
+        if not in_local:
+            new_in_upstream.append((key, upstream_val))
+        elif local_flat[key] != upstream_val:
+            changed.append((key, local_flat[key], upstream_val))
+
+    if not new_in_upstream and not changed:
+        click.secho("✓ ", fg="green", nl=False)
+        click.echo("No differences - config has all current preset symbols")
+        return False
+
+    click.secho("△ ", fg="yellow", nl=False)
+    click.echo("Differences found:\n")
+
+    if new_in_upstream:
+        click.secho(f"New in upstream preset ({len(new_in_upstream)}):", bold=True)
+        for key, val in new_in_upstream:
+            formatted = format_value(val)
+            annotation = unicode_annotation(val) if isinstance(val, str) else ""
+            click.secho("  + ", fg="green", nl=False)
+            click.echo(f"{key} = {formatted} ", nl=False)
+            click.secho(annotation, dim=True)
+        click.echo()
+
+    if changed:
+        click.secho(f"Changed in upstream preset ({len(changed)}):", bold=True)
+        for key, local_val, upstream_val in changed:
+            local_formatted = format_value(local_val)
+            upstream_formatted = format_value(upstream_val)
+            local_annotation = unicode_annotation(local_val) if isinstance(local_val, str) else ""
+            upstream_annotation = unicode_annotation(upstream_val) if isinstance(upstream_val, str) else ""
+            click.secho("  ~ ", fg="cyan", nl=False)
+            click.echo(key)
+            click.secho("      local:    ", fg="red", nl=False)
+            click.echo(f"{local_formatted} ", nl=False)
+            click.secho(local_annotation, dim=True)
+            click.secho("      upstream: ", fg="green", nl=False)
+            click.echo(f"{upstream_formatted} ", nl=False)
+            click.secho(upstream_annotation, dim=True)
+        click.echo()
+
+    return True
+
+
+@click.command()
+@click.argument("config", type=click.Path(exists=True, path_type=Path), required=False)
+@click.option(
+    "-u", "--upstream",
+    help="Preset file or URL (default: starship.rs nerd-font-symbols preset)",
+)
+@click.option(
+    "-k", "--keep",
+    is_flag=True,
+    help="Keep downloaded preset file",
+)
+@click.option(
+    "--no-color",
+    is_flag=True,
+    help="Disable colored output",
+)
+def main(config: Path | None, upstream: str | None, keep: bool, no_color: bool):
+    """Compare starship CONFIG against the upstream nerd-font-symbols preset.
+
+    Only keys from the preset are compared. Extra keys in your config
+    (palettes, custom modules, format strings) are ignored.
+
+    \b
+    Examples:
+      starship-diff                              # Compare default config
+      starship-diff ~/.config/starship.toml      # Compare specific config
+      starship-diff -u ./preset.toml config.toml # Use local preset file
+    """
+    # Handle --no-color by setting environment variable Click respects
+    if no_color:
+        import os
+        os.environ["NO_COLOR"] = "1"
+
+    # Determine config file
+    config_file = config if config else DEFAULT_CONFIG
+    if not config_file.exists():
+        raise click.ClickException(f"Config file not found: {config_file}")
+
+    # Set up temp directory for downloads
+    output_dir = Path(tempfile.mkdtemp(prefix="starship-diff."))
+    cleanup = not keep
+
+    try:
+        # Determine preset source
+        if upstream:
+            if upstream.startswith(("http://", "https://")):
+                preset_file = output_dir / "upstream-preset.toml"
+                download_preset(preset_file, upstream)
+                preset_source = upstream
+            else:
+                preset_file = Path(upstream)
+                if not preset_file.exists():
+                    raise click.ClickException(f"Preset file not found: {preset_file}")
+                preset_source = str(preset_file)
+        else:
+            preset_file = output_dir / "upstream-preset.toml"
+            download_preset(preset_file, PRESET_URL)
+            preset_source = PRESET_URL
+
+        click.secho("==> ", fg="blue", nl=False)
+        click.echo("Comparing:")
+        click.secho("    local:    ", fg="red", nl=False)
+        click.echo(config_file)
+        click.secho("    upstream: ", fg="green", nl=False)
+        click.echo(f"{preset_source}\n")
+
+        config_data = load_toml(config_file)
+        preset_data = load_toml(preset_file)
+        config_flat = flatten_dict(config_data)
+        preset_flat = flatten_dict(preset_data)
+
+        has_diff = show_diff(config_flat, preset_flat)
+
+        if keep:
+            click.secho("==> ", fg="blue", nl=False)
+            click.echo(f"Preset saved to: {preset_file}")
+
+        sys.exit(1 if has_diff else 0)
+
+    finally:
+        if cleanup and output_dir.exists():
+            import shutil
+            shutil.rmtree(output_dir)
+
+
+if __name__ == "__main__":
+    main()
