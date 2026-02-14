@@ -151,3 +151,6 @@
     expandtab = true
     refreshonfocus = true
     resizebrowsercolumns = true
+
+[submodule]
+    recurse = true
