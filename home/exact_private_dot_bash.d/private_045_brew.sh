@@ -67,4 +67,26 @@ fi
 #INFOPATH="$($BREW_PATH --prefix)/share/info:$INFOPATH"
 #export MANPATH INFOPATH
 
+# Wrapper: redirect `brew update <pkg>` to `brew upgrade <pkg>` {{{
+# brew update only updates brew itself and doesn't take formula names.
+# If positional args are given, the user almost certainly meant `brew upgrade`.
+brew() {
+    if [[ "$1" == "update" && $# -gt 1 ]]; then
+        local has_positional=false
+        for arg in "${@:2}"; do
+            if [[ "$arg" != -* ]]; then
+                has_positional=true
+                break
+            fi
+        done
+        if $has_positional; then
+            echo "brew update doesn't take formula names. Running 'brew upgrade ${*:2}' instead." >&2
+            command brew upgrade "${@:2}"
+            return
+        fi
+    fi
+    command brew "$@"
+}
+# }}}
+
 unset BREW_PATH

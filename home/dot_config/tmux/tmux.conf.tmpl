@@ -108,6 +108,21 @@ set -g default-terminal "screen-256color"
 # Enable truecolor where available
 set-option -ga terminal-overrides ",xterm-256color:Tc"
 
+# Allow modified key sequences (like Shift+Enter) to pass through to
+# applications instead of being swallowed by tmux. Without this, tmux treats
+# Shift+Enter the same as Enter, breaking apps that rely on the distinction
+# (e.g. Claude Code uses Shift+Enter for newline vs Enter for submit).
+set -s extended-keys always
+
+# Use the CSI u encoding for extended keys (e.g. ESC[13;2u for Shift+Enter)
+# instead of the default xterm modifyOtherKeys format (ESC[27;2;13~), which
+# apps like Claude Code don't recognise.
+set -s extended-keys-format csi-u
+
+# Tell tmux that the outer terminal supports extended keys, so tmux knows it
+# can forward CSI u-encoded sequences from the terminal.
+set -as terminal-features 'xterm*:extkeys'
+
 # }}}
 # Key Bindings {{ "{{{" }}
 # ===============

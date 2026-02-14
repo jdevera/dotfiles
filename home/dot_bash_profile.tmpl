@@ -1,0 +1,38 @@
+#!/bin/bash
+# bash_profile vs bashrc:
+# - bash_profile: sourced for LOGIN shells (SSH, Terminal.app on macOS, console login)
+# - bashrc: sourced for INTERACTIVE NON-LOGIN shells (running `bash` from existing shell)
+# This file sources bashrc so all settings work regardless of shell type
+
+{{ if .is_macos -}}
+# ------------------------------------------------------------------------------
+# Locale Configuration
+# ------------------------------------------------------------------------------
+# My macOS is configured with AppleLocale=en_ES (English language, Spain region)
+# because I live in Spain but prefer English. Problem is, there's no en_ES Unix
+# locale on macOS. The terminal tries to derive locale settings from this, fails,
+# and ends up setting LC_CTYPE=UTF-8, which is invalid (locales need the full
+# format like en_IE.UTF-8, not just UTF-8). This causes bash to complain:
+#
+#   bash: warning: setlocale: LC_COLLATE: cannot change locale (): No such file
+#
+# The fix: explicitly set a valid locale. I use en_IE.UTF-8 (English/Ireland)
+# because it gives me:
+#   - British English spelling (colour, metre, etc.)
+#   - Metric system
+#   - Euro currency symbol
+#   - 24-hour time format
+#   - dd/MM/yyyy date format
+#
+# Useful commands:
+#   defaults read -g AppleLocale      # Check macOS locale setting
+#   locale -a | grep en_              # List available English locales
+#   locale                            # Verify current settings
+# ------------------------------------------------------------------------------
+export LANG=en_IE.UTF-8
+export LC_ALL=en_IE.UTF-8
+
+{{ end -}}
+# shellcheck source=/dev/null
+[[ -s $HOME/.bashrc ]] && source "$HOME/.bashrc"
+
