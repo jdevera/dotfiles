@@ -4,6 +4,10 @@
 [diff]
     exclude = ["scripts"]
 
+[interpreters.py]
+    command = "uv"
+    args = ["--quiet", "run", "--script"]
+
 # chezmoi provides a hooks.read-source-state.pre hook that allows you to modify
 # your system after chezmoi init has cloned your dotfile repo but before chezmoi
 # has read the source state. This is the perfect time to install your password
