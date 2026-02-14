@@ -1,0 +1,4 @@
+# Managed by chezmoi — do not edit manually
+# Local/work SSH config goes in ~/.ssh/config.d/
+
+Include ~/.ssh/config.d/*

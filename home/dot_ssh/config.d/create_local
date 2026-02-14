@@ -1,0 +1,2 @@
+# Machine-specific SSH config — not managed by chezmoi
+# Edit this file directly; chezmoi will not overwrite it.

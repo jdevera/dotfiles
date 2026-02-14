@@ -70,14 +70,19 @@ Headless detection - systems that should NOT have GUI packages
 {{-     end -}}
 {{- end }}
 
-{{- /* Work machine vs personal machine */ -}}
-{{- $work_hosts := list "nerith" -}}
+{{- /* Work machine vs personal machine
+     Priority: marker file is definitive, then fall back to hostname list */ -}}
 {{- $is_work := false -}}
-{{- range $work_hosts -}}
-{{-     if eq . $.chezmoi.hostname -}}
-{{-         $is_work = true -}}
-{{-         break -}}
+{{- if stat (joinPath .chezmoi.homeDir ".config/chezmoi-work/.is-work") -}}
+{{-   $is_work = true -}}
+{{- else -}}
+{{-   $work_hosts := list "nerith" -}}
+{{-   range $work_hosts -}}
+{{-     if eq . $hostname -}}
+{{-       $is_work = true -}}
+{{-       break -}}
 {{-     end -}}
+{{-   end -}}
 {{- end -}}
 
 {{- /*

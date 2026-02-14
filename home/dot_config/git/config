@@ -7,6 +7,7 @@
     path = ~/.config/git/config.delta
     #path = ~/.config/git/config.diff-so-fancy
     path = ~/.config/git/config.user
+    path = ~/.config/git/config.work
     path = ~/.config/git/config.local
 
 [init]
