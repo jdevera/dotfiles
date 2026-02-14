@@ -243,7 +243,7 @@ if has('win32') || has('win64')
     set guifont=Lucida\ Console:h12
 elseif has('gui_macvim')
     set macligatures
-    set guifont=FiraCodeNFM-Reg:h16
+    set guifont=FantasqueSansMNFM-Regular:h18
 elseif has('unix')
     set guifont=Monaco\ 10
 endif
