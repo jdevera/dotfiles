@@ -1,0 +1,6 @@
+#{{ if .is_macos }}
+[".bash.d/200_tool_iterm2_shell_integration.sh"]
+type = "file"
+url = "https://raw.githubusercontent.com/gnachman/iTerm2/master/Resources/shell_integration/iterm2_shell_integration.bash"
+refreshPeriod = "730h"
+#{{ end -}}
