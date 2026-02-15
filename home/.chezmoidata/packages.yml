@@ -21,6 +21,7 @@ packages:
       - macvim
       - tox
       - colout
+      - zoxide
     interactive:
       - jordanbaird-ice
       - font-fantasque-sans-mono-nerd-font
@@ -45,4 +46,5 @@ packages:
     - git-delta
     - colout
     - tox
+    - zoxide
   interactive: []

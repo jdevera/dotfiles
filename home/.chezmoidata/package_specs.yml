@@ -78,3 +78,7 @@ softwarePackages:
     brew: yq
     eget:
       source: mikefarah/yq
+  zoxide:
+    brew: zoxide
+    eget:
+      source: ajeetdsouza/zoxide
