@@ -1,0 +1,75 @@
+#!/bin/zsh
+#############################################################################
+#
+# FILE:         040_misc_aliases.zsh
+#
+# DESCRIPTION:  Shell aliases
+#
+#############################################################################
+
+
+alias myalias='showaliases $DZSH/* $DZSH/local/after/* $DZSH/local/before/*'
+alias rlsh='reloadsh'
+
+alias vish='edot $DZSH'
+alias vishaf='edot $DZSH/local/after'
+alias gvish='gvim $DZSH'
+alias vivi='vim $HOME/.vimrc'
+alias gvivi='gvim $HOME/.vimrc'
+alias vif='vim $(fzf -x)'
+
+alias ..='cd ..'
+alias ..2='cd ../..'
+alias ..3='cd ../../..'
+alias ..4='cd ../../../..'
+alias ..5='cd ../../../../..'
+alias '..?'='show_parent_dirs'
+alias p=pwd
+
+alias du1='du --max-depth 1'
+alias dumd='du --max-depth'
+
+alias xff='export TERM=xterm-256color'
+
+alias ip0='getip4 eth0'
+
+alias ud='export DISPLAY=:0.0'
+
+alias agi='sudo apt-get install'
+
+alias l=ls
+alias sl=ls
+alias sls=ls
+
+alias cp="rsync -avz"
+
+alias git-root='cd "$(git rev-parse --show-toplevel)"'
+alias g=git
+alias tit=git
+
+alias mc='TERM=xterm-256color mc'
+alias mux=tmuxinator
+
+alias ag='ag --color-path="1;38;5;201" --color-line-number="1;38;5;81" --color-match="48;5;214;38;5;0"'
+
+{{ if eq .chezmoi.os "darwin" -}}
+
+# MacOS only aliases
+# ---------------------------------------------------------------------------
+alias ls='ls -G'
+# ---------------------------------------------------------------------------
+
+{{ else if eq .chezmoi.os "linux" -}}
+
+# Linux only aliases
+# ---------------------------------------------------------------------------
+alias ls='ls --color=auto'
+alias go=xdg-open  # Legacy: from when it was gnome-open, try to get used to xo
+alias xo=xdg-open
+alias start=xdg-open
+
+alias pbcopy='xsel --clipboard --input'
+alias pbpaste='xsel --clipboard --output'
+# ---------------------------------------------------------------------------
+
+{{ end -}}

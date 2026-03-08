@@ -4,6 +4,8 @@
 .vim/spell/*
 .bash.d/local/*
 !.bash.d/local/README.md
+.config/zsh/zsh.d/local/*
+!.config/zsh/zsh.d/local/README.md
 
 # MacOS only files
 {{ if ne .chezmoi.os "darwin" }}

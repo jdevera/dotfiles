@@ -1,0 +1,21 @@
+# ~/.zshrc: executed by zsh for interactive shells
+#
+# This is a thin loader: it sources the bootstrap which handles
+# the modular config under ~/.config/zsh/zsh.d/
+
+# Bootstrap config
+[[ -f ~/.config/zsh/zsh.d/bootstrap.zsh ]] && source ~/.config/zsh/zsh.d/bootstrap.zsh
+
+dot::timing::setup
+
+dot::source_zsh_d                 # Load all zsh.d files
+
+# Additional files that I generally want to source
+dot::source_file ~/.fzf.zsh
+
+# Timing teardown
+dot::timing::teardown
+
+# -----------------------------------------------------------------------------
+# This is where all sort of random commands will append their stuff
+# -----------------------------------------------------------------------------
