@@ -86,6 +86,7 @@ $localip\
 $shlvl\
 $singularity\
 $kubernetes\
+$shell\
 $directory\
 $vcsh\
 $fossil_branch\
@@ -164,7 +165,6 @@ $line_break\
 $jobs\
 $battery\
 $time\
-$shell\
 ${custom.exit_ok}\
 ${custom.exit_err}\
 $character"""
@@ -172,6 +172,99 @@ $character"""
 {{ else -}}
 # Starship config with full Unicode/Nerd Font prompt symbols
 # For terminals with Unicode rendering issues, use starship-ascii-prompt.toml instead
+
+# Custom format: $shell before $directory so the shell indicator leads the prompt
+format = """
+${custom.window_title}\
+$username\
+$hostname\
+$localip\
+$shlvl\
+$singularity\
+$kubernetes\
+$shell\
+$directory\
+$vcsh\
+$fossil_branch\
+$fossil_metrics\
+$git_branch\
+$git_commit\
+$git_state\
+$git_metrics\
+$git_status\
+$hg_branch\
+$pijul_channel\
+$docker_context\
+$package\
+$c\
+$cmake\
+$cobol\
+$daml\
+$dart\
+$deno\
+$dotnet\
+$elixir\
+$elm\
+$erlang\
+$fennel\
+$gleam\
+$golang\
+$gradle\
+$haskell\
+$haxe\
+$helm\
+$java\
+$julia\
+$kotlin\
+$lua\
+$nim\
+$nodejs\
+$ocaml\
+$opa\
+$perl\
+$php\
+$pulumi\
+$purescript\
+$python\
+$quarto\
+$raku\
+$rlang\
+$red\
+$ruby\
+$rust\
+$scala\
+$solidity\
+$swift\
+$terraform\
+$typst\
+$vlang\
+$vagrant\
+$zig\
+$buf\
+$guix_shell\
+$nix_shell\
+$conda\
+$meson\
+$spack\
+$memory_usage\
+$aws\
+$gcloud\
+$openstack\
+$azure\
+$direnv\
+$env_var\
+$crystal\
+${custom.chezmoi}\
+$sudo\
+$cmd_duration\
+$line_break\
+$jobs\
+$battery\
+$time\
+$status\
+$os\
+$container\
+$character"""
 
 {{ end -}}
 {{ toToml $base }}

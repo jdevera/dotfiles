@@ -8,6 +8,11 @@ starship:
 
   # Custom module settings (merged into base preset modules)
   custom_modules:
+    shell:
+      disabled: false
+      bash_indicator: "[🅱 ](bold peach)"
+      zsh_indicator: "[🅩 ](bold sapphire)"
+      format: "$indicator "
     directory:
       truncation_symbol: "…/"
       truncation_length: 4
