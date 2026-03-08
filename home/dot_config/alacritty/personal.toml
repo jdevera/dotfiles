@@ -1,0 +1,100 @@
+# Alacritty Configuration — Personal Layer
+#
+# Note: If fonts appear too bold on macOS, run:
+#   defaults write org.alacritty AppleFontSmoothing -int 0
+# Then restart Alacritty.
+# See: https://github.com/alacritty/alacritty/issues/7333
+
+[general]
+live_config_reload = true
+
+[window]
+opacity = 0.92
+blur = true
+padding = { x = 8, y = 8 }
+decorations = "Full"
+dynamic_title = false
+option_as_alt = "OnlyLeft"
+
+[scrolling]
+history = 50000
+multiplier = 3
+
+[font]
+size = 20.0
+
+[font.normal]
+family = "FantasqueSansM Nerd Font Mono"
+
+[font.bold]
+family = "FantasqueSansM Nerd Font Mono"
+style = "Regular"
+
+[font.italic]
+family = "FantasqueSansM Nerd Font Mono"
+style = "Italic"
+
+[font.bold_italic]
+family = "FantasqueSansM Nerd Font Mono"
+style = "Bold Italic"
+
+[cursor]
+blink_interval = 0
+
+[cursor.style]
+shape = "Block"
+blinking = "Off"
+
+[colors]
+draw_bold_text_with_bright_colors = false
+
+[colors.primary]
+background = "#111b2c"
+foreground = "#f8f8f2"
+
+[colors.cursor]
+text = "#282a36"
+cursor = "#f8f8f2"
+
+[selection]
+save_to_clipboard = true
+
+[keyboard]
+bindings = [
+  # Make Shift+Enter send a distinct sequence so Claude Code recognizes it as newline, not submit
+  { key = "Return", mods = "Shift", chars = "\u001b[13;2u" }
+]
+
+[hints]
+enabled = [
+  # Standard URLs (http, https, file)
+  { regex = "(https?://|file://)[^\u0000-\u001F\u007F-\u009F<>\"\\s{-}\\^⟨⟩`]+", hyperlinks = true, command = "open", post_processing = true, persist = false, mouse = { enabled = true, mods = "None" }, binding = { key = "U", mods = "Control|Shift" } },
+  # Obsidian URLs
+  { regex = "obsidian://[\\w\\-._~:/?#\\[\\]@!$&'()*+,;=%]+", hyperlinks = true, command = "open", post_processing = true, persist = false, mouse = { enabled = true, mods = "None" }, binding = { key = "O", mods = "Control|Shift" } },
+  # Todoist URLs
+  { regex = "todoist://[\\w\\-._~:/?#\\[\\]@!$&'()*+,;=%]+", hyperlinks = true, command = "open", post_processing = true, persist = false, mouse = { enabled = true, mods = "None" }, binding = { key = "T", mods = "Control|Shift" } }
+]
+
+[colors.selection]
+text = "#f8f8f2"
+background = "#44475a"
+
+[colors.normal]
+black   = "#21222c"
+red     = "#ff5555"
+green   = "#50fa7b"
+yellow  = "#f1fa8c"
+blue    = "#bd93f9"
+magenta = "#ff79c6"
+cyan    = "#8be9fd"
+white   = "#f8f8f2"
+
+[colors.bright]
+black   = "#6272a4"
+red     = "#ff6e6e"
+green   = "#69ff94"
+yellow  = "#ffffa5"
+blue    = "#d6acff"
+magenta = "#ff92df"
+cyan    = "#a4ffff"
+white   = "#ffffff"

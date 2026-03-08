@@ -1,0 +1,21 @@
+# Alacritty Configuration — Import Shell
+#
+# This file only contains imports. All actual settings live in personal.toml
+# and work.toml. Here's why:
+#
+# Alacritty evaluates the *importing* file LAST, so anything written directly
+# here would override both personal and work settings. I need work to override
+# personal, so both must be separate imports where ordering is respected:
+# personal.toml loads first (base), work.toml loads second (overrides).
+#
+# Why not make work.toml the main file? Some machines don't have the work
+# layer at all, so the main config must live in the personal layer.
+#
+# Alacritty silently skips missing import files, so on non-work machines
+# work.toml is harmlessly absent.
+
+[general]
+import = [
+    "personal.toml",
+    "work.toml",
+]
