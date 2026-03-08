@@ -70,6 +70,8 @@ pathprepend "$HOME/.local/bin"
 pathprepend "$HOME/.gem/ruby/1.9.1/bin"
 pathprepend "$HOME/.gem/ruby/2.3.0/bin"
 pathprepend "$HOME/.cargo/bin"
+export VOLTA_HOME="$HOME/.volta"
+pathprepend "$VOLTA_HOME/bin"
 
 [[ -n $NPM_PACKAGES ]] && pathprepend "$NPM_PACKAGES/bin"
 
