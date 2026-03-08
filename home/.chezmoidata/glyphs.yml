@@ -1,0 +1,35 @@
+# Tmux status bar glyphs — Nerd Font icons and powerline separators
+#
+# These are stored as Unicode escapes so the tmux config template
+# (dot_config/tmux/tmux.conf.tmpl) stays free of special characters,
+# making it easy to edit, diff, and review. The template references
+# these as {{ .tmux.glyphs.<key> }}.
+#
+# Requires a Nerd Font — https://www.nerdfonts.com/
+# Browse available glyphs at https://www.nerdfonts.com/cheat-sheet
+#
+# Separator styles come from the Powerline Extra set. The "pixelated_big"
+# style used here gives a chunky retro look. To switch styles, replace
+# sep_right/sep_left with a different pair:
+#
+#   plhard:          U+E0B0 / U+E0B2  — classic powerline arrows
+#   plsoft:          U+E0B1 / U+E0B3  — thin powerline arrows
+#   roundhard:       U+E0B4 / U+E0B6  — rounded semicircles
+#   pixelated_big:   U+E0C6 / U+E0C7  — chunky pixels (current)
+#   pixelated_small: U+E0C4 / U+E0C5  — small pixels
+#   flame:           U+E0C0 / U+E0C2  — fire/flame edge
+
+tmux:
+  glyphs:
+    # Powerline separators — pixelated_big style
+    sep_right: "\uE0C6"
+    sep_left: "\uE0C7"
+
+    # Status bar icons (Nerd Font)
+    icon_prefix: "\uF489"          # terminal icon — shown when prefix key is active
+    icon_hostname: "\U000F165D"    # monitor icon — hostname segment
+    icon_session: "\U000F156F"     # layers icon — tmux session name
+    icon_ram: "\uEFC5"             # memory chip — RAM usage percentage
+    icon_cpu: "\U000F04C5"         # gauge icon — CPU usage percentage
+    icon_time: "\uF017"            # clock icon — date and time
+    icon_net_off: "\U000F092E"     # wifi-off icon — shown when no internet

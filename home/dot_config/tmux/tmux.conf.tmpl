@@ -10,7 +10,8 @@
 # Status configuration {{ "{{{" }}
 # ========================
 
-{{  $status_default_color := "blue" -}}
+{{- $t := .tmux.theme -}}
+{{- $g := .tmux.glyphs }}
 
 # Update the status bar every interval seconds.  By default, updates will occur
 # every 15 seconds.  A setting of zero disables redrawing at interval.
@@ -20,17 +21,17 @@ set  -g status-interval 5
 # centre or right justified.
 set  -g status-justify centre
 
-set  -g status-style "bg=default fg={{ $status_default_color }}"
+set  -g status-style "bg={{ $t.status_bg }} fg={{ $t.status_fg }}"
 
 # Status left
 # -----------
 set  -g status-left-length 40
 # Command mode indicator:
-set  -g status-left "#{?client_prefix,#[bg=red#,fg=white#,bold]  #[bg=lightblue#,fg=red#,nobold] ,}"
+set  -g status-left "#{?client_prefix,#[bg={{ $t.prefix_bg }}#,fg={{ $t.prefix_fg }}#,bold] {{ $g.icon_prefix }} #[bg={{ $t.hostname_bg }}#,fg={{ $t.prefix_bg }}#,nobold]{{ $g.sep_right }} ,}"
 # Hostname:
-set -ag status-left "#[bg=lightblue,fg=black] 󱙝 #h #[bg=darkgreen,fg=lightblue] "
+set -ag status-left "#[bg={{ $t.hostname_bg }},fg={{ $t.hostname_fg }}] {{ $g.icon_hostname }} #h #[bg={{ $t.session_bg }},fg={{ $t.hostname_bg }}]{{ $g.sep_right }} "
 # Session name:
-set -ag status-left "#[bg=darkgreen,fg=white] 󱕯 #S #[bg=default,fg=darkgreen]"
+set -ag status-left "#[bg={{ $t.session_bg }},fg={{ $t.session_fg }}] {{ $g.icon_session }} #S #[bg={{ $t.status_bg }},fg={{ $t.session_bg }}]{{ $g.sep_right }}"
 
 # Status right
 # ------------
@@ -38,21 +39,23 @@ set  -g status-right-length 55
 set  -g status-right ''
 
 # Percentage of RAM in use
-set -ag status-right "#[bg=default,fg=green] #[bg=green,fg=black]  #(~/.tmux_scripts/used_ram_pct) #[bg=green,fg=color140] "
-# Load average
-set -ag status-right "#[bg=color140,fg=black] 󰓅 #(~/.tmux_scripts/load_avg) #[bg=color140,fg=cyan] "
+set -ag status-right "#[bg={{ $t.status_bg }},fg={{ $t.ram_bg }}]{{ $g.sep_left }}#[bg={{ $t.ram_bg }},fg={{ $t.ram_fg }}] {{ $g.icon_ram }} #(~/.tmux_scripts/used_ram_pct) #[bg={{ $t.ram_bg }},fg={{ $t.cpu_bg }}]{{ $g.sep_left }}"
+# CPU usage
+set -ag status-right "#[bg={{ $t.cpu_bg }},fg={{ $t.cpu_fg }}] {{ $g.icon_cpu }} #(~/.tmux_scripts/cpu_pct) #[bg={{ $t.cpu_bg }},fg={{ $t.time_bg }}]{{ $g.sep_left }}"
 # Time
-set -ag status-right "#[bg=cyan,fg=black]  %d/%m %H:%M"
+set -ag status-right "#[bg={{ $t.time_bg }},fg={{ $t.time_fg }}] {{ $g.icon_time }} %d/%m %H:%M"
+# Connectivity warning (only shown when offline)
+set -ag status-right "#(~/.tmux_scripts/net_check)"
 
 # Windows Status
 # --------------
 
-setw -g window-status-current-format '#[fg=red,bold](#[fg=white,bold]#I:#W#F#[fg=red,bold])#[fg=default,default]'
+setw -g window-status-current-format '#[fg={{ $t.win_current_accent }},bold](#[fg={{ $t.win_current_fg }},bold]#I:#W#F#[fg={{ $t.win_current_accent }},bold])#[fg=default,default]'
 setw -g window-status-current-style bright
-setw -g window-status-style fg=white
-setw -g window-status-last-style fg=cyan
-setw -g window-status-activity-style fg=yellow,bold
-setw -g window-status-bell-style fg=yellow,bold
+setw -g window-status-style fg={{ $t.win_fg }}
+setw -g window-status-last-style fg={{ $t.win_last_fg }}
+setw -g window-status-activity-style fg={{ $t.win_activity_fg }},bold
+setw -g window-status-bell-style fg={{ $t.win_activity_fg }},bold
 
 # }}}
 # Mouse configuration {{ "{{{" }}
@@ -102,7 +105,7 @@ set -g history-limit 50000
 
 # Set the default terminal for new windows created in this session - the
 # default value of the TERM environment variable.  For tmux to work correctly,
-# this must be set to ‘screen’ or a derivative of it.
+# this must be set to 'screen' or a derivative of it.
 set -g default-terminal "screen-256color"
 
 # Enable truecolor where available

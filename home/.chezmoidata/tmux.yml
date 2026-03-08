@@ -1,0 +1,46 @@
+# Tmux status bar theme — semantic color mapping
+#
+# Colors are defined here as semantic roles (hostname, session, ram, etc.)
+# rather than hardcoded in the tmux config template. This makes it easy to
+# retheme the entire status bar by swapping the hex values below.
+#
+# The tmux config template (dot_config/tmux/tmux.conf.tmpl) references these
+# as {{ .tmux.theme.<key> }}. Each status bar segment uses a bg/fg pair, and
+# the powerline separators use the bg color of the adjacent segments to create
+# seamless transitions.
+#
+# Current palette: Catppuccin Mocha — https://catppuccin.com/palette/
+# To switch themes, replace the hex values with your preferred palette.
+
+tmux:
+  theme:
+    # Status bar background and default text
+    status_bg: "default"           # terminal default — lets transparency work
+    status_fg: "#89b4fa"           # blue — default status text and window list
+
+    # Left side: [prefix] [hostname] [session]
+    prefix_bg: "#f38ba8"           # red — command prefix indicator
+    prefix_fg: "#1e1e2e"           # base — text on prefix
+    hostname_bg: "#89b4fa"         # blue
+    hostname_fg: "#1e1e2e"         # base
+    session_bg: "#a6e3a1"          # green
+    session_fg: "#1e1e2e"          # base
+
+    # Right side: [ram] [cpu] [time]
+    ram_bg: "#a6e3a1"              # green
+    ram_fg: "#1e1e2e"              # base
+    cpu_bg: "#cba6f7"              # mauve
+    cpu_fg: "#1e1e2e"              # base
+    time_bg: "#89dceb"             # sky
+    time_fg: "#1e1e2e"             # base
+
+    # Connectivity warning (only visible when offline)
+    net_off_bg: "#f38ba8"          # red — disconnected alert
+    net_off_fg: "#1e1e2e"          # base
+
+    # Window list
+    win_current_accent: "#f38ba8"  # red — active window brackets
+    win_current_fg: "#cdd6f4"      # text — active window name
+    win_fg: "#cdd6f4"              # text — inactive window name
+    win_last_fg: "#89dceb"         # sky — last active window
+    win_activity_fg: "#f9e2af"     # yellow — activity/bell alert

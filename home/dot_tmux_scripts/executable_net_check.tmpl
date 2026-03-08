@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+# Outputs a tmux-styled "offline" segment when there's no internet connectivity,
+# or nothing at all when online. Used in the tmux status bar via #().
+#
+# The check pings a reliable DNS server (1.1.1.1) with a single packet and a
+# 2-second timeout. No DNS resolution involved — pure connectivity test.
+
+if ! ping -c1 -W2 1.1.1.1 >/dev/null 2>&1; then
+    echo "#[fg={{ .tmux.theme.net_off_bg }},bg={{ .tmux.theme.time_bg }}]{{ .tmux.glyphs.sep_left }}#[bg={{ .tmux.theme.net_off_bg }},fg={{ .tmux.theme.net_off_fg }},bold] {{ .tmux.glyphs.icon_net_off }} #[default]"
+fi
