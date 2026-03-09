@@ -264,8 +264,10 @@ setopt NO_NOMATCH
 # Use emacs key bindings (same as bash default)
 bindkey -e
 
-# Cycle through available completions with Tab
-bindkey '^I' menu-complete
+# Use complete-word instead of the default expand-or-complete. This skips
+# expansion (globs, aliases, variables) and jumps straight to completion,
+# avoiding unexpected substitutions like $PWD expanding into a full path.
+bindkey '^I' complete-word
 
 # Cycle in reverse with Shift-Tab
 bindkey '^[[Z' reverse-menu-complete

@@ -1,7 +1,18 @@
 # ZSH completion system {{{
 # ---------------------------------------------------------------------------
 
-# Initialize the completion system
+# Custom completions directory managed by chezmoi
+fpath=(~/.config/zsh/completions $fpath)
+
+# Load all completions from linuxbrew
+if [[ -d /home/linuxbrew/.linuxbrew/share/zsh/site-functions ]]; then
+    fpath=(/home/linuxbrew/.linuxbrew/share/zsh/site-functions $fpath)
+fi
+if [[ -d ~/.linuxbrew/share/zsh/site-functions ]]; then
+    fpath=(~/.linuxbrew/share/zsh/site-functions $fpath)
+fi
+
+# Initialize the completion system (must be after fpath additions)
 autoload -Uz compinit && compinit
 
 # Git completion for aliases (must be after compinit)
@@ -40,16 +51,5 @@ function __complete_new()
    compadd -a templates
 }
 compdef __complete_new new
-# ---------------------------------------------------------------------------
-# }}}
-# Load all completions from linuxbrew {{{
-# ---------------------------------------------------------------------------
-if [[ -d /home/linuxbrew/.linuxbrew/share/zsh/site-functions ]]; then
-    fpath=(/home/linuxbrew/.linuxbrew/share/zsh/site-functions $fpath)
-fi
-if [[ -d ~/.linuxbrew/share/zsh/site-functions ]]; then
-    fpath=(~/.linuxbrew/share/zsh/site-functions $fpath)
-fi
-
 # ---------------------------------------------------------------------------
 # }}}
