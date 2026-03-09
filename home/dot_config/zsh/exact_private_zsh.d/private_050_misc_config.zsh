@@ -272,6 +272,11 @@ bindkey '^I' complete-word
 # Cycle in reverse with Shift-Tab
 bindkey '^[[Z' reverse-menu-complete
 
+# Ctrl-X Ctrl-E: edit command line in $EDITOR
+autoload -Uz edit-command-line
+zle -N edit-command-line
+bindkey '^X^E' edit-command-line
+
 #############################################################################
 
 # }}}
