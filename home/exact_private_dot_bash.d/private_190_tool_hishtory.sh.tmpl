@@ -3,6 +3,9 @@
 # Initialize hishtory - better shell history
 # https://github.com/ddworken/hishtory
 
+# Skip in AI agent shells to avoid recording auto-generated commands
+is_ai_agent && return
+
 export HISHTORY_SERVER={{ .hishtory_server | quote }}
 
 [[ -f ~/.hishtory/config.sh ]] && source ~/.hishtory/config.sh

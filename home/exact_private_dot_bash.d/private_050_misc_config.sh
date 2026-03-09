@@ -171,6 +171,9 @@ then
    # See: https://github.com/starship/starship/issues/6923
    if [[ "$TERM_PROGRAM" == "ghostty" ]]; then
       export STARSHIP_CONFIG="$HOME/.config/starship-ascii-prompt.toml"
+      # Sentinel: lets child shells (e.g. zsh launched from bash) detect that
+      # STARSHIP_CONFIG was set by bash and clear it to use their own default.
+      export _STARSHIP_CONFIG_SET_BY_BASH="$STARSHIP_CONFIG"
    fi
    eval -- "$(starship init bash --print-full-init)"
    # For ASCII prompt: capture and format exit status for starship custom modules
@@ -199,6 +202,14 @@ fi
 # }}}
 # Section: History {{{
 #############################################################################
+
+# Disable history recording in AI agent shells to avoid polluting history
+# with massive auto-generated commands from coding agents.
+if is_ai_agent; then
+   unset HISTFILE
+   HISTSIZE=0
+   HISTFILESIZE=0
+fi
 
 # HISTCONTROL {{{
 # ===========

@@ -5,7 +5,10 @@ function is_cursor_agent() {
 
 # @tags: canbescript
 function is_ai_agent() {
-    is_cursor_agent
+    is_cursor_agent \
+        || [[ -n ${CLAUDECODE:-} ]] \
+        || [[ -n ${CODEX_THREAD_ID:-} ]] \
+        || [[ -n ${AGENT:-} ]]
 }
 
 # @tags: command

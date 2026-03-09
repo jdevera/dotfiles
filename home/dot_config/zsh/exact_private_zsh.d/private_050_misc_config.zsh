@@ -167,29 +167,16 @@ export LESS_TERMCAP_us=$'\E[04;38;5;146m' # begin underline
 
 if has_command starship
 then
-   # Use ASCII-safe prompt config for terminals with Unicode rendering issues
-   # See: https://github.com/starship/starship/issues/6923
-   if [[ "$TERM_PROGRAM" == "ghostty" ]]; then
-      export STARSHIP_CONFIG="$HOME/.config/starship-ascii-prompt.toml"
+   # When zsh is launched from within bash (e.g. during a shell migration),
+   # it inherits STARSHIP_CONFIG which bash may have set to an ASCII-only
+   # prompt for terminals with Unicode issues (see starship/starship#6923).
+   # This is a bash-specific workaround that doesn't apply to zsh, so we
+   # detect it via a sentinel variable and clear it to use the default config.
+   if [[ -n "$_STARSHIP_CONFIG_SET_BY_BASH" && "$STARSHIP_CONFIG" == "$_STARSHIP_CONFIG_SET_BY_BASH" ]]; then
+      unset STARSHIP_CONFIG
+      unset _STARSHIP_CONFIG_SET_BY_BASH
    fi
    eval -- "$(starship init zsh)"
-   # For ASCII prompt: capture and format exit status for starship custom modules
-   # Must be set up AFTER starship init (which sets its own precmd hooks)
-   if [[ "$TERM_PROGRAM" == "ghostty" ]]; then
-      __starship_exit_status_hook() {
-         local exit_status=$?
-         if [[ $exit_status -eq 0 ]]; then
-            export __STARSHIP_EXIT_OK=1
-            export __STARSHIP_EXIT_FMT=""
-         else
-            export __STARSHIP_EXIT_OK=""
-            export __STARSHIP_EXIT_FMT=$(printf "[%3d]" "$exit_status")
-         fi
-         return $exit_status
-      }
-      # Use ZSH's native precmd hook array
-      precmd_functions=(__starship_exit_status_hook $precmd_functions)
-   fi
 else
    echo "No starship, this is the path: $PATH"
 fi
@@ -201,31 +188,39 @@ fi
 # Section: History {{{
 #############################################################################
 
-# ZSH history configuration
-HISTFILE=${HISTFILE:-$HOME/.zsh_history}
-HISTSIZE=5000
-SAVEHIST=20000
+# Disable history recording in AI agent shells to avoid polluting history
+# with massive auto-generated commands from coding agents.
+if is_ai_agent; then
+   HISTFILE=/dev/null
+   HISTSIZE=0
+   SAVEHIST=0
+else
+   # ZSH history configuration
+   HISTFILE=${HISTFILE:-$HOME/.zsh_history}
+   HISTSIZE=5000
+   SAVEHIST=20000
 
-# Append history instead of overwriting
-setopt APPEND_HISTORY
+   # Append history instead of overwriting
+   setopt APPEND_HISTORY
 
-# Share history between all sessions
-setopt SHARE_HISTORY
+   # Share history between all sessions
+   setopt SHARE_HISTORY
 
-# Don't record commands starting with a space
-setopt HIST_IGNORE_SPACE
+   # Don't record commands starting with a space
+   setopt HIST_IGNORE_SPACE
 
-# Remove duplicates from history when it fills up
-setopt HIST_EXPIRE_DUPS_FIRST
+   # Remove duplicates from history when it fills up
+   setopt HIST_EXPIRE_DUPS_FIRST
 
-# Don't record duplicate consecutive commands
-setopt HIST_IGNORE_DUPS
+   # Don't record duplicate consecutive commands
+   setopt HIST_IGNORE_DUPS
 
-# Add timestamps to history
-setopt EXTENDED_HISTORY
+   # Add timestamps to history
+   setopt EXTENDED_HISTORY
 
-# Write to history immediately, not when shell exits
-setopt INC_APPEND_HISTORY
+   # Write to history immediately, not when shell exits
+   setopt INC_APPEND_HISTORY
+fi
 
 #############################################################################
 
