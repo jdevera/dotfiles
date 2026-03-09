@@ -103,6 +103,7 @@ Personal information
 {{- $last_name := onepasswordRead (printf "%s/last name" $identity_entry) -}}
 {{- $ghuser := onepasswordRead (printf "%s/github" $identity_entry) -}}
 {{- $full_name := printf "%s %s" $first_name $last_name -}}
+{{- $hishtory_server := onepasswordRead "op://dotfiles/Hishtory Config/server" -}}
 
 {{- /* Data: keep this here for the newline */}}
 [data]
@@ -115,6 +116,7 @@ Personal information
     is_linux = {{ $is_linux }}
     is_work = {{ $is_work }}
     copy_command = {{ if $is_macos }}"pbcopy"{{ else }}"xsel --clipboard --input"{{ end }}
+    hishtory_server = {{ $hishtory_server | quote }}
 
 
 {{/*

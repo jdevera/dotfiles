@@ -78,6 +78,9 @@ softwarePackages:
     brew: yq
     eget:
       source: mikefarah/yq
+  hishtory:
+    homepage: https://github.com/ddworken/hishtory
+    brew: hishtory
   zoxide:
     brew: zoxide
     eget:

@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+
+# Initialize hishtory - better shell history
+# https://github.com/ddworken/hishtory
+
+export HISHTORY_SERVER={{ .hishtory_server | quote }}
+
+[[ -f ~/.hishtory/config.sh ]] && source ~/.hishtory/config.sh
