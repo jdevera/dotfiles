@@ -1,0 +1,5 @@
+[".config/zsh/zsh.d/195_externals_autosuggestions.zsh"]
+    type = "file"
+    url = "https://raw.githubusercontent.com/zsh-users/zsh-autosuggestions/master/zsh-autosuggestions.zsh"
+    refreshPeriod = "168h" # 1 Week
+    private = true
