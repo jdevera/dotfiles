@@ -22,6 +22,10 @@ compdef tit=git
 # Menu selection: highlight the current completion
 zstyle ':completion:*' menu select
 
+# Accept completion and execute with Enter (like bash)
+zmodload zsh/complist
+bindkey -M menuselect '^M' .accept-line
+
 # Case-insensitive matching
 zstyle ':completion:*' matcher-list 'm:{a-z}={A-Z}'
 
