@@ -25,6 +25,7 @@ packages:
     interactive:
       - jordanbaird-ice
       - font-fantasque-sans-mono-nerd-font
+      - vscode
   linux:
     all:
     - bash

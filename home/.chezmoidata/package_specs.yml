@@ -81,6 +81,8 @@ softwarePackages:
   hishtory:
     homepage: https://github.com/ddworken/hishtory
     brew: hishtory
+  vscode:
+    cask: visual-studio-code
   zoxide:
     brew: zoxide
     eget:
