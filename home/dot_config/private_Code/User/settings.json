@@ -11,7 +11,26 @@
     // Nerd Font variant with monospaced glyphs for consistent alignment
     "editor.fontFamily": "FantasqueSansM Nerd Font Mono",
     "editor.fontSize": 16,
+    "editor.fontLigatures": true,
 
     // Show whitespace differences in the diff editor (don't hide trailing space changes)
-    "diffEditor.ignoreTrimWhitespace": false
+    "diffEditor.ignoreTrimWhitespace": false,
+
+    // --- Terminal ---
+
+    // Open the integrated terminal at the workspace root
+    "terminal.integrated.cwd": "${workspaceFolder}",
+
+    // Select text in terminal to copy it automatically
+    "terminal.integrated.copyOnSelection": true,
+
+    // Enable inline suggestions in the terminal (command completions)
+    "terminal.integrated.suggest.enabled": true,
+
+    // Terminal font size (slightly smaller than editor's 16)
+    "terminal.integrated.fontSize": 15,
+
+    // Terminal ligatures not working as of VSCode 1.111
+    // https://github.com/microsoft/vscode/issues/274296
+    "terminal.integrated.fontLigatures.enabled": true
 }
