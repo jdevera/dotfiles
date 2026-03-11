@@ -2,6 +2,21 @@ vscode_extensions:
   - id: catppuccin.catppuccin-vsc
     name: "Catppuccin for VSCode"
     description: "Soothing pastel theme for VSCode"
+  - id: github.copilot-chat
+    name: "GitHub Copilot Chat"
+    description: "AI chat features powered by Copilot"
   - id: vscodevim.vim
     name: "Vim"
     description: "Vim emulation for Visual Studio Code"
+  - id: ms-python.python
+    name: "Python"
+    description: "Python language support with IntelliSense, debugging, linting, formatting, and more"
+  - id: ms-python.debugpy
+    name: "Python Debugger"
+    description: "Python Debugger extension using debugpy"
+  - id: ms-python.vscode-pylance
+    name: "Pylance"
+    description: "A performant, feature-rich language server for Python in VS Code"
+  - id: ms-python.vscode-python-envs
+    name: "Python Environments"
+    description: "Provides a unified python environment experience"
