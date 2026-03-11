@@ -1,4 +1,17 @@
 {
     // Auto-save when switching to a different editor tab (not on window change or after delay)
-    "files.autoSave": "onFocusChange"
+    "files.autoSave": "onFocusChange",
+
+    // Use Tab key to accept inline completions and suggestions
+    "editor.tabCompletion": "on",
+
+    // Disable the "are you using a screen reader?" prompt on startup
+    "editor.accessibilitySupport": "off",
+
+    // Nerd Font variant with monospaced glyphs for consistent alignment
+    "editor.fontFamily": "FantasqueSansM Nerd Font Mono",
+    "editor.fontSize": 16,
+
+    // Show whitespace differences in the diff editor (don't hide trailing space changes)
+    "diffEditor.ignoreTrimWhitespace": false
 }
