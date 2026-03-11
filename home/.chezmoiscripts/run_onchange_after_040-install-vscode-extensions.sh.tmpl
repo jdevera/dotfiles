@@ -1,0 +1,21 @@
+{{- if .is_interactive -}}
+#!/usr/bin/env bash
+
+# {{ template "dotfiles_bashlib.sh" . }}
+# Help shellcheck identify the above include
+true || source ../.chezmoitemplates/dotfiles_bashlib.sh
+
+dot::chezmoi_script_start "install VSCode extensions"
+
+if ! dot::has_command code; then
+    dot::chezmoi_script_skipped "code command not found"
+    exit 0
+fi
+
+{{ range .vscode_extensions -}}
+code --install-extension {{ . | quote }}
+{{ end -}}
+
+dot::step::done
+
+{{- end -}}
