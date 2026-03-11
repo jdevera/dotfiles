@@ -1,2 +1,7 @@
 vscode_extensions:
-  - catppuccin.catppuccin-vsc
+  - id: catppuccin.catppuccin-vsc
+    name: "Catppuccin for VSCode"
+    description: "Soothing pastel theme for VSCode"
+  - id: vscodevim.vim
+    name: "Vim"
+    description: "Vim emulation for Visual Studio Code"

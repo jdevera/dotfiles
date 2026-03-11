@@ -13,7 +13,8 @@ if ! dot::has_command code; then
 fi
 
 {{ range .vscode_extensions -}}
-code --install-extension {{ . | quote }}
+# {{ .name }}: {{ .description }}
+code --install-extension {{ .id | quote }}
 {{ end -}}
 
 dot::step::done
