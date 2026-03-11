@@ -1,0 +1,4 @@
+{
+    // Auto-save when switching to a different editor tab (not on window change or after delay)
+    "files.autoSave": "onFocusChange"
+}
