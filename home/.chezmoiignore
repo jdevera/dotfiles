@@ -12,6 +12,8 @@
 .config/iterm2/
 .bash_profile
 Library/
+.bash.d/050_ssh.sh
+.config/zsh/zsh.d/050_ssh.zsh
 {{ end }}
 
 
