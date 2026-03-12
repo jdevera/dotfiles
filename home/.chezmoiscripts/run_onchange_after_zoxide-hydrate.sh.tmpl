@@ -1,0 +1,45 @@
+#!/usr/bin/env bash
+
+# path_bookmarks hash: {{ include "dot_config/path_bookmarks/dotfiles.bookmarks.tmpl" | sha256sum }}
+
+# {{ template "dotfiles_bashlib.sh" . }}
+
+# Help shellcheck identify the above include
+true || source ../.chezmoitemplates/dotfiles_bashlib.sh
+
+dot::chezmoi_script_start "hydrate zoxide with path bookmarks"
+
+if ! command -v zoxide &>/dev/null; then
+    dot::chezmoi_script_skipped "zoxide not installed"
+fi
+
+# NOTE ON THE TEMPLATE STRATEGY BELOW:
+#
+# We use chezmoi's `stat` function at TEMPLATE RENDER TIME to check whether
+# each bookmarked directory exists. Only directories that exist when chezmoi
+# runs are included as `zoxide add` lines in the rendered script.
+#
+# This is intentional and serves two purposes:
+#
+# 1. We avoid adding non-existent directories to zoxide's database.
+#
+# 2. More importantly: because `stat` is evaluated at render time, the
+#    rendered script content CHANGES when a bookmarked directory is created
+#    or removed. Since this is a `run_onchange_after_` script, chezmoi
+#    detects that change and re-runs the script automatically. This means
+#    zoxide gets re-hydrated whenever the set of existing bookmarked
+#    directories changes — no manual intervention needed.
+
+{{ range .path_bookmarks -}}
+{{ if or (not (hasKey . "os")) (eq .os $.chezmoi.os) -}}
+{{ $fullpath := .path -}}
+{{ if not (hasPrefix "/" .path) -}}
+{{ $fullpath = joinPath $.chezmoi.homeDir .path -}}
+{{ end -}}
+{{ if stat $fullpath -}}
+zoxide add "{{ $fullpath }}"
+{{ end -}}
+{{ end -}}
+{{ end }}
+
+dot::success "zoxide hydration complete"

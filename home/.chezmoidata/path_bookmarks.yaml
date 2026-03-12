@@ -1,0 +1,20 @@
+# Path bookmarks: cd-NAME aliases and bashmarks
+# Paths relative to $HOME unless starting with /
+path_bookmarks:
+  - name: proj
+    path: devel/projects
+  - name: co
+    path: devel/checkout
+  - name: sb
+    path: devel/sandbox
+  - name: cont
+    path: devel/contributions
+  - name: dow
+    path: Downloads
+    os: darwin
+  - name: las
+    path: Library/Application Support
+    os: darwin
+  - name: dow
+    path: comms/downloads
+    os: linux
