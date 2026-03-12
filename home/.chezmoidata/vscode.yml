@@ -20,3 +20,18 @@ vscode_extensions:
   - id: ms-python.vscode-python-envs
     name: "Python Environments"
     description: "Provides a unified python environment experience"
+  - id: mads-hartmann.bash-ide-vscode
+    name: "Bash IDE"
+    description: "A language server for Bash"
+  - id: bierner.markdown-mermaid
+    name: "Markdown Preview Mermaid Support"
+    description: "Adds Mermaid diagram and flowchart support to VS Code's builtin markdown preview"
+  - id: redhat.vscode-yaml
+    name: "YAML"
+    description: "YAML Language Support by Red Hat, with built-in Kubernetes syntax support"
+  - id: jinliming2.vscode-go-template
+    name: "Go Template Support"
+    description: "Syntax highlight support for Go text/template and html/template"
+  - id: usernamehw.todo-md
+    name: "Todo MD"
+    description: "Todo tracking based on todo.txt format"
