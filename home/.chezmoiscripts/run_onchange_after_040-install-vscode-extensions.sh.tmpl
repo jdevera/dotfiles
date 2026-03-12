@@ -12,11 +12,34 @@ if ! dot::has_command code; then
     exit 0
 fi
 
+declare -A installed_extensions
+while IFS= read -r ext; do
+    installed_extensions["$ext"]=1
+done < <(code --list-extensions)
+
+installed_count=0
+skipped_count=0
+
+vscode::install_extension() {
+    local id="$1"
+    local name="$2"
+    if [[ -n "${installed_extensions[$id]}" ]]; then
+        (( skipped_count++ ))
+        return
+    fi
+    dot::step::start "install $name ($id)"
+    code --install-extension "$id" > /dev/null
+    dot::step::done
+    (( installed_count++ ))
+}
+
 {{ range .vscode_extensions -}}
 # {{ .name }}: {{ .description }}
-code --install-extension {{ .id | quote }}
+vscode::install_extension {{ .id | quote }} {{ .name | quote }}
 {{ end -}}
 
-dot::step::done
+if [[ $installed_count -eq 0 ]]; then
+    dot::chezmoi_script_skipped "all $skipped_count extensions already installed"
+fi
 
 {{- end -}}

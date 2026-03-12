@@ -32,6 +32,9 @@ vscode_extensions:
   - id: jinliming2.vscode-go-template
     name: "Go Template Support"
     description: "Syntax highlight support for Go text/template and html/template"
+  - id: samuelcolvin.jinjahtml
+    name: "Better Jinja"
+    description: "Syntax highlighting for jinja(2) including HTML, Markdown, YAML, Ruby and LaTeX templates"
   - id: usernamehw.todo-md
     name: "Todo MD"
     description: "Todo tracking based on todo.txt format"
