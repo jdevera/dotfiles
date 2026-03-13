@@ -52,7 +52,7 @@ function _code_show_script()
 
 # @tags: command canbescript
 # DEPENDS-ON: find_function, _code_show_function, _code_show_script
-function code()
+function showme()
 {
    local type
    type="$(builtin type -t "$1")"
@@ -88,7 +88,7 @@ function code()
          ;;
    esac
 }
-complete -c code # Complete with command names
+complete -c showme # Complete with command names
 #______________________________________________________________________________
 
 

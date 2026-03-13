@@ -158,9 +158,9 @@ function xf()
 # @tags: command canbescript
 function rtouch()
 {
-   local path="$1"
-   mkdir -p "$(dirname "$path")"
-   touch "$path"
+   local filepath="$1"
+   mkdir -p "$(dirname "$filepath")"
+   touch "$filepath"
 }
 #______________________________________________________________________________
 

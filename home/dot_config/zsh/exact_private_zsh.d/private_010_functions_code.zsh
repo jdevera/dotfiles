@@ -39,19 +39,19 @@ function _code_show_function()
 # DEPENDS-ON: has_command, hless
 function _code_show_script()
 {
-   local path="$1"
+   local filepath="$1"
    if has_command bat; then
-      bat "$path"
+      bat "$filepath"
    elif has_command pygmentize; then
-      hless "$path"
+      hless "$filepath"
    else
-      less -Fr "$path"
+      less -Fr "$filepath"
    fi
 }
 
 # @tags: command canbescript
 # DEPENDS-ON: find_function, _code_show_function, _code_show_script
-function code()
+function showme()
 {
    local wtype
    wtype="$(whence -w "$1" 2>/dev/null | awk '{print $2}')"
@@ -65,9 +65,9 @@ function code()
          local location
          location="$(find_function "$1")"
          if [[ -n $location ]]; then
-            local func line path
-            read -r func line path <<< "$location"
-            printf "Defined in: %s +%d\n" "$path" "$line"
+            local func line filepath
+            read -r func line filepath <<< "$location"
+            printf "Defined in: %s +%d\n" "$filepath" "$line"
          fi
          _code_show_function "$1"
          ;;
@@ -77,13 +77,13 @@ function code()
          man zshbuiltins 2>/dev/null | less -p "^       $1 " || echo "No help available for $1"
          ;;
       command)
-         local path
-         path="$(whence -p "$1")"
-         if head -1 "$path" | grep -q "^#!"; then
-            echo "$1 is a script at $path"
-            _code_show_script "$path"
+         local filepath
+         filepath="$(whence -p "$1")"
+         if head -1 "$filepath" | grep -q "^#!"; then
+            echo "$1 is a script at $filepath"
+            _code_show_script "$filepath"
          else
-            echo "$1 is a binary at $path"
+            echo "$1 is a binary at $filepath"
          fi
          ;;
       *)
