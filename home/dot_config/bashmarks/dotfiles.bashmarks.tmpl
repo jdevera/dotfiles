@@ -1,12 +1,9 @@
 # Bashmarks managed by dotfiles
 # Generated from .chezmoidata/path_bookmarks.yaml
+# Relative paths are resolved relative to $HOME by bashmarks
 
 {{ range .path_bookmarks -}}
 {{ if or (not (hasKey . "os")) (eq .os $.chezmoi.os) -}}
-{{ if hasPrefix "/" .path -}}
 {{ .path }}|{{ .name }}
-{{ else -}}
-$HOME/{{ .path }}|{{ .name }}
-{{ end -}}
 {{ end -}}
 {{ end -}}
