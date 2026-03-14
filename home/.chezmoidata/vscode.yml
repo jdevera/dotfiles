@@ -38,3 +38,24 @@ vscode_extensions:
   - id: usernamehw.todo-md
     name: "Todo MD"
     description: "Todo tracking based on todo.txt format"
+  - id: ms-azuretools.vscode-containers
+    name: "Container Tools"
+    description: "Create, manage, and debug containerized applications"
+  - id: ms-vscode-remote.remote-containers
+    name: "Dev Containers"
+    description: "Open any folder or repository inside a Docker container"
+  - id: charliermarsh.ruff
+    name: "Ruff"
+    description: "Python linter and formatter"
+  - id: redhat.ansible
+    name: "Ansible"
+    description: "Ansible language support"
+  - id: golang.go
+    name: "Go"
+    description: "Rich Go language support for Visual Studio Code"
+  - id: github.vscode-github-actions
+    name: "GitHub Actions"
+    description: "GitHub Actions workflows and runs for github.com hosted repositories"
+  - id: tamasfe.even-better-toml
+    name: "Even Better TOML"
+    description: "Fully-featured TOML support"
