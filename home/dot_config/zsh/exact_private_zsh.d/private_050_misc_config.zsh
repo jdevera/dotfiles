@@ -302,7 +302,3 @@ else
    MYFULLNAME=$(getent passwd "$(whoami)" | cut -d ':' -f 5 | cut -d ',' -f 1)
 fi
 export MYFULLNAME
-
-
-# CTRL-D must be used twice to exit the shell
-setopt IGNORE_EOF
