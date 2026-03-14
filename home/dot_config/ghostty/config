@@ -5,6 +5,9 @@
 # Theme
 # Run `ghostty +list-themes` to see all available themes
 theme = Catppuccin Mocha
+# The auto/theme.ghostty file is written by `ghostty +list-themes` when a theme
+# is selected interactively. If present, it overrides the default theme above.
+config-file = ?auto/theme.ghostty
 
 # Font
 font-family = FantasqueSansM Nerd Font Mono
