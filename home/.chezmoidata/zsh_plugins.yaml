@@ -1,0 +1,9 @@
+# ZSH plugins: downloaded as chezmoi externals, loaded by load_plugin
+# Fields:
+#   repo:        GitHub owner/repo (required)
+#   description: what the plugin does
+#   name:        (optional) plugin directory name, defaults to repo name
+#   source:      (optional) file to source, defaults to <name>.plugin.zsh
+zsh_plugins:
+  - repo: zsh-users/zsh-autosuggestions
+    description: "Fish-like autosuggestions for zsh"

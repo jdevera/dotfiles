@@ -1,0 +1,8 @@
+# Load ZSH plugins
+# Generated from .chezmoidata/zsh_plugins.yaml
+
+{{ range .zsh_plugins -}}
+{{ $name := default (base .repo) (index . "name") -}}
+{{ $source := default (printf "%s.plugin.zsh" $name) (index . "source") -}}
+plug::load {{ $name }} {{ $source }}
+{{ end -}}

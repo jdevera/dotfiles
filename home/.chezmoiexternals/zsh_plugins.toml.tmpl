@@ -1,0 +1,6 @@
+{{- range .zsh_plugins -}}
+{{ $name := default (base .repo) (index . "name") }}
+[".config/zsh/plugins/{{ $name }}"]
+    type = "git-repo"
+    url = "https://github.com/{{ .repo }}.git"
+{{ end -}}
