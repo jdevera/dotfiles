@@ -24,6 +24,7 @@ dot::timing::setup()
         ZSH_TIMES_FILE="/tmp/zshtimes.$$"
         echo -n > "$ZSH_TIMES_FILE"
     fi
+    dot::defer "dot::timing::teardown"
 }
 
 # Unset ZSH_TIME_STARTUP and ZSH_TIMES_FILE to leave the shell clean
@@ -36,6 +37,36 @@ dot::timing::teardown()
         unset -f "$fn"
     done
 }
+
+# Deferred cleanup system {{{
+#
+# Register commands to run after all startup files have been sourced.
+# Deferred commands run in LIFO order (last registered, first executed).
+#
+# Usage (from any zsh.d/ file):
+#   dot::defer "unset _my_temp_var"
+#   dot::defer "unfunction _my_helper"
+#
+typeset -a _dot_deferred=()
+
+dot::defer()
+{
+    _dot_deferred+=("$1")
+}
+
+# Run all deferred commands in LIFO order, then clean up the defer
+# machinery itself.
+dot::run_deferred()
+{
+    local i
+    for (( i=${#_dot_deferred[@]}; i >= 1; i-- )); do
+        eval "${_dot_deferred[$i]}"
+    done
+    unset _dot_deferred
+    unfunction dot::defer
+    unfunction dot::run_deferred
+}
+# }}}
 
 dot::timing::timed_source()
 {
@@ -89,5 +120,13 @@ dot::source_zsh_d()
     dot::source_dir ~/.config/zsh/zsh.d/local/before
     dot::source_dir ~/.config/zsh/zsh.d
     dot::source_dir ~/.config/zsh/zsh.d/local/after
+}
+
+dot::bootstrap()
+{
+    dot::timing::setup
+    dot::defer "unfunction dot::source_file dot::source_dir dot::source_zsh_d dot::bootstrap"
+    dot::source_zsh_d
+    dot::run_deferred
 }
 # }}}
