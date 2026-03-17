@@ -39,23 +39,26 @@ dot::timing::teardown()
 }
 
 # Deferred cleanup system {{{
-#
-# Register commands to run after all startup files have been sourced.
-# Deferred commands run in LIFO order (last registered, first executed).
-#
-# Usage (from any zsh.d/ file):
-#   dot::defer "unset _my_temp_var"
-#   dot::defer "unfunction _my_helper"
-#
+
 typeset -a _dot_deferred=()
 
+# @description Register a command to run after all startup files have been
+#     sourced. Deferred commands run in LIFO order (last registered, first
+#     executed). The defer system cleans up itself after running.
+# @arg $1 string Shell command to evaluate at teardown.
+# @example
+#   dot::defer "unset _my_temp_var"
+#   dot::defer "unfunction _my_helper"
 dot::defer()
 {
     _dot_deferred+=("$1")
 }
 
-# Run all deferred commands in LIFO order, then clean up the defer
-# machinery itself.
+# @description Run all deferred commands in LIFO order, then clean up the
+#     defer machinery itself (unsets _dot_deferred, undefines dot::defer
+#     and dot::run_deferred).
+# @noargs
+# @internal
 dot::run_deferred()
 {
     local i
