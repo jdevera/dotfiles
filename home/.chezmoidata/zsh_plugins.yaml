@@ -1,9 +1,22 @@
-# ZSH plugins: downloaded as chezmoi externals, loaded by load_plugin
-# Fields:
+# ZSH plugins: downloaded as chezmoi externals, loaded by plug::load
+#
+# Single-plugin repos:
 #   repo:        GitHub owner/repo (required)
 #   description: what the plugin does
 #   name:        (optional) plugin directory name, defaults to repo name
 #   source:      (optional) file to source, defaults to <name>.plugin.zsh
+#
+# Multi-plugin repos (e.g. ohmyzsh):
+#   repo:        GitHub owner/repo (required)
+#   description: what the repo provides
+#   plugins:     list of plugins to load from this repo
+#     - path:    path within the repo to the plugin directory
+#       name:    (optional) plugin name, defaults to last segment of path
+#       source:  (optional) file to source, defaults to <name>.plugin.zsh
 zsh_plugins:
   - repo: zsh-users/zsh-autosuggestions
     description: "Fish-like autosuggestions for zsh"
+  - repo: ohmyzsh/ohmyzsh
+    description: "Community-driven zsh framework, used as a plugin source"
+    plugins:
+      - path: plugins/marked2

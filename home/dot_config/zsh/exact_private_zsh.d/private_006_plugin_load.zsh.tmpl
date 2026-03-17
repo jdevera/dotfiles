@@ -1,8 +1,30 @@
 # Load ZSH plugins
 # Generated from .chezmoidata/zsh_plugins.yaml
 
+# Register plugin source paths
 {{ range .zsh_plugins -}}
-{{ $name := default (base .repo) (index . "name") -}}
-{{ $source := default (printf "%s.plugin.zsh" $name) (index . "source") -}}
-plug::load {{ $name }} {{ $source }}
+{{ if hasKey . "plugins" -}}
+{{   $repo_name := default (base .repo) (index . "name") -}}
+{{   range .plugins -}}
+{{     $name := default (base .path) (index . "name") -}}
+{{     $source := default (printf "%s.plugin.zsh" $name) (index . "source") -}}
+_plug_source[{{ $name }}]=~/.config/zsh/plugins/{{ $repo_name }}/{{ .path }}/{{ $source }}
+{{ end -}}
+{{ else -}}
+{{   $name := default (base .repo) (index . "name") -}}
+{{   $source := default (printf "%s.plugin.zsh" $name) (index . "source") -}}
+_plug_source[{{ $name }}]=~/.config/zsh/plugins/{{ $name }}/{{ $source }}
+{{ end -}}
+{{ end }}
+# Load plugins
+{{ range .zsh_plugins -}}
+{{ if hasKey . "plugins" -}}
+{{   range .plugins -}}
+{{     $name := default (base .path) (index . "name") -}}
+plug::load {{ $name }}
+{{ end -}}
+{{ else -}}
+{{   $name := default (base .repo) (index . "name") -}}
+plug::load {{ $name }}
+{{ end -}}
 {{ end -}}

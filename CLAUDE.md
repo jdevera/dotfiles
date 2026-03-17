@@ -63,6 +63,65 @@ Modular bash config loaded by `.bashrc` in order:
 
 Files are named with numeric prefixes for ordering (e.g., `010_functions_*.sh`).
 
+### ZSH Configuration (`home/dot_config/zsh/`)
+
+Modular zsh config loaded by `.zshrc` via `dot::bootstrap`:
+1. `.config/zsh/zsh.d/local/before/*` (untracked, machine-specific)
+2. `.config/zsh/zsh.d/*` (tracked modules)
+3. `.config/zsh/zsh.d/local/after/*` (untracked, machine-specific)
+
+Files are named with numeric prefixes for ordering (e.g., `005_plugin_loader.zsh`).
+
+#### Bootstrap (`bootstrap.zsh`)
+
+The bootstrap defines core functions for the zsh startup lifecycle:
+- `dot::bootstrap` - Entry point called from `.zshrc`, runs setup/source/cleanup
+- `dot::source_file`, `dot::source_dir`, `dot::source_zsh_d` - Source helpers
+- `dot::timing::setup/teardown` - Optional startup timing (`ZSH_TIME_STARTUP=1`)
+
+#### Deferred Cleanup (`dot::defer`)
+
+Register commands to run after all startup files have been sourced. Runs in LIFO order (last registered, first executed). The defer system cleans up itself on exit.
+
+```zsh
+dot::defer "unset _my_temp_var"
+dot::defer "unfunction my_helper"
+```
+
+All bootstrap functions, plugin loader state, and timing variables are cleaned up via `dot::defer` — none survive into the interactive session.
+
+#### ZSH Plugin System
+
+Data-driven plugin management without a framework. Plugins are defined in `home/.chezmoidata/zsh_plugins.yaml` and downloaded as chezmoi `git-repo` externals into `~/.config/zsh/plugins/`.
+
+**Data file** (`zsh_plugins.yaml`):
+```yaml
+# Single-plugin repo (name defaults to repo name):
+- repo: zsh-users/zsh-autosuggestions
+  description: "Fish-like autosuggestions"
+
+# Multi-plugin repo (name defaults to last segment of path):
+- repo: ohmyzsh/ohmyzsh
+  description: "Plugin source"
+  plugins:
+    - path: plugins/git
+    - path: plugins/docker
+      source: docker.plugin.zsh  # only if non-standard
+```
+
+**Key files:**
+- `005_plugin_loader.zsh` - Defines `plug::load` and `plug::is_loaded` (static)
+- `006_plugin_load.zsh.tmpl` - Generated `plug::load` calls from YAML
+- `007_plugin_config.zsh` - Plugin configuration using `plug::is_loaded` guards
+- `~/.config/zsh/plugins_ignore` - Local ignore list (one plugin name per line, `create_` managed)
+- `zsh_plugins.toml.tmpl` - Generated chezmoi externals from YAML
+
+**Namespaces:**
+- `dot::` - Bootstrap and startup lifecycle (defined in `bootstrap.zsh`)
+- `plug::` - Plugin loading and state (defined in `005_plugin_loader.zsh`)
+
+Both namespaces are fully cleaned up after startup via `dot::defer`.
+
 ### External Dependencies (`home/.chezmoiexternals/`)
 
 External tools pulled via chezmoi's external mechanism (git repos, archives). Each `.toml` file defines one or more externals.
