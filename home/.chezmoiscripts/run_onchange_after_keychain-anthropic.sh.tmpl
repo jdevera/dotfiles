@@ -1,0 +1,30 @@
+#!/usr/bin/env bash
+
+# trigger: {{ (onepassword "Anthropic API" "dotfiles").updated_at }}
+
+# {{ template "dotfiles_bashlib.sh" . }}
+
+# Help shellcheck identify the above include
+true || source ../.chezmoitemplates/dotfiles_bashlib.sh
+
+{{ if ne .chezmoi.os "darwin" -}}
+dot::chezmoi_script_skipped "macOS only"
+{{ else -}}
+
+dot::chezmoi_script_start "store Anthropic API key in macOS Keychain"
+
+KEYCHAIN_SERVICE="zsh-ai-cmd-anthropic"
+
+dot::step::start "read key from 1Password"
+key=$(op read "op://dotfiles/Anthropic API/credential") || dot::step::fatal
+dot::step::done
+
+dot::step::start "store in macOS Keychain"
+# Delete existing entry if present (security add fails on duplicates)
+security delete-generic-password -s "$KEYCHAIN_SERVICE" -a "$USER" 2>/dev/null
+security add-generic-password -s "$KEYCHAIN_SERVICE" -a "$USER" -w "$key" || dot::step::fatal
+dot::step::done
+
+dot::success "Anthropic API key stored in Keychain as '$KEYCHAIN_SERVICE'"
+
+{{ end -}}

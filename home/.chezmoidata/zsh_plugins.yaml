@@ -16,6 +16,8 @@
 zsh_plugins:
   - repo: zsh-users/zsh-autosuggestions
     description: "Fish-like autosuggestions for zsh"
+  - repo: kylesnowschwartz/zsh-ai-cmd
+    description: "AI shell suggestions with ghost text via Ctrl+Z"
   - repo: ohmyzsh/ohmyzsh
     description: "Community-driven zsh framework, used as a plugin source"
     plugins:
