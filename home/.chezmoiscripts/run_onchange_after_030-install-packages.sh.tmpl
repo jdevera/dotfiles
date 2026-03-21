@@ -11,11 +11,9 @@ true || source ../.chezmoitemplates/dotfiles_bashlib.sh
 
 {{ if .is_linux -}}
 
-dot::chezmoi_script_start "install packages with APT"
+if command -v apt > /dev/null 2>&1; then
 
-if ! command -v apt > /dev/null 2>&1; then
-    dot::die "APT is not installed"
-fi
+dot::chezmoi_script_start "install packages with APT"
 
 dot::step::start "update package sources"
 sudo apt update || dot::step::fatal
@@ -31,6 +29,47 @@ sudo apt install --no-upgrade -y \
 {{- end }} \
     || dot::step::fatal
 dot::step::done
+
+elif command -v dnf > /dev/null 2>&1; then
+
+dot::chezmoi_script_start "install packages with DNF"
+
+{{- $has_copr := false -}}
+{{- range $package_name := $package_names -}}
+{{-     $package := get $.softwarePackages $package_name -}}
+{{-     if hasKey $package "copr" -}}
+{{-         $has_copr = true -}}
+{{-     end -}}
+{{- end }}
+
+{{ if $has_copr }}
+dot::step::start "enable COPR repositories"
+{{- range $package_name := $package_names -}}
+{{-     $package := get $.softwarePackages $package_name -}}
+{{-     if hasKey $package "copr" }}
+if ! dnf repolist 2>/dev/null | grep -q "copr.*{{ $package.copr | replace "/" ".*" }}"; then
+    sudo dnf copr enable -y {{ $package.copr }}
+fi
+{{-     end -}}
+{{- end }}
+dot::step::done
+{{ end }}
+
+dot::step::start "install packages"
+sudo dnf install --skip-unavailable -y \
+{{- range $package_name := $package_names -}}
+{{-     $package := get $.softwarePackages $package_name -}}
+{{-     if hasKey $package "dnf" -}}
+{{-         $package.dnf }} \
+{{     end -}}
+{{- end }} \
+    || dot::step::fatal
+dot::step::done
+
+else
+    dot::chezmoi_script_start "install packages"
+    dot::die "No supported package manager found (apt or dnf)"
+fi
 
 {{ else if .is_macos -}}
 # MacOS build version: {{ output "sw_vers" "--buildVersion" }}

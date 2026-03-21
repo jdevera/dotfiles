@@ -23,6 +23,12 @@ properties:
         apt:
           type: string
           description: Debian/Ubuntu APT package name
+        dnf:
+          type: string
+          description: Fedora DNF package name
+        copr:
+          type: string
+          description: Fedora COPR repository to enable (user/project format)
         cask:
           type: string
           description: Homebrew cask name

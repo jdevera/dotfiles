@@ -15,60 +15,79 @@ softwarePackages:
   bash:
     brew: bash
     apt: bash
+    dnf: bash
   bash-completion:
     brew: bash-completion@2
     apt: bash-completion
+    dnf: bash-completion
   bat:
     brew: bat
     apt: bat
+    dnf: bat
   curl:
     brew: curl
     apt: curl
+    dnf: curl
   fd:
     brew: fd
     apt: fd-find
+    dnf: fd-find
   fzf:
     brew: fzf
     apt: fzf
+    dnf: fzf
   git:
     brew: git
     apt: git
+    dnf: git
   git-delta:
     brew: git-delta
     apt: git-delta
+    dnf: git-delta
   jq:
     brew: jq
     apt: jq
+    dnf: jq
   ripgrep:
     brew: ripgrep
     apt: ripgrep
+    dnf: ripgrep
   rsync:
     brew: rsync
     apt: rsync
+    dnf: rsync
   starship:
     brew: starship
     apt: starship
+    dnf: starship
+    copr: atim/starship
   tig:
     brew: tig
     apt: tig
+    dnf: tig
   tmux:
     brew: tmux
     apt: tmux
+    dnf: tmux
   tree:
     brew: tree
     apt: tree
+    dnf: tree
   uv:
     brew: uv
     apt: uv
+    dnf: uv
     script: >-
       sh -c "$(curl -LsSf https://astral.sh/uv/install.sh )" --no-modify-path
   wget:
     brew: wget
     apt: wget
+    dnf: wget
   macvim:
     cask: macvim-app
   vim:
     apt: vim
+    dnf: vim-enhanced
   jordanbaird-ice:
     cask: jordanbaird-ice
   font-fantasque-sans-mono-nerd-font:
@@ -85,6 +104,7 @@ softwarePackages:
     cask: visual-studio-code
   zoxide:
     brew: zoxide
+    dnf: zoxide
     eget:
       source: ajeetdsouza/zoxide
   lowdown:
