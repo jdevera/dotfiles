@@ -171,5 +171,19 @@ bind-key P command-prompt -p 'save history to filename:' -I '~/.tmux.history' 'c
 # Use b to go to the last active window
 bind-key b last
 
+# Window picker with fzf in a floating popup
+bind-key f display-popup -E -w 60% -h 60% "~/.config/tmux/window-picker.sh"
+
+# }}}
+# Plugins {{ "{{{" }}
+# =========
+
+# List of TPM plugins
+set -g @plugin 'tmux-plugins/tpm'
+set -g @plugin 'wfxr/tmux-fzf-url'
+
+# Initialize TPM (keep this line at the very bottom of tmux.conf)
+run '~/.tmux/plugins/tpm/tpm'
+
 # }}}
 # vim: fdm=marker ft=tmux :

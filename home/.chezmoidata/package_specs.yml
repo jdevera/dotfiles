@@ -87,3 +87,7 @@ softwarePackages:
     brew: zoxide
     eget:
       source: ajeetdsouza/zoxide
+  lowdown:
+    brew: lowdown
+  shdoc-ng:
+    brew: jdevera/tap/shdoc-ng

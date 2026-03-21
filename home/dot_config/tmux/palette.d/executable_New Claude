@@ -1,0 +1,11 @@
+#!/usr/bin/env bash
+# @name New Claude
+# @brief Open a new tmux window running Claude Code
+# @description
+#     Prompts for a session name, then creates a new tmux window
+#     with that name and starts Claude Code in it.
+
+name=$(echo "" | fzf --print-query --prompt="session name > " --no-info --reverse | head -1)
+[[ -z $name ]] && exit 0
+
+tmux new-window -n "$name" "claude -n \"$name\""
