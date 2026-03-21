@@ -40,6 +40,7 @@ dot::assert_has_commands uv jq yq
 currently_installed_tools_json="$(
     for f in ~/.local/share/uv/tools/*/uv-receipt.toml
     do
+        [[ -f $f ]] || continue
         yq -p toml -o json "$f"
     done |
         jq -s '
@@ -69,7 +70,7 @@ then
     dot::step::start "install uv tool: {{ $package_name }}"
     uv tool install {{ range $package.with }}--with {{. | quote}} {{end}}{{ $package.name | quote}}
     dot::step::done
-    did_install_anything = true
+    did_install_anything=true
 fi
 {{ end -}}
 
