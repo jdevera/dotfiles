@@ -11,6 +11,8 @@ softwarePackages:
       name: tox
       with: tox-uv
   claude-code:
+    check:
+      command: claude
     script: >-
       curl -fsSL https://claude.ai/install.sh | bash
   colout:

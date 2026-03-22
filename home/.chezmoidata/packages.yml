@@ -17,6 +17,7 @@ packages:
       - curl
       - fd
       - fzf
+      - gh
       - git
       - git-delta
       - jq
@@ -47,6 +48,7 @@ packages:
     - bat
     - ripgrep
     - fd
+    - gh
     - tmux
     - vim
     - starship
