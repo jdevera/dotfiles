@@ -120,7 +120,7 @@ softwarePackages:
   eget:
     brew: eget
     script: >-
-      curl -o /tmp/eget.sh https://zyedidia.github.io/eget.sh && sh /tmp/eget.sh
+      curl -o /tmp/eget.sh https://zyedidia.github.io/eget.sh && cd /tmp && sh /tmp/eget.sh && mv /tmp/eget ~/.local/bin/
   git-this-bread:
     brew: jdevera/tap/git-this-bread
     dnf:
