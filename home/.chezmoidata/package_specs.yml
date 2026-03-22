@@ -118,5 +118,8 @@ softwarePackages:
       curl -o /tmp/eget.sh https://zyedidia.github.io/eget.sh && sh /tmp/eget.sh
   shdoc-ng:
     brew: jdevera/tap/shdoc-ng
+    dnf:
+      package: shdoc-ng
+      copr: jdevera/shdoc-ng
     eget:
       source: jdevera/shdoc-ng
