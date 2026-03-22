@@ -13,6 +13,8 @@ starship:
       bash_indicator: "[🅱 ](bold peach)"
       zsh_indicator: "[🅩 ](bold sapphire)"
       format: "$indicator "
+    hostname:
+      style: "bold teal"
     directory:
       truncation_symbol: "…/"
       truncation_length: 4
