@@ -32,8 +32,7 @@ Available in `.tmpl` files (defined in `home/.chezmoi.toml.tmpl`):
 | Variable | Description |
 |----------|-------------|
 | `.is_macos` / `.is_linux` | OS detection |
-| `.is_interactive` | Machine with direct user interaction (all macOS, specific Linux hosts) |
-| `.is_headless` | No GUI (Linux servers, opposite of interactive) |
+| `.has_gui` | Has graphical environment (all macOS, specific Linux hosts) |
 | `.is_work` | Work machine vs personal |
 | `.email`, `.fname`, `.ghuser` | Personal info from 1Password |
 | `.copy_command` | Clipboard command (`pbcopy` or `xsel`) |

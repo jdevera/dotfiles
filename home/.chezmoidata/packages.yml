@@ -35,7 +35,7 @@ packages:
       - lowdown
       - shdoc-ng
       - git-this-bread
-    interactive:
+    gui:
       - jordanbaird-ice
       - nf-fantasque-sans-mono
       - vscode

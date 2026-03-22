@@ -36,39 +36,18 @@ Machine information
 {{- end -}}
 
 {{- /*
-Interactive hosts are hosts I interact directly with, rather than through other
-machines.
+GUI hosts have a graphical environment (all macOS, specific Linux hosts).
 */ -}}
 
-{{- $interactive_hosts := list "nexon" -}}
-{{- $is_interactive := false -}}
+{{- $gui_hosts := list "nexon" -}}
+{{- $has_gui := false -}}
 
 {{- if $is_macos -}}
-{{-     $is_interactive = true -}}
+{{-     $has_gui = true -}}
 {{- else -}}
-{{-     range $interactive_hosts -}}
+{{-     range $gui_hosts -}}
 {{-         if eq . $.chezmoi.hostname -}}
-{{-             $is_interactive = true -}}
-{{-             break -}}
-{{-         end -}}
-{{-     end -}}
-{{- end }}
-
-{{- /*
-Headless detection - systems that should NOT have GUI packages
-*/ -}}
-
-{{- $headful_hosts := list "nexon" -}}
-{{- $is_headless := true -}}
-
-{{- /* Never headless on macOS */ -}}
-{{- if $is_macos -}}
-{{-     $is_headless = false -}}
-{{- else -}}
-{{- /* Check if hostname is in explicit headful hosts list */ -}}
-{{-     range $headful_hosts -}}
-{{-         if eq . $.chezmoi.hostname -}}
-{{-             $is_headless = false -}}
+{{-             $has_gui = true -}}
 {{-             break -}}
 {{-         end -}}
 {{-     end -}}
@@ -110,8 +89,7 @@ Personal information
     email = {{ $email | quote }}
     fname = {{ $full_name | quote }}
     ghuser = {{ $ghuser | quote }}
-    is_interactive = {{ $is_interactive }}
-    is_headless = {{ $is_headless }}
+    has_gui = {{ $has_gui }}
     is_macos = {{ $is_macos }}
     is_linux = {{ $is_linux }}
     is_work = {{ $is_work }}

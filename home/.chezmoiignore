@@ -23,7 +23,7 @@ Library/
 .Xresources
 {{ end }}
 
-{{ if not .is_interactive }}
+{{ if not .has_gui }}
 .config/espanso/
 {{ end }}
 

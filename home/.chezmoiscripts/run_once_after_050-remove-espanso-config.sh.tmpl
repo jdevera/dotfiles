@@ -1,4 +1,4 @@
-{{ if and .is_interactive .is_macos -}}
+{{ if and .has_gui .is_macos -}}
 #!/usr/bin/env bash
 
 # {{ template "dotfiles_bashlib.sh" . }}
