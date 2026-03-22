@@ -1,0 +1,147 @@
+{{- $chezmoi := .chezmoi -}}
+{{- $specs := .softwarePackages -}}
+{{- $hasUV := lookPath "uv" -}}
+{{- $hasEget := lookPath "eget" -}}
+{{- $hasAPT := lookPath "apt" -}}
+{{- $hasDNF := lookPath "dnf" -}}
+
+{{- /* Build the packages list */ -}}
+{{- $os_packages := get .packages .chezmoi.os -}}
+{{- $pkg_names := $os_packages.all -}}
+{{- if and .is_interactive (hasKey $os_packages "interactive") -}}
+{{-   $pkg_names = concat $pkg_names $os_packages.interactive -}}
+{{- end -}}
+
+{{- /* Build the install_tools list */ -}}
+{{- $tool_names := list -}}
+{{- if and (hasKey . "install_tools") (hasKey .install_tools .chezmoi.os) -}}
+{{-   $os_tools := get .install_tools .chezmoi.os -}}
+{{-   $tool_names = $os_tools.all -}}
+{{- end -}}
+
+{{- /* Combine both lists with a tag for later separation */ -}}
+{{- $all := list -}}
+{{- range $name := $tool_names -}}
+{{-   $all = append $all (dict "name" $name "list" "install_tools") -}}
+{{- end -}}
+{{- range $name := $pkg_names -}}
+{{-   $all = append $all (dict "name" $name "list" "packages") -}}
+{{- end -}}
+
+{{- /* Resolve each package to method + detail */ -}}
+{{- $pkg_lines := list -}}
+{{- $tool_lines := list -}}
+{{- range $entry := $all -}}
+{{-   $name := $entry.name -}}
+{{-   $spec := get $specs $name -}}
+{{-   $method := "" -}}
+{{-   $detail := "" -}}
+{{- /* Tier 1: OS package manager */ -}}
+{{-   if eq $chezmoi.os "darwin" -}}
+{{-     if and (not $method) (hasKey $spec "brew") -}}
+{{-       $method = "brew" -}}
+{{-       $detail = $spec.brew -}}
+{{-     end -}}
+{{-     if and (not $method) (hasKey $spec "cask") -}}
+{{-       $method = "cask" -}}
+{{-       $detail = $spec.cask -}}
+{{-     end -}}
+{{-   else if eq $chezmoi.os "linux" -}}
+{{-     if and (not $method) $hasAPT (hasKey $spec "apt") -}}
+{{-       $method = "apt" -}}
+{{-       $detail = $spec.apt -}}
+{{-     end -}}
+{{-     if and (not $method) $hasDNF (hasKey $spec "dnf") -}}
+{{-       $val := $spec.dnf -}}
+{{-       if kindIs "string" $val -}}
+{{-         $method = "dnf" -}}
+{{-         $detail = $val -}}
+{{-       else -}}
+{{-         $method = "dnf" -}}
+{{-         if hasKey $val "copr" -}}
+{{-           $detail = printf "%s (copr: %s)" $val.package $val.copr -}}
+{{-         else -}}
+{{-           $detail = $val.package -}}
+{{-         end -}}
+{{-       end -}}
+{{-     end -}}
+{{-   end -}}
+{{- /* Tier 2: Cross-platform fallbacks */ -}}
+{{-   if and (not $method) $hasUV (hasKey $spec "uv") -}}
+{{-     $method = "uv" -}}
+{{-     $u := $spec.uv -}}
+{{-     if kindIs "string" $u -}}
+{{-       $detail = $u -}}
+{{-     else -}}
+{{-       $detail = $u.name -}}
+{{-       if hasKey $u "with" -}}
+{{-         if kindIs "string" $u.with -}}
+{{-           $detail = printf "%s (with: %s)" $u.name $u.with -}}
+{{-         else if $u.with -}}
+{{-           $detail = printf "%s (with: %s)" $u.name (join ", " $u.with) -}}
+{{-         end -}}
+{{-       end -}}
+{{-     end -}}
+{{-   end -}}
+{{-   if and (not $method) $hasEget (hasKey $spec "eget") -}}
+{{-     $method = "eget" -}}
+{{-     $detail = $spec.eget.source -}}
+{{-   end -}}
+{{-   if and (not $method) (hasKey $spec "script") -}}
+{{-     $method = "script" -}}
+{{-     $detail = "(inline)" -}}
+{{-   end -}}
+{{-   if not $method -}}
+{{-     $method = "none" -}}
+{{-     $detail = "-" -}}
+{{-   end -}}
+{{-   $line := printf "  %-28s %-8s %s" $name $method $detail -}}
+{{-   if eq $entry.list "packages" -}}
+{{-     $pkg_lines = append $pkg_lines $line -}}
+{{-   else -}}
+{{-     $tool_lines = append $tool_lines $line -}}
+{{-   end -}}
+{{- end -}}
+#!/usr/bin/env bash
+set -euo pipefail
+
+show_header() {
+    echo "Platform: {{ $chezmoi.os }}{{ if eq $chezmoi.os "darwin" }} (macOS){{ else }} (Linux){{ end }}"
+    echo "Interactive: {{ if $.is_interactive }}yes{{ else }}no{{ end }}"
+}
+
+show_packages() {
+    echo
+    echo "Packages ({{ len $pkg_lines }}):"
+{{ range $line := $pkg_lines }}    echo {{ $line | squote }}
+{{ end -}}
+}
+
+show_install_tools() {
+    echo
+    echo "Install tools ({{ len $tool_lines }}):"
+{{ range $line := $tool_lines }}    echo {{ $line | squote }}
+{{ end -}}
+}
+
+list="${1:-packages}"
+
+case "$list" in
+    packages)
+        show_header
+        show_packages
+        ;;
+    install_tools)
+        show_header
+        show_install_tools
+        ;;
+    all)
+        show_header
+        show_install_tools
+        show_packages
+        ;;
+    *)
+        echo "Usage: chezmoi-list-packages [packages|install_tools|all]" >&2
+        exit 1
+        ;;
+esac
