@@ -1,0 +1,13 @@
+{{- $os_packages := get .packages .chezmoi.os -}}
+{{- $package_names := $os_packages.all -}}
+{{- if and .is_interactive (hasKey $os_packages "interactive") -}}
+{{-     $package_names = concat $package_names $os_packages.interactive -}}
+{{- end -}}
+{{- includeTemplate "install_packages.sh.tmpl" (dict
+    "title" "install packages"
+    "package_names" $package_names
+    "softwarePackages" .softwarePackages
+    "chezmoi" .chezmoi
+    "is_macos" .is_macos
+    "is_linux" .is_linux
+) -}}

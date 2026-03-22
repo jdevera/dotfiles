@@ -1,3 +1,13 @@
+install_tools:
+  darwin:
+    all:
+      - eget
+      - uv
+  linux:
+    all:
+      - eget
+      - uv
+
 packages:
   darwin:
     all:
@@ -26,7 +36,7 @@ packages:
       - shdoc-ng
     interactive:
       - jordanbaird-ice
-      - font-fantasque-sans-mono-nerd-font
+      - nf-fantasque-sans-mono
       - vscode
   linux:
     all:
@@ -50,4 +60,5 @@ packages:
     - colout
     - tox
     - zoxide
+    - lowdown
   interactive: []

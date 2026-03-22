@@ -1,0 +1,12 @@
+{{- if and (hasKey . "install_tools") (hasKey .install_tools .chezmoi.os) -}}
+{{-   $os_tools := get .install_tools .chezmoi.os -}}
+{{-   $tool_names := $os_tools.all -}}
+{{-   includeTemplate "install_packages.sh.tmpl" (dict
+        "title" "install tools"
+        "package_names" $tool_names
+        "softwarePackages" .softwarePackages
+        "chezmoi" .chezmoi
+        "is_macos" .is_macos
+        "is_linux" .is_linux
+     ) -}}
+{{- end -}}

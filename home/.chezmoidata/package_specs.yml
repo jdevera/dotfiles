@@ -59,8 +59,9 @@ softwarePackages:
   starship:
     brew: starship
     apt: starship
-    dnf: starship
-    copr: atim/starship
+    dnf:
+      package: starship
+      copr: atim/starship
   tig:
     brew: tig
     apt: tig
@@ -90,7 +91,7 @@ softwarePackages:
     dnf: vim-enhanced
   jordanbaird-ice:
     cask: jordanbaird-ice
-  font-fantasque-sans-mono-nerd-font:
+  nf-fantasque-sans-mono:
     cask: font-fantasque-sans-mono-nerd-font
   yq:
     homepage: https://github.com/mikefarah/yq
@@ -109,5 +110,13 @@ softwarePackages:
       source: ajeetdsouza/zoxide
   lowdown:
     brew: lowdown
+    apt: lowdown
+    dnf: lowdown
+  eget:
+    brew: eget
+    script: >-
+      curl -o /tmp/eget.sh https://zyedidia.github.io/eget.sh && sh /tmp/eget.sh
   shdoc-ng:
     brew: jdevera/tap/shdoc-ng
+    eget:
+      source: jdevera/shdoc-ng

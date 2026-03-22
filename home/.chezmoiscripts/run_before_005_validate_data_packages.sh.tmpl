@@ -18,6 +18,11 @@
 {{- if and .is_interactive (hasKey $os_packages "interactive") -}}
 {{-     $packages = concat $packages $os_packages.interactive -}}
 {{- end -}}
+{{- /* Also validate install_tools entries */ -}}
+{{- if and (hasKey . "install_tools") (hasKey .install_tools .chezmoi.os) -}}
+{{-     $os_tools := get .install_tools .chezmoi.os -}}
+{{-     $packages = concat $packages $os_tools.all -}}
+{{- end -}}
 {{- $missing_packages := list -}}
 {{- range $package_name := $packages -}}
 {{- /* Check if the package is in the registry */}}

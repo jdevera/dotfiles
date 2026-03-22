@@ -1,0 +1,200 @@
+{{- /*
+    install_packages.sh.tmpl — Shared package installation template.
+    Expects a dict with keys:
+      title            — script banner text
+      package_names    — list of package names to install
+      softwarePackages — the specs registry
+      chezmoi          — chezmoi data (for OS detection)
+      is_macos         — boolean
+      is_linux         — boolean
+*/ -}}
+{{- $chezmoi := .chezmoi -}}
+{{- $specs := .softwarePackages -}}
+{{- $title := .title -}}
+{{- $names := .package_names -}}
+
+{{- /* Pre-compute tool availability */ -}}
+{{- $hasUV := lookPath "uv" -}}
+{{- $hasEget := lookPath "eget" -}}
+{{- $hasAPT := lookPath "apt" -}}
+{{- $hasDNF := lookPath "dnf" -}}
+
+{{- /* Method collections */ -}}
+{{- $brew := list -}}
+{{- $apt := list -}}
+{{- $dnf := list -}}
+{{- $copr := list -}}
+{{- $uv := dict -}}
+{{- $eget := dict -}}
+{{- $script := dict -}}
+
+{{- /* Resolve each package to an install method */ -}}
+{{- range $name := $names -}}
+{{-   $spec := get $specs $name -}}
+{{-   $ok := false -}}
+
+{{- /* Tier 1: OS package manager */ -}}
+{{-   if eq $chezmoi.os "darwin" -}}
+{{-     if and (not $ok) (hasKey $spec "brew") -}}
+{{-       $brew = append $brew (printf "brew %s" ($spec.brew | quote)) -}}
+{{-       $ok = true -}}
+{{-     end -}}
+{{-     if and (not $ok) (hasKey $spec "cask") -}}
+{{-       $brew = append $brew (printf "cask %s" ($spec.cask | quote)) -}}
+{{-       $ok = true -}}
+{{-     end -}}
+{{-   else if eq $chezmoi.os "linux" -}}
+{{-     if and (not $ok) $hasAPT (hasKey $spec "apt") -}}
+{{-       $apt = append $apt $spec.apt -}}
+{{-       $ok = true -}}
+{{-     end -}}
+{{-     if and (not $ok) $hasDNF (hasKey $spec "dnf") -}}
+{{-       $val := $spec.dnf -}}
+{{-       if kindIs "string" $val -}}
+{{-         $dnf = append $dnf $val -}}
+{{-       else -}}
+{{-         $dnf = append $dnf $val.package -}}
+{{-         if hasKey $val "copr" -}}
+{{-           $copr = append $copr $val.copr -}}
+{{-         end -}}
+{{-       end -}}
+{{-       $ok = true -}}
+{{-     end -}}
+{{-   end -}}
+
+{{- /* Tier 2: Cross-platform fallbacks (uv > eget > script) */ -}}
+{{-   if and (not $ok) $hasUV (hasKey $spec "uv") -}}
+{{-     $u := $spec.uv -}}
+{{-     if kindIs "string" $u -}}
+{{-       $uv = set $uv $name (dict "name" $u "with" list) -}}
+{{-     else -}}
+{{-       $w := list -}}
+{{-       if hasKey $u "with" -}}
+{{-         if kindIs "string" $u.with -}}
+{{-           $w = list $u.with -}}
+{{-         else -}}
+{{-           $w = $u.with -}}
+{{-         end -}}
+{{-       end -}}
+{{-       $uv = set $uv $name (dict "name" $u.name "with" $w) -}}
+{{-     end -}}
+{{-     $ok = true -}}
+{{-   end -}}
+{{-   if and (not $ok) $hasEget (hasKey $spec "eget") -}}
+{{-     $eget = set $eget $name $spec.eget -}}
+{{-     $ok = true -}}
+{{-   end -}}
+{{-   if and (not $ok) (hasKey $spec "script") -}}
+{{-     $script = set $script $name $spec.script -}}
+{{-     $ok = true -}}
+{{-   end -}}
+
+{{-   if not $ok -}}
+{{-     warnf "Package %s: no install method for %s" $name $chezmoi.os -}}
+{{-   end -}}
+{{- end -}}
+
+{{- $hasAny := or (len $brew) (len $apt) (len $dnf) (len $uv) (len $eget) (len $script) -}}
+{{- if $hasAny -}}
+#!/usr/bin/env bash
+{{ if eq $chezmoi.os "darwin" -}}
+# macOS build version: {{ output "sw_vers" "--buildVersion" -}}
+{{ end }}
+# {{- includeTemplate "dotfiles_bashlib.sh" . }}
+# Help shellcheck identify the above include
+true || source ../.chezmoitemplates/dotfiles_bashlib.sh
+
+dot::chezmoi_script_start {{ $title | quote }}
+{{ if $brew }}
+dot::step::start "ensure Homebrew is installed"
+if ! dot::has_command brew; then
+    dot::step::fatal "NOT installed"
+fi
+dot::step::done
+
+dot::step::start "install formulae and casks"
+brew bundle --no-upgrade --file=/dev/stdin <<'BREWEOF' || dot::step::fatal
+{{ range $line := $brew -}}
+{{ $line }}
+{{ end -}}
+BREWEOF
+dot::step::done
+{{ end -}}
+{{ if $apt }}
+dot::step::start "update package sources"
+sudo apt update || dot::step::fatal
+dot::step::done
+
+dot::step::start "install packages with APT"
+sudo apt install --no-upgrade -y \
+{{ range $pkg := $apt }}    {{ $pkg }} \
+{{ end }}    || dot::step::fatal
+dot::step::done
+{{ end -}}
+{{ if $dnf }}
+{{ if $copr -}}
+dot::step::start "enable COPR repositories"
+{{ range $repo := ($copr | uniq) -}}
+if ! dnf repolist 2>/dev/null | grep -q "copr.*{{ $repo | replace "/" ".*" }}"; then
+    sudo dnf copr enable -y {{ $repo }}
+fi
+{{ end -}}
+dot::step::done
+{{ end }}
+dot::step::start "install packages with DNF"
+sudo dnf install --skip-unavailable -y \
+{{ range $pkg := $dnf }}    {{ $pkg }} \
+{{ end }}    || dot::step::fatal
+dot::step::done
+{{ end -}}
+{{ if $uv }}
+dot::assert_has_commands uv jq yq
+
+currently_installed_tools_json="$(
+    for f in ~/.local/share/uv/tools/*/uv-receipt.toml
+    do
+        [[ -f $f ]] || continue
+        yq -p toml -o json "$f"
+    done |
+        jq -s '
+            map(
+                .tool.requirements
+                | select(length>0)
+                | {key: .[0].name, value: (.[1:] | map(.name) | unique)}
+            )
+            | from_entries
+            ')"
+
+function is_already_installed() {
+    local package_name=$1
+    local deps=$2
+    local result="$(echo "$currently_installed_tools_json" |
+        jq --arg pkg "$package_name" \
+           --argjson deps "$deps" \
+           'has($pkg) and ((.[$pkg] | sort) == ($deps | sort))')"
+    [[ $result == true ]]
+}
+{{ range $name, $pkg := $uv }}
+if ! is_already_installed {{ $name | quote }} {{ $pkg.with | toJson | quote }}
+then
+    dot::step::start "install uv tool: {{ $name }}"
+    uv tool install {{ range $pkg.with }}--with {{ . | quote }} {{ end }}{{ $pkg.name | quote }}
+    dot::step::done
+fi
+{{ end -}}
+{{ end -}}
+{{ if $eget }}
+{{ range $name, $pkg := $eget -}}
+dot::step::start "install {{ $name }} with eget"
+eget {{ $pkg.source | quote }} -t ~/.local/bin/
+dot::step::done
+{{ end -}}
+{{ end -}}
+{{ if $script }}
+{{ range $name, $cmd := $script -}}
+dot::step::start "install {{ $name }} via script"
+{{ $cmd }}
+dot::step::done
+{{ end -}}
+{{ end -}}
+{{- end -}}

@@ -24,11 +24,19 @@ properties:
           type: string
           description: Debian/Ubuntu APT package name
         dnf:
-          type: string
-          description: Fedora DNF package name
-        copr:
-          type: string
-          description: Fedora COPR repository to enable (user/project format)
+          description: Fedora DNF package name (string) or object with package and optional copr
+          oneOf:
+            - type: string
+            - type: object
+              required: [package]
+              properties:
+                package:
+                  type: string
+                  description: DNF package name
+                copr:
+                  type: string
+                  description: COPR repository to enable (user/project format)
+              additionalProperties: false
         cask:
           type: string
           description: Homebrew cask name
