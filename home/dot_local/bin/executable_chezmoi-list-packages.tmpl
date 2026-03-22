@@ -9,7 +9,7 @@
 {{- $os_packages := get .packages .chezmoi.os -}}
 {{- $pkg_names := $os_packages.all -}}
 {{- if and .has_gui (hasKey $os_packages "gui") -}}
-{{-   $pkg_names = concat $pkg_names $os_packages.interactive -}}
+{{-   $pkg_names = concat $pkg_names $os_packages.gui -}}
 {{- end -}}
 
 {{- /* Build the install_tools list */ -}}
@@ -102,12 +102,14 @@
 {{-     $tool_lines = append $tool_lines $line -}}
 {{-   end -}}
 {{- end -}}
+{{- $pkg_lines = sortAlpha $pkg_lines -}}
+{{- $tool_lines = sortAlpha $tool_lines -}}
 #!/usr/bin/env bash
 set -euo pipefail
 
 show_header() {
     echo "Platform: {{ $chezmoi.os }}{{ if eq $chezmoi.os "darwin" }} (macOS){{ else }} (Linux){{ end }}"
-    echo "Interactive: {{ if $.has_gui }}yes{{ else }}no{{ end }}"
+    echo "GUI: {{ if $.has_gui }}yes{{ else }}no{{ end }}"
 }
 
 show_packages() {
