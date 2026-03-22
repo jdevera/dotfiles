@@ -34,6 +34,7 @@ packages:
       - zoxide
       - lowdown
       - shdoc-ng
+      - git-this-bread
     interactive:
       - jordanbaird-ice
       - nf-fantasque-sans-mono
@@ -62,4 +63,5 @@ packages:
     - zoxide
     - lowdown
     - shdoc-ng
+    - git-this-bread
   interactive: []

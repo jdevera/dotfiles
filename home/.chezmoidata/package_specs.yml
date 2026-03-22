@@ -116,6 +116,11 @@ softwarePackages:
     brew: eget
     script: >-
       curl -o /tmp/eget.sh https://zyedidia.github.io/eget.sh && sh /tmp/eget.sh
+  git-this-bread:
+    brew: jdevera/tap/git-this-bread
+    dnf:
+      package: git-this-bread
+      copr: jdevera/git-this-bread
   shdoc-ng:
     brew: jdevera/tap/shdoc-ng
     dnf:
