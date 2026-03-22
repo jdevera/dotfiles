@@ -10,6 +10,9 @@ softwarePackages:
     uv:
       name: tox
       with: tox-uv
+  claude-code:
+    script: >-
+      curl -fsSL https://claude.ai/install.sh | bash
   colout:
     uv: colout
   bash:

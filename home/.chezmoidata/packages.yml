@@ -35,6 +35,7 @@ packages:
       - lowdown
       - shdoc-ng
       - git-this-bread
+      - claude-code
     gui:
       - jordanbaird-ice
       - nf-fantasque-sans-mono
@@ -64,4 +65,5 @@ packages:
     - lowdown
     - shdoc-ng
     - git-this-bread
-  interactive: []
+    - claude-code
+  gui: []
