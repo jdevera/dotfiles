@@ -104,6 +104,8 @@ softwarePackages:
   hishtory:
     homepage: https://github.com/ddworken/hishtory
     brew: hishtory
+    eget:
+      source: ddworken/hishtory
   vscode:
     cask: visual-studio-code
   zoxide:
