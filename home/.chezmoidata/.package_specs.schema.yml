@@ -48,6 +48,14 @@ properties:
           type: string
           description: |-
             Shell script to install the package.
+        check:
+          type: object
+          description: How to check if the package is already installed (used by eget and script methods)
+          properties:
+            command:
+              type: string
+              description: Command name to look up in PATH
+          additionalProperties: false
       additionalProperties: false
 additionalProperties: false
 

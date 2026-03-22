@@ -41,6 +41,9 @@ softwarePackages:
     brew: fzf
     apt: fzf
     dnf: fzf
+  gh:
+    brew: gh
+    dnf: gh
   git:
     brew: git
     apt: git
@@ -83,6 +86,8 @@ softwarePackages:
     brew: uv
     apt: uv
     dnf: uv
+    check:
+      command: uv
     script: >-
       sh -c "$(curl -LsSf https://astral.sh/uv/install.sh )" --no-modify-path
   wget:
@@ -101,11 +106,15 @@ softwarePackages:
   yq:
     homepage: https://github.com/mikefarah/yq
     brew: yq
+    check:
+      command: yq
     eget:
       source: mikefarah/yq
   hishtory:
     homepage: https://github.com/ddworken/hishtory
     brew: hishtory
+    check:
+      command: hishtory
     eget:
       source: ddworken/hishtory
   vscode:
@@ -113,6 +122,8 @@ softwarePackages:
   zoxide:
     brew: zoxide
     dnf: zoxide
+    check:
+      command: zoxide
     eget:
       source: ajeetdsouza/zoxide
   lowdown:
@@ -121,6 +132,8 @@ softwarePackages:
     dnf: lowdown
   eget:
     brew: eget
+    check:
+      command: eget
     script: >-
       curl -o /tmp/eget.sh https://zyedidia.github.io/eget.sh && cd /tmp && sh /tmp/eget.sh && mv /tmp/eget ~/.local/bin/
   git-this-bread:
@@ -133,5 +146,7 @@ softwarePackages:
     dnf:
       package: shdoc-ng
       copr: jdevera/shdoc-ng
+    check:
+      command: shdoc-ng
     eget:
       source: jdevera/shdoc-ng

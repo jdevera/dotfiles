@@ -28,6 +28,7 @@
 {{- $uv := dict -}}
 {{- $eget := dict -}}
 {{- $script := dict -}}
+{{- $checks := dict -}}
 
 {{- /* Resolve each package to an install method */ -}}
 {{- range $name := $names -}}
@@ -83,10 +84,12 @@
 {{-   end -}}
 {{-   if and (not $ok) $hasEget (hasKey $spec "eget") -}}
 {{-     $eget = set $eget $name $spec.eget -}}
+{{-     if hasKey $spec "check" -}}{{- $checks = set $checks $name $spec.check -}}{{- end -}}
 {{-     $ok = true -}}
 {{-   end -}}
 {{-   if and (not $ok) (hasKey $spec "script") -}}
 {{-     $script = set $script $name $spec.script -}}
+{{-     if hasKey $spec "check" -}}{{- $checks = set $checks $name $spec.check -}}{{- end -}}
 {{-     $ok = true -}}
 {{-   end -}}
 
@@ -186,16 +189,36 @@ fi
 {{ end -}}
 {{ if $eget }}
 {{ range $name, $pkg := $eget -}}
+{{ if hasKey $checks $name -}}
+dot::step::start "install {{ $name }} with eget"
+if dot::has_command {{ (get $checks $name).command | quote }}; then
+    dot::step::skipped "already installed"
+else
+    eget {{ $pkg.source | quote }} -t ~/.local/bin/
+    dot::step::done
+fi
+{{ else -}}
 dot::step::start "install {{ $name }} with eget"
 eget {{ $pkg.source | quote }} -t ~/.local/bin/
 dot::step::done
 {{ end -}}
 {{ end -}}
+{{ end -}}
 {{ if $script }}
 {{ range $name, $cmd := $script -}}
+{{ if hasKey $checks $name -}}
+dot::step::start "install {{ $name }} via script"
+if dot::has_command {{ (get $checks $name).command | quote }}; then
+    dot::step::skipped "already installed"
+else
+    {{ $cmd }}
+    dot::step::done
+fi
+{{ else -}}
 dot::step::start "install {{ $name }} via script"
 {{ $cmd }}
 dot::step::done
+{{ end -}}
 {{ end -}}
 {{ end -}}
 {{- end -}}
