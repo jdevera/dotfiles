@@ -24,18 +24,8 @@ fi
 #############################################################################
 
 # Directories
-export DDOC=$HOME/doc
-export DMEDIA=$HOME/media
-export DBACKUP=$HOME/backup
 export DDOWN=$HOME/comms/downloads
-export DOTHER=$HOME/other
-export DADMIN=$DOTHER/admin
-export DSYSDATA=$DADMIN/data
-export DDROPBOX=$HOME/comms/Dropbox
 export DZSH=$HOME/.config/zsh/zsh.d
-export DBASH=$HOME/.bash.d  # Keep for compatibility
-export DDESKTOP=$DOTHER/Desktop
-export DAPTCACHE=/var/cache/apt/archives
 
 export PROJECT_HOME=$HOME/devel/myforge/projects
 
@@ -46,10 +36,6 @@ then
    export PROJECT_HOME=$HOME/devel/projects
 fi
 
-# Files
-export FSYSLOG=/var/log/syslog
-export FILOG=$DSYSDATA/install.log
-
 export NPM_PACKAGES="$HOME/.npm-packages"
 
 #############################################################################
@@ -57,10 +43,6 @@ export NPM_PACKAGES="$HOME/.npm-packages"
 # }}}
 # Section: PATH {{{
 #############################################################################
-
-# Add my admin scripts to the path
-[[ -n $DADMIN ]] && pathprepend "$DADMIN/scripts"
-[[ -n $DOTHER ]] && pathprepend "$DOTHER/run/bin"
 
 pathprepend /usr/local/sbin
 
