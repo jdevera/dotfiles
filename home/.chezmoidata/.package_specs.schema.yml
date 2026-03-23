@@ -67,7 +67,24 @@ $defs:
       source:
         type: string
         description: |
-          Location of the package (github user/repo, URL, or local path)  
+          Location of the package (github user/repo, URL, or local path)
+      name:
+        type: string
+        description: Output filename (defaults to source repo name if not set)
+      asset:
+        description: Asset filter(s) passed to eget --asset (string or list)
+        oneOf:
+          - type: string
+          - type: array
+            items:
+              type: string
+      file:
+        type: string
+        description: Glob passed to eget --file to select files for extraction
+      download_only:
+        type: boolean
+        description: Pass --download-only (no extraction)
+    additionalProperties: false
 
   uvDef:
     description: |

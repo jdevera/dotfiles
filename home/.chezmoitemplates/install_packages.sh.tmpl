@@ -189,17 +189,33 @@ fi
 {{ end -}}
 {{ if $eget }}
 {{ range $name, $pkg := $eget -}}
+{{- $egetTo := "~/.local/bin/" -}}
+{{- if hasKey $pkg "name" -}}{{- $egetTo = printf "~/.local/bin/%s" $pkg.name -}}{{- end -}}
+{{- $egetCmd := printf "eget %s --to %s" ($pkg.source | quote) $egetTo -}}
+{{- if hasKey $pkg "asset" -}}
+{{-   $assets := $pkg.asset -}}
+{{-   if kindIs "string" $assets -}}{{- $assets = list $assets -}}{{- end -}}
+{{-   range $a := $assets -}}
+{{-     $egetCmd = printf "%s --asset %s" $egetCmd ($a | quote) -}}
+{{-   end -}}
+{{- end -}}
+{{- if hasKey $pkg "file" -}}
+{{-   $egetCmd = printf "%s --file %s" $egetCmd ($pkg.file | quote) -}}
+{{- end -}}
+{{- if and (hasKey $pkg "download_only") $pkg.download_only -}}
+{{-   $egetCmd = printf "%s --download-only" $egetCmd -}}
+{{- end -}}
 {{ if hasKey $checks $name -}}
 dot::step::start "install {{ $name }} with eget"
 if dot::has_command {{ (get $checks $name).command | quote }}; then
     dot::step::skipped "already installed"
 else
-    eget {{ $pkg.source | quote }} -t ~/.local/bin/
+    {{ $egetCmd }}
     dot::step::done
 fi
 {{ else -}}
 dot::step::start "install {{ $name }} with eget"
-eget {{ $pkg.source | quote }} -t ~/.local/bin/
+{{ $egetCmd }}
 dot::step::done
 {{ end -}}
 {{ end -}}
