@@ -16,7 +16,7 @@
 {{- $os_packages := get .packages .chezmoi.os -}}
 {{- $packages := $os_packages.all -}}
 {{- if and .has_gui (hasKey $os_packages "gui") -}}
-{{-     $packages = concat $packages $os_packages.interactive -}}
+{{-     $packages = concat $packages $os_packages.gui -}}
 {{- end -}}
 {{- /* Also validate install_tools entries */ -}}
 {{- if and (hasKey . "install_tools") (hasKey .install_tools .chezmoi.os) -}}

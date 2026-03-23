@@ -70,4 +70,4 @@ packages:
     - shdoc-ng
     - git-this-bread
     - claude-code
-  gui: []
+    gui: []

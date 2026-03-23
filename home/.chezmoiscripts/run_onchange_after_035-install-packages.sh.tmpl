@@ -1,7 +1,7 @@
 {{- $os_packages := get .packages .chezmoi.os -}}
 {{- $package_names := $os_packages.all -}}
 {{- if and .has_gui (hasKey $os_packages "gui") -}}
-{{-     $package_names = concat $package_names $os_packages.interactive -}}
+{{-     $package_names = concat $package_names $os_packages.gui -}}
 {{- end -}}
 {{- includeTemplate "install_packages.sh.tmpl" (dict
     "title" "install packages"
