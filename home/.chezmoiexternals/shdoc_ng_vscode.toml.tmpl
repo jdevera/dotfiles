@@ -1,0 +1,6 @@
+{{- $release := gitHubLatestRelease "jdevera/shdoc-ng" -}}
+{{- $version := trimPrefix "v" $release.TagName -}}
+[".local/share/shdoc-ng-vscode/shdoc-ng-{{ $version }}.vsix"]
+    type = "file"
+    url = "https://github.com/jdevera/shdoc-ng/releases/download/{{ $release.TagName }}/shdoc-ng-{{ $version }}.vsix"
+    refreshPeriod = "168h"
