@@ -1,8 +1,4 @@
-{{- $os_packages := get .packages .chezmoi.os -}}
-{{- $package_names := $os_packages.all -}}
-{{- if and .has_gui (hasKey $os_packages "gui") -}}
-{{-     $package_names = concat $package_names $os_packages.gui -}}
-{{- end -}}
+{{- $package_names := splitList " " (includeTemplate "resolve_packages.tmpl" (dict "list" .packages "dot" .)) -}}
 {{- includeTemplate "install_packages.sh.tmpl" (dict
     "title" "install packages"
     "package_names" $package_names

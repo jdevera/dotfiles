@@ -1,73 +1,41 @@
 install_tools:
-  darwin:
-    all:
-      - eget
-      - uv
-  linux:
-    all:
-      - eget
-      - uv
+  - eget
+  - uv
 
 packages:
-  darwin:
-    all:
-      - bash
-      - bash-completion
-      - bat
-      - curl
-      - fd
-      - fzf
-      - gh
-      - git
-      - hishtory
-      - git-delta
-      - jq
-      - ripgrep
-      - rsync
-      - starship
-      - tig
-      - tmux
-      - tree
-      - uv
-      - wget
-      - macvim
-      - tox
-      - colout
-      - zoxide
-      - lowdown
-      - shdoc-ng
-      - git-this-bread
-      - claude-code
-    gui:
-      - jordanbaird-ice
-      - nf-fantasque-sans-mono
-      - vscode
-  linux:
-    all:
-    - bash
-    - fzf
-    - bat
-    - ripgrep
-    - fd
-    - gh
-    - hishtory
-    - tmux
-    - vim
-    - starship
-    - bash-completion
-    - jq
-    - git
-    - tig
-    - curl
-    - wget
-    - rsync
-    - tree
-    - git-delta
-    - colout
-    - tox
-    - zoxide
-    - lowdown
-    - shdoc-ng
-    - git-this-bread
-    - claude-code
-    gui: []
+  - bash
+  - bash-completion
+  - bat
+  - claude-code
+  - colout
+  - curl
+  - fd
+  - fzf
+  - gh
+  - git
+  - git-delta
+  - git-this-bread
+  - hishtory
+  - jq
+  - lowdown
+  - ripgrep
+  - rsync
+  - shdoc-ng
+  - starship
+  - tig
+  - tmux
+  - tox
+  - tree
+  - uv
+  - wget
+  - zoxide
+  - name: macvim
+    only_when: [macos]
+  - name: vim
+    only_when: [linux]
+  - name: jordanbaird-ice
+    only_when: [macos]
+  - name: nf-fantasque-sans-mono
+    only_when: [macos]
+  - name: vscode
+    only_when: [gui]

@@ -1,6 +1,5 @@
-{{- if and (hasKey . "install_tools") (hasKey .install_tools .chezmoi.os) -}}
-{{-   $os_tools := get .install_tools .chezmoi.os -}}
-{{-   $tool_names := $os_tools.all -}}
+{{- if hasKey . "install_tools" -}}
+{{-   $tool_names := splitList " " (includeTemplate "resolve_packages.tmpl" (dict "list" .install_tools "dot" .)) -}}
 {{-   includeTemplate "install_packages.sh.tmpl" (dict
         "title" "install tools"
         "package_names" $tool_names

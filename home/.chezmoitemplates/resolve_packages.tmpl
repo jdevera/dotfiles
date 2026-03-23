@@ -1,0 +1,48 @@
+{{- /* resolve_packages.tmpl
+     Input: dict "list" <list> "dot" <root context>
+     Output: space-separated string of package names matching current conditions.
+
+     Entries can be plain strings (always included) or maps with "name" and "only_when".
+     only_when values are ANDed. Mutually exclusive pairs are validated.
+*/ -}}
+{{- $dot := .dot -}}
+{{- $filters := dict
+    "macos"    $dot.is_macos
+    "linux"    $dot.is_linux
+    "gui"      $dot.has_gui
+    "headless" (not $dot.has_gui)
+    "work"     $dot.is_work
+    "personal" (not $dot.is_work)
+-}}
+{{- $exclusive := list
+    (list "macos" "linux")
+    (list "gui" "headless")
+    (list "work" "personal")
+-}}
+{{- $result := list -}}
+{{- range $entry := .list -}}
+{{-   if kindIs "string" $entry -}}
+{{-     $result = append $result $entry -}}
+{{-   else -}}
+{{-     range $tag := $entry.only_when -}}
+{{-       if not (hasKey $filters $tag) -}}
+{{-         fail (printf "Package %s: unknown only_when value %q" $entry.name $tag) -}}
+{{-       end -}}
+{{-     end -}}
+{{-     range $pair := $exclusive -}}
+{{-       if and (has (index $pair 0) $entry.only_when) (has (index $pair 1) $entry.only_when) -}}
+{{-         fail (printf "Package %s: conflicting only_when values %q and %q" $entry.name (index $pair 0) (index $pair 1)) -}}
+{{-       end -}}
+{{-     end -}}
+{{-     $include := true -}}
+{{-     range $tag := $entry.only_when -}}
+{{-       if not (get $filters $tag) -}}
+{{-         $include = false -}}
+{{-       end -}}
+{{-     end -}}
+{{-     if $include -}}
+{{-       $result = append $result $entry.name -}}
+{{-     end -}}
+{{-   end -}}
+{{- end -}}
+{{- join " " $result -}}

@@ -6,17 +6,12 @@
 {{- $hasDNF := lookPath "dnf" -}}
 
 {{- /* Build the packages list */ -}}
-{{- $os_packages := get .packages .chezmoi.os -}}
-{{- $pkg_names := $os_packages.all -}}
-{{- if and .has_gui (hasKey $os_packages "gui") -}}
-{{-   $pkg_names = concat $pkg_names $os_packages.gui -}}
-{{- end -}}
+{{- $pkg_names := splitList " " (includeTemplate "resolve_packages.tmpl" (dict "list" .packages "dot" .)) -}}
 
 {{- /* Build the install_tools list */ -}}
 {{- $tool_names := list -}}
-{{- if and (hasKey . "install_tools") (hasKey .install_tools .chezmoi.os) -}}
-{{-   $os_tools := get .install_tools .chezmoi.os -}}
-{{-   $tool_names = $os_tools.all -}}
+{{- if hasKey . "install_tools" -}}
+{{-   $tool_names = splitList " " (includeTemplate "resolve_packages.tmpl" (dict "list" .install_tools "dot" .)) -}}
 {{- end -}}
 
 {{- /* Combine both lists with a tag for later separation */ -}}
