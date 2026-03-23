@@ -19,9 +19,6 @@ dot::timing::setup
 dot::source_vendored bash-preexec  # Source bash-preexec first
 dot::source_bash_d                 # Load all bash.d files
 
-# Additional files that I generally want to source
-dot::source_file ~/.fzf.bash
-
 # Timing teardown
 dot::timing::teardown
 
