@@ -19,6 +19,7 @@ packages:
       - fzf
       - gh
       - git
+      - hishtory
       - git-delta
       - jq
       - ripgrep
@@ -49,6 +50,7 @@ packages:
     - ripgrep
     - fd
     - gh
+    - hishtory
     - tmux
     - vim
     - starship

@@ -15,8 +15,30 @@ if [[ -f "${HOME}/.hishtory/config.sh" ]]; then
     dot::chezmoi_script_skipped "hishtory is already configured"
 fi
 
-dot::step::start "initializing hishtory shell integration"
-hishtory install --skip-config-modification || dot::step::fatal
+dot::step::start "initializing hishtory"
+# We use `hishtory install --skip-config-modification` rather than `hishtory init`
+# because install creates ~/.hishtory/config.{sh,zsh} (the shell integration files)
+# while init only sets up the database and secret key.
+#
+# --skip-config-modification prevents install from mangling shell rc files, since
+# our dotfiles already handle sourcing the config files.
+#
+# The temp copy workaround is needed because install does the following:
+#   1. LookPath("hishtory") -> finds ~/.local/bin/hishtory
+#   2. Unlinks that path (to prepare for a fresh copy)
+#   3. Copies os.Args[0] to that path
+# When the binary IS on PATH, os.Args[0] and the LookPath result are the same
+# file, so step 2 deletes the binary before step 3 can copy it. Running from a
+# temp copy ensures the source survives the unlink.
+_hishtory_tmp="$(mktemp)"
+cp "$(command -v hishtory)" "$_hishtory_tmp"
+chmod +x "$_hishtory_tmp"
+{{ if .hishtory_server -}}
+HISHTORY_SERVER={{ .hishtory_server | quote }} "$_hishtory_tmp" install --skip-config-modification || dot::step::fatal
+{{- else -}}
+"$_hishtory_tmp" install --skip-config-modification --offline || dot::step::fatal
+{{- end }}
+rm -f "$_hishtory_tmp"
 dot::step::done
 
 dot::success "hishtory configured"
