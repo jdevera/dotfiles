@@ -14,6 +14,8 @@
 Library/
 .bash.d/050_ssh.sh
 .config/zsh/zsh.d/050_ssh.zsh
+.bash.d/020_dirs_obsidian.sh
+.config/zsh/zsh.d/020_dirs_obsidian.zsh
 {{ end }}
 
 
