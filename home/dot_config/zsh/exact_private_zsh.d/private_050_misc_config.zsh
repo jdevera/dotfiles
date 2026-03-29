@@ -243,9 +243,6 @@ setopt NO_NOMATCH
 # Section: Key Bindings {{{
 #############################################################################
 
-# Use emacs key bindings (same as bash default)
-bindkey -e
-
 # Use complete-word instead of the default expand-or-complete. This skips
 # expansion (globs, aliases, variables) and jumps straight to completion,
 # avoiding unexpected substitutions like $PWD expanding into a full path.
