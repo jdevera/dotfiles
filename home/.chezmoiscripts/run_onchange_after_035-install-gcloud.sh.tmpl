@@ -1,0 +1,26 @@
+{{- $tarball := joinPath .chezmoi.homeDir ".local/share/google-cloud-cli.tar.gz" -}}
+#!/usr/bin/env bash
+
+# hash: {{ if stat $tarball }}{{ output "shasum" "-a" "256" $tarball }}{{ end }}
+
+# {{ template "dotfiles_bashlib.sh" . }}
+
+# Help shellcheck identify the above include
+true || source ../.chezmoitemplates/dotfiles_bashlib.sh
+
+dot::chezmoi_script_start "extract Google Cloud SDK"
+
+TARBALL={{ $tarball | quote }}
+GCLOUD_DIR="$HOME/.local/share/google-cloud-sdk"
+
+if [[ ! -f "$TARBALL" ]]; then
+    dot::chezmoi_script_skipped "tarball not found: $TARBALL"
+fi
+
+dot::step::start "extracting to $GCLOUD_DIR"
+rm -rf "$GCLOUD_DIR"
+mkdir -p "$GCLOUD_DIR"
+tar xzf "$TARBALL" --strip-components=1 -C "$GCLOUD_DIR" || dot::step::fatal
+dot::step::done
+
+dot::success "Google Cloud SDK extracted"

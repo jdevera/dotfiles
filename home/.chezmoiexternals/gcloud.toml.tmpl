@@ -1,0 +1,11 @@
+{{ if .is_macos -}}
+[".local/share/google-cloud-cli.tar.gz"]
+    type = "file"
+    url = "https://dl.google.com/dl/cloudsdk/channels/rapid/downloads/google-cloud-cli-darwin-arm.tar.gz"
+    refreshPeriod = "168h"
+{{ else if .is_linux -}}
+[".local/share/google-cloud-cli.tar.gz"]
+    type = "file"
+    url = "https://dl.google.com/dl/cloudsdk/channels/rapid/downloads/google-cloud-cli-linux-x86_64.tar.gz"
+    refreshPeriod = "168h"
+{{ end -}}
