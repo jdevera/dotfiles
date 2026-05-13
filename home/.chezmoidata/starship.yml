@@ -21,6 +21,10 @@ starship:
       style: "bold lavender"
     git_branch:
       style: "bold mauve"
+    aws:
+      disabled: true
+    gcloud:
+      disabled: true
 
   # Custom modules (added to config)
   custom:
