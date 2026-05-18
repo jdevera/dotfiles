@@ -1,7 +1,7 @@
 {{- $tarball := joinPath .chezmoi.homeDir ".local/share/google-cloud-cli.tar.gz" -}}
 #!/usr/bin/env bash
 
-# hash: {{ if stat $tarball }}{{ output "shasum" "-a" "256" $tarball }}{{ end }}
+# hash: {{ if stat $tarball }}{{ include $tarball | sha256sum }}{{ end }}
 
 # {{ template "dotfiles_bashlib.sh" . }}
 
