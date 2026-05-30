@@ -19,6 +19,20 @@
 export LANG=en_IE.UTF-8
 export LC_ALL=en_IE.UTF-8
 
+# cmux: GHOSTTY_BIN_DIR points at cmux's MacOS/ dir which has no ghostty
+# binary, breaking ssh-cache calls in Ghostty's shell integration. Repoint
+# to the bundled ghostty (or the host's Ghostty.app) before integration
+# loads. https://github.com/manaflow-ai/cmux/issues/1187
+if [[ -n "$GHOSTTY_BIN_DIR" && ! -x "$GHOSTTY_BIN_DIR/ghostty" ]]; then
+  cmux_bin="${GHOSTTY_BIN_DIR%/MacOS}/Resources/bin"
+  if [[ -x "$cmux_bin/ghostty" ]]; then
+    export GHOSTTY_BIN_DIR="$cmux_bin"
+  elif [[ -x /Applications/Ghostty.app/Contents/MacOS/ghostty ]]; then
+    export GHOSTTY_BIN_DIR=/Applications/Ghostty.app/Contents/MacOS
+  fi
+  unset cmux_bin
+fi
+
 {{ end -}}
 # Keep .zshenv minimal — it runs for ALL zsh invocations (scripts, subshells, etc.)
 # Everything else goes in .zshrc (interactive shells only).
