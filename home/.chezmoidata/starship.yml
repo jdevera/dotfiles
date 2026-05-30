@@ -39,6 +39,12 @@ starship:
       when: 'test -n "$CHEZMOI_EXECUTABLE"'
       symbol: "𖠿 chezmoi "
       description: "In a 'chezmoi cd' shell"
+    agentsess:
+      description: "Active coding-agent session counts for cwd"
+      when: true
+      command: 'HIDE_ZERO=1 FORMAT="󰯉 {claude} || 󰄄 {codex} " agentsess count'
+      format: "$output"
+      shell: ["bash"]
 
   # Character module settings for unicode variant
   character:
