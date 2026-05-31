@@ -286,6 +286,6 @@ softwarePackages:
     mas: 585829637
   utm:
     homepage: https://mac.getutm.app
-    mas: 1538878817
+    cask: utm
   monitorcontrol:
     cask: monitorcontrol
