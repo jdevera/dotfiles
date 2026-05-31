@@ -112,7 +112,7 @@ packages:
   - name: wireshark-app
     only_when: [macos]
   - name: zoom
-    only_when: [macos]
+    only_when: [macos, work]
   - name: textual
     only_when: [macos, personal]
   - name: todoist
