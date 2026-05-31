@@ -55,6 +55,8 @@ packages:
     only_when: [gui]
   - name: 1password-desktop
     only_when: [macos]
+  - name: 1password-cli
+    only_when: [macos]
   - name: iterm2
     only_when: [macos]
   - name: git-cola

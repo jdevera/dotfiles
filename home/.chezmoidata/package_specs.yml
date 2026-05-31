@@ -157,6 +157,8 @@ softwarePackages:
       source: jdevera/shdoc-ng
   1password-desktop:
     cask: 1password
+  1password-cli:
+    cask: 1password-cli
   iterm2:
     cask: iterm2
   age:
