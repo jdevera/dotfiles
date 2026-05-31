@@ -119,3 +119,5 @@ packages:
     only_when: [macos]
   - name: utm
     only_when: [macos]
+  - name: monitorcontrol
+    only_when: [macos]
