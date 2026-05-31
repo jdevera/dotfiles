@@ -9,28 +9,35 @@ dot::chezmoi_script_start "install VSCode extensions"
 
 if ! dot::has_command code; then
     dot::chezmoi_script_skipped "code command not found"
-    exit 0
 fi
 
+# Snapshot the installed extensions once. Keys are lowercased because extension
+# ids are case-insensitive. (The bashlib re-execs us under a modern bash, so
+# associative arrays and ${var,,} are safe.)
 declare -A installed_extensions
 while IFS= read -r ext; do
-    installed_extensions["$ext"]=1
-done < <(code --list-extensions)
+    [[ -n $ext ]] && installed_extensions["${ext,,}"]=1
+done < <(code --list-extensions 2>/dev/null)
 
 installed_count=0
 skipped_count=0
+failed_extensions=()
 
 vscode::install_extension() {
     local id="$1"
     local name="$2"
-    if [[ -n "${installed_extensions[$id]}" ]]; then
-        (( skipped_count++ ))
+    if [[ -n ${installed_extensions[${id,,}]:-} ]]; then
+        skipped_count=$(( skipped_count + 1 ))
         return
     fi
     dot::step::start "install $name ($id)"
-    code --install-extension "$id" > /dev/null
-    dot::step::done
-    (( installed_count++ ))
+    if code --install-extension "$id" > /dev/null; then
+        dot::step::done
+        installed_count=$(( installed_count + 1 ))
+    else
+        dot::step::error
+        failed_extensions+=("$name ($id)")
+    fi
 }
 
 {{ range .vscode_extensions -}}
@@ -38,8 +45,14 @@ vscode::install_extension() {
 vscode::install_extension {{ .id | quote }} {{ .name | quote }}
 {{ end -}}
 
-if [[ $installed_count -eq 0 ]]; then
+# Fail loudly if anything could not be installed: a non-zero exit keeps this
+# run_onchange script from being recorded as done, so it retries on next apply.
+if (( ${#failed_extensions[@]} > 0 )); then
+    dot::die "failed to install ${#failed_extensions[@]} extension(s): ${failed_extensions[*]}"
+elif (( installed_count == 0 )); then
     dot::chezmoi_script_skipped "all $skipped_count extensions already installed"
+else
+    dot::success "installed $installed_count extension(s); $skipped_count already present"
 fi
 
 {{- end -}}

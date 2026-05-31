@@ -1,4 +1,19 @@
 # shellcheck shell=bash
+
+# Re-exec under a modern bash when launched with an old one. chezmoi resolves
+# the `#!/usr/bin/env bash` shebang against its inherited PATH, which on a fresh
+# machine can still resolve to the macOS system bash 3.2 even after Homebrew
+# bash is installed. Bounce to the newer bash so scripts may use bash 4+ syntax.
+if [[ -z ${DOT_BASH_REEXECED:-} && ${BASH_VERSINFO[0]:-0} -lt 4 ]]; then
+    for _dot_bash in /opt/homebrew/bin/bash /usr/local/bin/bash /home/linuxbrew/.linuxbrew/bin/bash; do
+        if [[ -x $_dot_bash ]]; then
+            export DOT_BASH_REEXECED=1
+            exec "$_dot_bash" "$0" "$@"
+        fi
+    done
+    unset _dot_bash
+fi
+
 # Check if the terminal supports color output by:
 # 1. Checking if stdout is a terminal ([[ -t 1 ]])
 # 2. Checking if $TERM is set (test -n "${TERM}")
