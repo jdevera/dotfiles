@@ -71,3 +71,51 @@ packages:
     only_when: [macos, work]
   - name: book-preview
     only_when: [macos]
+  - name: audacity
+    only_when: [macos]
+  - name: betterdisplay
+    only_when: [macos]
+  - name: discord
+    only_when: [macos]
+  - name: elgato-control-center
+    only_when: [macos]
+  - name: espanso
+    only_when: [macos]
+  - name: firefox
+    only_when: [macos]
+  - name: font-fira-code-nerd-font
+    only_when: [macos]
+  - name: font-jetbrains-mono-nerd-font
+    only_when: [macos]
+  - name: foobar2000
+    only_when: [macos]
+  - name: google-chrome
+    only_when: [macos]
+  - name: lulu
+    only_when: [macos]
+  - name: meetingbar
+    only_when: [macos]
+  - name: menumeters
+    only_when: [macos]
+  - name: muzzle
+    only_when: [macos]
+  - name: obs
+    only_when: [macos]
+  - name: obsidian
+    only_when: [macos]
+  - name: orbstack
+    only_when: [macos]
+  - name: rocket
+    only_when: [macos]
+  - name: vlc
+    only_when: [macos]
+  - name: wireshark-app
+    only_when: [macos]
+  - name: zoom
+    only_when: [macos]
+  - name: textual
+    only_when: [macos, personal]
+  - name: todoist
+    only_when: [macos]
+  - name: utm
+    only_when: [macos]

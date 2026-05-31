@@ -237,3 +237,53 @@ softwarePackages:
   book-preview:
     homepage: https://apps.apple.com/app/book-preview/id6744098874
     mas: 6744098874
+  audacity:
+    cask: audacity
+  betterdisplay:
+    cask: betterdisplay
+  discord:
+    cask: discord
+  elgato-control-center:
+    cask: elgato-control-center
+  espanso:
+    cask: espanso
+  firefox:
+    cask: firefox
+  font-fira-code-nerd-font:
+    cask: font-fira-code-nerd-font
+  font-jetbrains-mono-nerd-font:
+    cask: font-jetbrains-mono-nerd-font
+  foobar2000:
+    cask: foobar2000
+  google-chrome:
+    cask: google-chrome
+  lulu:
+    cask: lulu
+  meetingbar:
+    cask: meetingbar
+  menumeters:
+    cask: menumeters
+  muzzle:
+    cask: muzzle
+  obs:
+    cask: obs
+  obsidian:
+    cask: obsidian
+  orbstack:
+    cask: orbstack
+  rocket:
+    cask: rocket
+  vlc:
+    cask: vlc
+  wireshark-app:
+    cask: wireshark-app
+  zoom:
+    cask: zoom
+  textual:
+    cask: textual
+  todoist:
+    homepage: https://todoist.com
+    mas: 585829637
+  utm:
+    homepage: https://mac.getutm.app
+    mas: 1538878817
