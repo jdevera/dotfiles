@@ -22,6 +22,7 @@
 
 {{- /* Method collections */ -}}
 {{- $brew := list -}}
+{{- $mas := dict -}}
 {{- $apt := list -}}
 {{- $dnf := list -}}
 {{- $copr := list -}}
@@ -37,6 +38,10 @@
 
 {{- /* Tier 1: OS package manager */ -}}
 {{-   if eq $chezmoi.os "darwin" -}}
+{{-     if and (not $ok) (hasKey $spec "mas") -}}
+{{-       $mas = set $mas $name (toString $spec.mas) -}}
+{{-       $ok = true -}}
+{{-     end -}}
 {{-     if and (not $ok) (hasKey $spec "brew") -}}
 {{-       $brew = append $brew (printf "brew %s" ($spec.brew | quote)) -}}
 {{-       $ok = true -}}
@@ -98,7 +103,7 @@
 {{-   end -}}
 {{- end -}}
 
-{{- $hasAny := or (len $brew) (len $apt) (len $dnf) (len $uv) (len $eget) (len $script) -}}
+{{- $hasAny := or (len $brew) (len $mas) (len $apt) (len $dnf) (len $uv) (len $eget) (len $script) -}}
 {{- if $hasAny -}}
 #!/usr/bin/env bash
 {{ if eq $chezmoi.os "darwin" -}}
@@ -123,6 +128,18 @@ brew bundle --no-upgrade --file=/dev/stdin <<'BREWEOF' || dot::step::fatal
 {{ end -}}
 BREWEOF
 dot::step::done
+{{ end -}}
+{{ if $mas }}
+dot::assert_has_commands mas
+{{ range $name, $id := $mas }}
+dot::step::start "install {{ $name }} from the App Store"
+if mas list 2>/dev/null | grep -q "^{{ $id }}[[:space:]]"; then
+    dot::step::skipped "already installed"
+else
+    mas install {{ $id }} || dot::step::fatal
+    dot::step::done
+fi
+{{ end -}}
 {{ end -}}
 {{ if $apt }}
 dot::step::start "update package sources"

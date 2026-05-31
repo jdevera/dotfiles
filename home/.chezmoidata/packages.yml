@@ -1,6 +1,8 @@
 install_tools:
   - eget
   - uv
+  - name: mas
+    only_when: [macos]
 
 packages:
   - age
@@ -57,3 +59,13 @@ packages:
     only_when: [macos]
   - name: git-cola
     only_when: [gui]
+  - name: whatsapp
+    only_when: [macos]
+  - name: telegram
+    only_when: [macos]
+  - name: drafts
+    only_when: [macos]
+  - name: inyourface
+    only_when: [macos]
+  - name: book-preview
+    only_when: [macos]

@@ -217,3 +217,21 @@ softwarePackages:
       command: tre
     eget:
       source: dduan/tre
+  mas:
+    homepage: https://github.com/mas-cli/mas
+    brew: mas
+  whatsapp:
+    homepage: https://www.whatsapp.com
+    cask: whatsapp
+  telegram:
+    homepage: https://telegram.org
+    mas: 747648890
+  drafts:
+    homepage: https://getdrafts.com
+    mas: 1435957248
+  inyourface:
+    homepage: https://www.inyourface.app
+    mas: 1476964367
+  book-preview:
+    homepage: https://apps.apple.com/app/book-preview/id6744098874
+    mas: 6744098874

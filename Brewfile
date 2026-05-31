@@ -5,7 +5,6 @@ brew "gawk"
 brew "gnu-sed"
 brew "gnupg"
 brew "gpg-tui"
-brew "mas"
 brew "pnpm"
 brew "pre-commit"
 brew "qpdf"
@@ -45,5 +44,3 @@ cask "utm"
 cask "vlc"
 cask "wireshark-app"
 cask "zoom"
-mas "Slack", id: 803453959
-mas "WhatsApp", id: 1147396723

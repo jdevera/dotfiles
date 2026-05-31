@@ -40,6 +40,12 @@ properties:
         cask:
           type: string
           description: Homebrew cask name
+        mas:
+          description: |-
+            Mac App Store app id (mas-cli). Preferred over brew/cask on macOS.
+          oneOf:
+            - type: integer
+            - type: string
         uv:
           $ref: "#/$defs/uvDef"
         eget:
