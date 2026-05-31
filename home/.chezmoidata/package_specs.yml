@@ -155,3 +155,65 @@ softwarePackages:
       command: shdoc-ng
     eget:
       source: jdevera/shdoc-ng
+  1password-desktop:
+    cask: 1password
+  iterm2:
+    cask: iterm2
+  age:
+    brew: age
+    apt: age
+    dnf: age
+  fx:
+    homepage: https://github.com/antonmedv/fx
+    brew: fx
+    check:
+      command: fx
+    eget:
+      source: antonmedv/fx
+  git-cola:
+    brew: git-cola
+    apt: git-cola
+    dnf: git-cola
+  go:
+    brew: go
+    apt: golang
+    dnf: golang
+  htop:
+    brew: htop
+    apt: htop
+    dnf: htop
+  httpie:
+    brew: httpie
+    apt: httpie
+    dnf: httpie
+  neovim:
+    brew: neovim
+    apt: neovim
+    dnf: neovim
+  node:
+    brew: node
+    apt: nodejs
+    dnf: nodejs
+  ondir:
+    brew: ondir
+    apt: ondir
+  sevenzip:
+    brew: sevenzip
+    apt: 7zip
+    dnf: 7zip
+  shellcheck:
+    brew: shellcheck
+    apt: shellcheck
+    dnf: ShellCheck
+  shfmt:
+    brew: shfmt
+    apt: shfmt
+    dnf: shfmt
+  tre-command:
+    homepage: https://github.com/dduan/tre
+    brew: tre-command
+    apt: tre-command
+    check:
+      command: tre
+    eget:
+      source: dduan/tre

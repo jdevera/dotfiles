@@ -3,6 +3,7 @@ install_tools:
   - uv
 
 packages:
+  - age
   - bash
   - bash-completion
   - bat
@@ -10,21 +11,32 @@ packages:
   - colout
   - curl
   - fd
+  - fx
   - fzf
   - gh
   - git
   - git-delta
   - git-this-bread
+  - go
   - hishtory
+  - htop
+  - httpie
   - jq
   - lowdown
+  - neovim
+  - node
+  - ondir
   - ripgrep
   - rsync
+  - sevenzip
   - shdoc-ng
+  - shellcheck
+  - shfmt
   - starship
   - tig
   - tmux
   - tox
+  - tre-command
   - tree
   - uv
   - wget
@@ -38,4 +50,10 @@ packages:
   - name: nf-fantasque-sans-mono
     only_when: [macos]
   - name: vscode
+    only_when: [gui]
+  - name: 1password-desktop
+    only_when: [macos]
+  - name: iterm2
+    only_when: [macos]
+  - name: git-cola
     only_when: [gui]
