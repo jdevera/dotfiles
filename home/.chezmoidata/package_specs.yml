@@ -289,3 +289,12 @@ softwarePackages:
     cask: utm
   monitorcontrol:
     cask: monitorcontrol
+  cmux:
+    homepage: https://www.cmux.dev
+    cask: cmux
+  ghostty:
+    homepage: https://ghostty.org
+    cask: ghostty
+    dnf:
+      package: ghostty
+      copr: scottames/ghostty
