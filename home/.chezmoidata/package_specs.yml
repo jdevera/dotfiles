@@ -298,3 +298,6 @@ softwarePackages:
     dnf:
       package: ghostty
       copr: scottames/ghostty
+  raycast:
+    homepage: https://www.raycast.com
+    cask: raycast

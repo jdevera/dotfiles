@@ -125,3 +125,5 @@ packages:
     only_when: [macos]
   - name: ghostty
     only_when: [gui]
+  - name: raycast
+    only_when: [macos]
