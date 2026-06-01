@@ -25,6 +25,7 @@ packages:
   - httpie
   - jq
   - lowdown
+  - mise
   - neovim
   - node
   - ondir
@@ -34,6 +35,7 @@ packages:
   - shdoc-ng
   - shellcheck
   - shfmt
+  - sops
   - starship
   - tig
   - tmux
@@ -46,6 +48,8 @@ packages:
   - name: macvim
     only_when: [macos]
   - name: vim
+    only_when: [linux]
+  - name: bubblewrap
     only_when: [linux]
   - name: jordanbaird-ice
     only_when: [macos]

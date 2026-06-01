@@ -29,6 +29,11 @@ softwarePackages:
     brew: bat
     apt: bat
     dnf: bat
+  bubblewrap:
+    description: Unprivileged Linux sandboxing tool (bwrap); used by Codex and Flatpak
+    homepage: https://github.com/containers/bubblewrap
+    apt: bubblewrap
+    dnf: bubblewrap
   curl:
     brew: curl
     apt: curl
@@ -56,6 +61,13 @@ softwarePackages:
     brew: jq
     apt: jq
     dnf: jq
+  mise:
+    description: Polyglot tool/runtime version manager (Node, Python, etc.)
+    homepage: https://mise.jdx.dev
+    brew: mise
+    dnf:
+      package: mise
+      repo: https://mise.jdx.dev/rpm/mise.repo
   ripgrep:
     brew: ripgrep
     apt: ripgrep
@@ -301,3 +313,19 @@ softwarePackages:
   raycast:
     homepage: https://www.raycast.com
     cask: raycast
+  sops:
+    description: Encrypts/decrypts secrets (used with age keys)
+    homepage: https://github.com/getsops/sops
+    brew: sops
+    check:
+      command: sops
+    eget:
+      source: getsops/sops
+      name: sops
+      asset:
+        - ^.deb
+        - ^.rpm
+        - ^.sig
+        - ^.pem
+        - ^.txt
+        - ^.json

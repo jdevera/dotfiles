@@ -24,7 +24,7 @@ properties:
           type: string
           description: Debian/Ubuntu APT package name
         dnf:
-          description: Fedora DNF package name (string) or object with package and optional copr
+          description: Fedora DNF package name (string) or object with package and optional copr/repo
           oneOf:
             - type: string
             - type: object
@@ -36,6 +36,11 @@ properties:
                 copr:
                   type: string
                   description: COPR repository to enable (user/project format)
+                repo:
+                  type: string
+                  description: |-
+                    URL of a .repo file to add via `dnf config-manager addrepo`
+                    before installing (e.g. https://mise.jdx.dev/rpm/mise.repo)
               additionalProperties: false
         cask:
           type: string

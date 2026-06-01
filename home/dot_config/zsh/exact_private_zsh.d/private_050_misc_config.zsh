@@ -56,6 +56,10 @@ pathprepend "$HOME/.cargo/bin"
 export VOLTA_HOME="$HOME/.volta"
 pathprepend "$VOLTA_HOME/bin"
 
+# mise-managed tool shims (static; no shell-startup eval). Prepended after
+# Volta so a mise-installed tool wins once `mise use -g <tool>` creates its shim.
+pathprepend "$HOME/.local/share/mise/shims"
+
 [[ -n $NPM_PACKAGES ]] && pathprepend "$NPM_PACKAGES/bin"
 
 if has_command brew

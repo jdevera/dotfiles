@@ -26,6 +26,7 @@
 {{- $apt := list -}}
 {{- $dnf := list -}}
 {{- $copr := list -}}
+{{- $dnfrepo := list -}}
 {{- $uv := dict -}}
 {{- $eget := dict -}}
 {{- $script := dict -}}
@@ -63,6 +64,9 @@
 {{-         $dnf = append $dnf $val.package -}}
 {{-         if hasKey $val "copr" -}}
 {{-           $copr = append $copr $val.copr -}}
+{{-         end -}}
+{{-         if hasKey $val "repo" -}}
+{{-           $dnfrepo = append $dnfrepo $val.repo -}}
 {{-         end -}}
 {{-       end -}}
 {{-       $ok = true -}}
@@ -158,6 +162,15 @@ dot::step::start "enable COPR repositories"
 {{ range $repo := ($copr | uniq) -}}
 if ! dnf repolist 2>/dev/null | grep -q "copr.*{{ $repo | replace "/" ".*" }}"; then
     sudo dnf copr enable -y {{ $repo }}
+fi
+{{ end -}}
+dot::step::done
+{{ end }}
+{{ if $dnfrepo -}}
+dot::step::start "add DNF repositories"
+{{ range $repo := ($dnfrepo | uniq) -}}
+if [[ ! -f /etc/yum.repos.d/{{ base $repo }} ]]; then
+    sudo dnf config-manager addrepo --from-repofile={{ $repo | quote }}
 fi
 {{ end -}}
 dot::step::done
