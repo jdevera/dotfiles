@@ -196,9 +196,9 @@ softwarePackages:
     apt: neovim
     dnf: neovim
   node:
-    brew: node
-    apt: nodejs
-    dnf: nodejs
+    description: Node.js runtime, managed in $HOME via mise (no system package)
+    homepage: https://nodejs.org
+    mise: node@lts
   ondir:
     brew: ondir
     apt: ondir
