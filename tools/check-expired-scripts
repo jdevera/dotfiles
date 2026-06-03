@@ -1,0 +1,46 @@
+#!/usr/bin/env bash
+#
+# check-expired-scripts — fail when a one-shot script has outlived its expiry.
+#
+# One-shot scripts (typically a run_once_ migration that bridges an old layout
+# to a new one) are transitional by nature: useless on fresh machines and pure
+# cruft once every machine has run them. Mark such a script with a comment:
+#
+#     # EXPIRES: YYYY-MM-DD   one-shot migration; delete after this date
+#
+# This check fails once that date has passed, so the dead script gets pruned
+# instead of lingering forever. It is wired as a prek / pre-commit hook and is
+# meant to run in CI too.
+#
+# Semantics: a script is valid up to and including its EXPIRES date, and
+# expired the day after (today > date).
+#
+set -euo pipefail
+
+# Distinctive, case-sensitive marker so it never collides with unrelated text
+# (e.g. a "expires:" field in some config). Example lines in comments use a
+# non-numeric placeholder (YYYY-MM-DD) and so never match.
+marker='EXPIRES:[[:space:]]*[0-9]{4}-[0-9]{2}-[0-9]{2}'
+today="$(date +%F)"
+rc=0
+
+while IFS= read -r hit; do
+    [[ -n $hit ]] || continue
+    file="${hit%%:*}"
+    rest="${hit#*:}"
+    lineno="${rest%%:*}"
+    [[ $hit =~ EXPIRES:[[:space:]]*([0-9]{4}-[0-9]{2}-[0-9]{2}) ]] || continue
+    expiry="${BASH_REMATCH[1]}"
+    if [[ $expiry < $today ]]; then
+        printf '%s:%s: expired on %s (today %s) — delete this one-shot script.\n' \
+            "$file" "$lineno" "$expiry" "$today" >&2
+        rc=1
+    fi
+done < <(grep -rInE "$marker" --binary-files=without-match --exclude-dir=.git . 2>/dev/null || true)
+
+if [[ $rc -ne 0 ]]; then
+    echo >&2
+    echo "Expired one-shot script(s) found above. Remove them and retry." >&2
+fi
+
+exit $rc

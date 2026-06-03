@@ -1,0 +1,17 @@
+# Linting for this repo, run with prek (https://github.com/j178/prek), a
+# drop-in pre-commit replacement:
+#
+#     prek run --all-files        # run every hook
+#     prek install                # install the git pre-commit hook
+#
+# For now this only guards against expired one-shot scripts; more hooks and a
+# CI job that runs them over all files will follow.
+repos:
+  - repo: local
+    hooks:
+      - id: no-expired-scripts
+        name: no expired one-shot scripts
+        entry: tools/check-expired-scripts
+        language: script
+        pass_filenames: false
+        always_run: true
