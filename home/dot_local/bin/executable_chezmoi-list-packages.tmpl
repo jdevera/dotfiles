@@ -1,7 +1,7 @@
 {{- $chezmoi := .chezmoi -}}
 {{- $specs := .softwarePackages -}}
 {{- $hasUV := lookPath "uv" -}}
-{{- $hasEget := lookPath "eget" -}}
+{{- $hasMise := lookPath "mise" -}}
 {{- $hasAPT := lookPath "apt" -}}
 {{- $hasDNF := lookPath "dnf" -}}
 
@@ -78,9 +78,9 @@
 {{-       end -}}
 {{-     end -}}
 {{-   end -}}
-{{-   if and (not $method) $hasEget (hasKey $spec "eget") -}}
-{{-     $method = "eget" -}}
-{{-     $detail = $spec.eget.source -}}
+{{-   if and (not $method) $hasMise (hasKey $spec "mise") -}}
+{{-     $method = "mise" -}}
+{{-     $detail = $spec.mise -}}
 {{-   end -}}
 {{-   if and (not $method) (hasKey $spec "script") -}}
 {{-     $method = "script" -}}

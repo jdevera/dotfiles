@@ -120,20 +120,13 @@ softwarePackages:
     brew: yq
     check:
       command: yq
-    eget:
-      source: mikefarah/yq
+    mise: aqua:mikefarah/yq
   hishtory:
     homepage: https://github.com/ddworken/hishtory
     brew: hishtory
     check:
       command: hishtory
-    eget:
-      source: ddworken/hishtory
-      name: hishtory
-      asset:
-        - ^.intoto
-        - ^server
-      download_only: true
+    mise: github:ddworken/hishtory
   vscode:
     cask: visual-studio-code
   zoxide:
@@ -141,18 +134,11 @@ softwarePackages:
     dnf: zoxide
     check:
       command: zoxide
-    eget:
-      source: ajeetdsouza/zoxide
+    mise: aqua:ajeetdsouza/zoxide
   lowdown:
     brew: lowdown
     apt: lowdown
     dnf: lowdown
-  eget:
-    brew: eget
-    check:
-      command: eget
-    script: >-
-      curl -o /tmp/eget.sh https://zyedidia.github.io/eget.sh && cd /tmp && sh /tmp/eget.sh && mv /tmp/eget ~/.local/bin/
   git-this-bread:
     brew: jdevera/tap/git-this-bread
     dnf:
@@ -165,8 +151,7 @@ softwarePackages:
       copr: jdevera/shdoc-ng
     check:
       command: shdoc-ng
-    eget:
-      source: jdevera/shdoc-ng
+    mise: github:jdevera/shdoc-ng
   1password-desktop:
     cask: 1password
   1password-cli:
@@ -182,8 +167,7 @@ softwarePackages:
     brew: fx
     check:
       command: fx
-    eget:
-      source: antonmedv/fx
+    mise: aqua:antonmedv/fx
   git-cola:
     brew: git-cola
     apt: git-cola
@@ -229,8 +213,7 @@ softwarePackages:
     apt: tre-command
     check:
       command: tre
-    eget:
-      source: dduan/tre
+    mise: github:dduan/tre
   mas:
     homepage: https://github.com/mas-cli/mas
     brew: mas
@@ -319,13 +302,4 @@ softwarePackages:
     brew: sops
     check:
       command: sops
-    eget:
-      source: getsops/sops
-      name: sops
-      asset:
-        - ^.deb
-        - ^.rpm
-        - ^.sig
-        - ^.pem
-        - ^.txt
-        - ^.json
+    mise: aqua:getsops/sops

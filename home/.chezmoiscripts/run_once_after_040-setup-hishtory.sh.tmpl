@@ -30,8 +30,14 @@ dot::step::start "initializing hishtory"
 # When the binary IS on PATH, os.Args[0] and the LookPath result are the same
 # file, so step 2 deletes the binary before step 3 can copy it. Running from a
 # temp copy ensures the source survives the unlink.
+_hishtory_bin="$(command -v hishtory)"
+# When hishtory comes from a mise shim, copy the real binary instead — the shim
+# is a launcher and can't stand in for os.Args[0] during `hishtory install`.
+if command -v mise >/dev/null 2>&1 && mise which hishtory >/dev/null 2>&1; then
+    _hishtory_bin="$(mise which hishtory)"
+fi
 _hishtory_tmp="$(mktemp)"
-cp "$(command -v hishtory)" "$_hishtory_tmp"
+cp "$_hishtory_bin" "$_hishtory_tmp"
 chmod +x "$_hishtory_tmp"
 {{ if .hishtory_server -}}
 HISHTORY_SERVER={{ .hishtory_server | quote }} "$_hishtory_tmp" install --skip-config-modification || dot::step::fatal

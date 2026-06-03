@@ -53,15 +53,19 @@ properties:
             - type: string
         uv:
           $ref: "#/$defs/uvDef"
-        eget:
-          $ref: "#/$defs/egetDef"
+        mise:
+          type: string
+          description: |-
+            mise tool spec installed globally via `mise use --global`. Carries the
+            backend in its prefix, e.g. node@lts (core), aqua:getsops/sops,
+            github:owner/repo, optionally pinned with @version.
         script:
           type: string
           description: |-
             Shell script to install the package.
         check:
           type: object
-          description: How to check if the package is already installed (used by eget and script methods)
+          description: How to check if the package is already installed (used by mise and script methods)
           properties:
             command:
               type: string
@@ -71,32 +75,6 @@ properties:
 additionalProperties: false
 
 $defs:
-  egetDef:
-    type: object
-    required: [source]
-    properties:
-      source:
-        type: string
-        description: |
-          Location of the package (github user/repo, URL, or local path)
-      name:
-        type: string
-        description: Output filename (defaults to source repo name if not set)
-      asset:
-        description: Asset filter(s) passed to eget --asset (string or list)
-        oneOf:
-          - type: string
-          - type: array
-            items:
-              type: string
-      file:
-        type: string
-        description: Glob passed to eget --file to select files for extraction
-      download_only:
-        type: boolean
-        description: Pass --download-only (no extraction)
-    additionalProperties: false
-
   uvDef:
     description: |
       UV package spec: either a string name or an object with name and optional

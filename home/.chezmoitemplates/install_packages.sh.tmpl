@@ -16,7 +16,7 @@
 
 {{- /* Pre-compute tool availability */ -}}
 {{- $hasUV := lookPath "uv" -}}
-{{- $hasEget := lookPath "eget" -}}
+{{- $hasMise := lookPath "mise" -}}
 {{- $hasAPT := lookPath "apt" -}}
 {{- $hasDNF := lookPath "dnf" -}}
 
@@ -28,7 +28,7 @@
 {{- $copr := list -}}
 {{- $dnfrepo := list -}}
 {{- $uv := dict -}}
-{{- $eget := dict -}}
+{{- $mise := dict -}}
 {{- $script := dict -}}
 {{- $checks := dict -}}
 
@@ -73,7 +73,7 @@
 {{-     end -}}
 {{-   end -}}
 
-{{- /* Tier 2: Cross-platform fallbacks (uv > eget > script) */ -}}
+{{- /* Tier 2: Cross-platform fallbacks (uv > mise > script) */ -}}
 {{-   if and (not $ok) $hasUV (hasKey $spec "uv") -}}
 {{-     $u := $spec.uv -}}
 {{-     if kindIs "string" $u -}}
@@ -91,8 +91,8 @@
 {{-     end -}}
 {{-     $ok = true -}}
 {{-   end -}}
-{{-   if and (not $ok) $hasEget (hasKey $spec "eget") -}}
-{{-     $eget = set $eget $name $spec.eget -}}
+{{-   if and (not $ok) $hasMise (hasKey $spec "mise") -}}
+{{-     $mise = set $mise $name $spec.mise -}}
 {{-     if hasKey $spec "check" -}}{{- $checks = set $checks $name $spec.check -}}{{- end -}}
 {{-     $ok = true -}}
 {{-   end -}}
@@ -107,7 +107,7 @@
 {{-   end -}}
 {{- end -}}
 
-{{- $hasAny := or (len $brew) (len $mas) (len $apt) (len $dnf) (len $uv) (len $eget) (len $script) -}}
+{{- $hasAny := or (len $brew) (len $mas) (len $apt) (len $dnf) (len $uv) (len $mise) (len $script) -}}
 {{- if $hasAny -}}
 #!/usr/bin/env bash
 {{ if eq $chezmoi.os "darwin" -}}
@@ -217,35 +217,19 @@ then
 fi
 {{ end -}}
 {{ end -}}
-{{ if $eget }}
-{{ range $name, $pkg := $eget -}}
-{{- $egetTo := "~/.local/bin/" -}}
-{{- if hasKey $pkg "name" -}}{{- $egetTo = printf "~/.local/bin/%s" $pkg.name -}}{{- end -}}
-{{- $egetCmd := printf "eget %s --to %s" ($pkg.source | quote) $egetTo -}}
-{{- if hasKey $pkg "asset" -}}
-{{-   $assets := $pkg.asset -}}
-{{-   if kindIs "string" $assets -}}{{- $assets = list $assets -}}{{- end -}}
-{{-   range $a := $assets -}}
-{{-     $egetCmd = printf "%s --asset %s" $egetCmd ($a | quote) -}}
-{{-   end -}}
-{{- end -}}
-{{- if hasKey $pkg "file" -}}
-{{-   $egetCmd = printf "%s --file %s" $egetCmd ($pkg.file | quote) -}}
-{{- end -}}
-{{- if and (hasKey $pkg "download_only") $pkg.download_only -}}
-{{-   $egetCmd = printf "%s --download-only" $egetCmd -}}
-{{- end -}}
+{{ if $mise }}
+{{ range $name, $tool := $mise -}}
 {{ if hasKey $checks $name -}}
-dot::step::start "install {{ $name }} with eget"
+dot::step::start "install {{ $name }} with mise"
 if dot::has_command {{ (get $checks $name).command | quote }}; then
     dot::step::skipped "already installed"
 else
-    {{ $egetCmd }}
+    mise use --global {{ $tool | quote }}
     dot::step::done
 fi
 {{ else -}}
-dot::step::start "install {{ $name }} with eget"
-{{ $egetCmd }}
+dot::step::start "install {{ $name }} with mise"
+mise use --global {{ $tool | quote }}
 dot::step::done
 {{ end -}}
 {{ end -}}

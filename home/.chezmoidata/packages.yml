@@ -1,5 +1,5 @@
 install_tools:
-  - eget
+  - mise
   - uv
   - name: mas
     only_when: [macos]
@@ -25,7 +25,6 @@ packages:
   - httpie
   - jq
   - lowdown
-  - mise
   - neovim
   - node
   - ondir
