@@ -1,0 +1,20 @@
+# Configuration for prek (https://prek.j178.dev), a fast Rust pre-commit
+# alternative used to lint this repo:
+#
+#     prek run --all-files        # run every hook
+#     prek install                # install the git pre-commit hook
+#
+# For now this only guards against expired one-shot scripts; more hooks and a
+# CI job that runs them over all files will follow.
+#:schema https://www.schemastore.org/prek.json
+
+[[repos]]
+repo = "local"
+
+[[repos.hooks]]
+id = "no-expired-scripts"
+name = "no expired one-shot scripts"
+entry = "tools/check-expired-scripts"
+language = "script"
+pass_filenames = false
+always_run = true

@@ -68,6 +68,13 @@ softwarePackages:
     dnf:
       package: mise
       repo: https://mise.jdx.dev/rpm/mise.repo
+  prek:
+    description: Fast Rust pre-commit alternative (git hook manager)
+    homepage: https://github.com/j178/prek
+    brew: prek
+    check:
+      command: prek
+    mise: aqua:j178/prek
   ripgrep:
     brew: ripgrep
     apt: ripgrep

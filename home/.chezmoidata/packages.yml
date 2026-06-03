@@ -28,6 +28,7 @@ packages:
   - neovim
   - node
   - ondir
+  - prek
   - ripgrep
   - rsync
   - sevenzip
