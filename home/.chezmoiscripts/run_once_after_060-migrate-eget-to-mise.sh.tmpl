@@ -1,0 +1,40 @@
+#!/usr/bin/env bash
+#
+# EXPIRES: 2026-12-03
+#
+# One-shot migration. Earlier machines installed these tools as standalone
+# binaries in ~/.local/bin via eget. Now that mise manages them, hand each one
+# off to mise (install via mise, then drop the stale ~/.local/bin binary so the
+# mise shim wins). Safe because brew/dnf never install into ~/.local/bin, so a
+# regular file there can only be a leftover eget binary.
+#
+# Delete this script after the expiry date — the prek `no-expired-scripts`
+# hook will flag it once that date has passed.
+
+# {{ template "dotfiles_bashlib.sh" . }}
+
+# Help shellcheck identify the above include
+true || source ../.chezmoitemplates/dotfiles_bashlib.sh
+
+dot::chezmoi_script_start "migrate eget tools to mise"
+
+if ! dot::has_command mise; then
+    dot::chezmoi_script_skipped "mise is not installed"
+fi
+{{ range $name, $spec := .softwarePackages }}
+{{- if and (hasKey $spec "mise") (hasKey $spec "check") (hasKey $spec.check "command") }}
+{{- $cmd := $spec.check.command }}
+_stale="$HOME/.local/bin/{{ $cmd }}"
+if [[ -f $_stale && ! -L $_stale ]]; then
+    dot::step::start "hand {{ $name }} off to mise"
+    if mise use --global {{ $spec.mise | quote }}; then
+        rm -f "$_stale"
+        dot::step::done
+    else
+        dot::step::skipped "mise install failed; kept existing binary"
+    fi
+fi
+{{- end }}
+{{- end }}
+
+dot::success "eget tools migrated to mise"
