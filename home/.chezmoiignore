@@ -7,6 +7,10 @@
 .config/zsh/zsh.d/local/*
 !.config/zsh/zsh.d/local/README.md
 
+# mise rewrites its tool state here on every `mise use`; let mise own it.
+# Declarative settings are managed under .config/mise/conf.d/ instead.
+.config/mise/config.toml
+
 # MacOS only files
 {{ if ne .chezmoi.os "darwin" }}
 .config/iterm2/

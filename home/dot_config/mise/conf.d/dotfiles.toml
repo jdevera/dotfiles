@@ -1,0 +1,16 @@
+# mise configuration managed by these dotfiles.
+#
+# Only declarative config lives here (settings, plus baseline tools we always
+# want). mise merges every ~/.config/mise/conf.d/*.toml on top of the global
+# config.
+#
+# The mutable tool list that mise rewrites on every `mise use` stays in
+# ~/.config/mise/config.toml, which is intentionally NOT tracked (see
+# .chezmoiignore): the tools this repo wants are declared in
+# package_specs.yml and installed via the `mise:` tier.
+
+[settings]
+idiomatic_version_file_enable_tools = ["python"]
+
+[tools]
+usage = "latest"
