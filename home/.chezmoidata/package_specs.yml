@@ -113,13 +113,13 @@ softwarePackages:
     brew: wget
     apt: wget
     dnf: wget
+  tag:
+    brew: tag
   macvim:
     cask: macvim-app
   vim:
     apt: vim
     dnf: vim-enhanced
-  jordanbaird-ice:
-    cask: jordanbaird-ice
   nf-fantasque-sans-mono:
     cask: font-fantasque-sans-mono-nerd-font
   yq:
@@ -243,6 +243,8 @@ softwarePackages:
     cask: audacity
   betterdisplay:
     cask: betterdisplay
+  claude:
+    cask: claude
   discord:
     cask: discord
   elgato-control-center:
@@ -273,6 +275,8 @@ softwarePackages:
     cask: obsidian
   orbstack:
     cask: orbstack
+  private-internet-access:
+    cask: private-internet-access
   rocket:
     cask: rocket
   vlc:
@@ -283,6 +287,8 @@ softwarePackages:
     cask: zoom
   textual:
     cask: textual
+  thaw@beta:
+    cask: thaw@beta
   todoist:
     homepage: https://todoist.com
     mas: 585829637
