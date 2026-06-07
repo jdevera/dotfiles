@@ -4,8 +4,8 @@ description: >-
   Use when adding, removing, or changing how a software package / CLI tool /
   GUI app / runtime is installed in this chezmoi dotfiles repo. Covers the two
   data files to edit, the install-method priority order (native packages first;
-  mise for release binaries; uv for Python; node via mise), the spec schema, and
-  how to verify the change.
+  mise for release binaries and npm CLIs; uv for Python; node via mise), the spec
+  schema, and how to verify the change.
 ---
 
 # Adding a software package
@@ -54,19 +54,23 @@ cross-platform coverage.
    `mise: github:owner/repo` for repos not in aqua (e.g. personal repos).
    - Do **not** use eget (removed) or the `ubi:` backend (deprecated by mise).
    - Verify it resolves: `mise ls-remote aqua:owner/repo`.
-4. **Python CLI tool or interpreter → `uv`.** `uv: toolname`, or
+4. **npm-distributed CLI → `mise`.** Use `mise: npm:package-name`, e.g.
+   `mise: npm:@openai/codex`. This keeps global npm CLIs under mise instead of
+   ad hoc `npm install -g` scripts. Prefer an explicit `npm:` backend when a
+   registry shorthand has multiple backends.
+5. **Python CLI tool or interpreter → `uv`.** `uv: toolname`, or
    `uv: { name: tool, with: [extra] }`. uv owns Python; do not use mise for it.
-5. **Runtime you develop against (e.g. node) → `mise`, no native package.** Omit
+6. **Runtime you develop against (e.g. node) → `mise`, no native package.** Omit
    brew/apt/dnf entirely and use only `mise: node@lts` so it lives in `$HOME` and
    global installs (`npm i -g`) don't need sudo. Omit `check` for these so
    `mise use --global` always asserts ownership even if a stray system copy is on
    PATH.
-6. **macOS GUI app → `cask`.** Mac App Store app → `mas: <numeric-id>` (preferred
+7. **macOS GUI app → `cask`.** Mac App Store app → `mas: <numeric-id>` (preferred
    over brew/cask when available).
-7. **Last resort → `script`.** An inline shell one-liner. Pair with `check`.
+8. **Last resort → `script`.** An inline shell one-liner. Pair with `check`.
 
 Add **`check: { command: <bin> }`** to any spec so the install is skipped when
-the command is already present (skip this for node — see #5). Required for
+the command is already present (skip this for node — see #6). Required for
 `mise`/`script` methods to be idempotent.
 
 ### Tier resolution order (what wins)
@@ -100,6 +104,12 @@ shdoc-ng:
   check: { command: shdoc-ng }
   mise: github:jdevera/shdoc-ng
 
+# npm-distributed CLI via mise:
+codex:
+  cask: codex
+  check: { command: codex }
+  mise: npm:@openai/codex
+
 # Tool with its own RPM repo:
 mise:
   brew: mise
@@ -131,6 +141,9 @@ chezmoi execute-template < home/.chezmoiscripts/run_before_005_validate_data_pac
 
 # For mise backends, confirm the spec resolves:
 mise ls-remote <aqua:owner/repo | github:owner/repo>
+
+# For npm-backed mise tools, confirm the backend is known:
+mise registry <tool>
 
 # Lint:
 prek run --all-files
