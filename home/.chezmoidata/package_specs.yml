@@ -245,6 +245,12 @@ softwarePackages:
     cask: betterdisplay
   claude:
     cask: claude
+  codex:
+    homepage: https://github.com/openai/codex
+    cask: codex
+    check:
+      command: codex
+    mise: npm:@openai/codex
   discord:
     cask: discord
   elgato-control-center:
@@ -279,8 +285,12 @@ softwarePackages:
     cask: private-internet-access
   rocket:
     cask: rocket
+  shottr:
+    cask: shottr
   vlc:
     cask: vlc
+  windows-app:
+    cask: windows-app
   wireshark-app:
     cask: wireshark-app
   zoom:

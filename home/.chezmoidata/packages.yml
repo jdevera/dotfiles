@@ -10,6 +10,7 @@ packages:
   - bash-completion
   - bat
   - claude-code
+  - codex
   - colout
   - curl
   - fd
@@ -46,6 +47,7 @@ packages:
   - tree
   - uv
   - wget
+  - yq
   - zoxide
   - name: macvim
     only_when: [macos]
@@ -115,7 +117,11 @@ packages:
     only_when: [macos]
   - name: rocket
     only_when: [macos]
+  - name: shottr
+    only_when: [macos]
   - name: vlc
+    only_when: [macos]
+  - name: windows-app
     only_when: [macos]
   - name: wireshark-app
     only_when: [macos]
