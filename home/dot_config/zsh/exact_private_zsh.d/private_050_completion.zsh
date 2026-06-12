@@ -43,7 +43,6 @@ function __complete_ansi_color()
    compadd -a colors
 }
 compdef __complete_ansi_color ansi_color
-compdef __complete_ansi_color set_prompt_color
 # ---------------------------------------------------------------------------
 # }}}
 # New program template {{{
