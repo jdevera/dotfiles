@@ -91,31 +91,6 @@ function delfrompath()
 
 #______________________________________________________________________________
 #
-# FUNCTION:     link_complete_function
-#
-# DESCRIPTION:  Assign a completion function to a command. In ZSH, this uses
-#               compdef to bind completion functions.
-#
-# PARAMETERS:   1 (r): The name of the command
-#               2 (o): Optionally, bind the same completion to this command
-#______________________________________________________________________________
-#
-# DEPENDS-ON: has_command, function_exists
-function link_complete_function()
-{
-   local command=$1
-   local target=${2:-$1}
-   if has_command fzf && (( $+functions[__fzf_complete_$command] )); then
-      compdef "__fzf_complete_$command" "$target"
-   elif (( $+functions[__complete_$command] )); then
-      compdef "__complete_$command" "$target"
-   fi
-}
-#______________________________________________________________________________
-
-
-#______________________________________________________________________________
-#
 # FUNCTION:     showenv
 #
 # DESCRIPTION:  Show a pretty printed list of environment variables.

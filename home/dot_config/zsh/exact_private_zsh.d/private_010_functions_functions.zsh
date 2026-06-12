@@ -54,17 +54,17 @@ function find_function()
 
 # Output the names of all functions defined in the current shell
 # @tags: command canbescript
-function dump_functions()
+function funcs-dump()
 {
    functions
 }
 
 # Show a pretty printed list of shell functions, sorted by file and line
 # @tags: command canbescript
-function list_functions()
+function funcs-list()
 {
    if ! (( $+functions_source )); then
-      echo "list_functions requires ZSH 5.9+ (\$functions_source not available)"
+      echo "funcs-list requires ZSH 5.9+ (\$functions_source not available)"
       return 1
    fi
 
@@ -96,10 +96,10 @@ function list_functions()
 
 # View all defined functions in vim
 # @tags: command canbescript
-function viewfuncs()
+function funcs-view()
 {
    if ! (( $+functions_source )); then
-      echo "viewfuncs requires ZSH 5.9+ (\$functions_source not available)"
+      echo "funcs-view requires ZSH 5.9+ (\$functions_source not available)"
       return 1
    fi
 

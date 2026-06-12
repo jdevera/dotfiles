@@ -75,15 +75,3 @@ function in_git_repo()
 {
    git rev-parse &> /dev/null
 }
-
-# @tags: canbescript
-# DEPENDS-ON: echoe, in_git_repo
-function check_in_git_repo()
-{
-   if ! in_git_repo
-   then
-      echoe "Not in a git repository"
-      return 1
-   fi
-   return 0
-}

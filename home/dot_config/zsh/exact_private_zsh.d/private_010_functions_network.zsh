@@ -64,17 +64,3 @@ function ssh-start-agent()
     echo "Agent running with PID $SSH_AGENT_PID"
     ssh-add
 }
-
-# @tags: command canbescript network
-# DEPENDS-ON: download
-function getfavicon()
-{
-   local url="$1/favicon.ico"
-   local name="$2"
-   if [[ -z $name ]]; then
-      name="$(python -c 'import sys,urlparse; print urlparse.urlparse(sys.argv[1]).netloc.replace(".", "_")' "$1")"
-   fi
-   local favdir="$DDOWN/favicons"
-   mkdir -p "$favdir"
-   DDOWN="$favdir" download "$url" && mv "$favdir/favicon.ico" "$favdir/${name}.ico"
-}

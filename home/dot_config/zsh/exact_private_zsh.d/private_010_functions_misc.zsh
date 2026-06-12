@@ -64,8 +64,6 @@ function zshtimes()
 
    sort -k1 -n -r
 }
-# Keep bashtimes as an alias for discoverability
-alias bashtimes=zshtimes
 
 
 # @tags: command canbescript
