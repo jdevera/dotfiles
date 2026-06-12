@@ -81,6 +81,8 @@ packages:
     only_when: [macos]
   - name: betterdisplay
     only_when: [macos]
+  - name: chatgpt
+    only_when: [macos]
   - name: claude
     only_when: [macos]
   - name: discord

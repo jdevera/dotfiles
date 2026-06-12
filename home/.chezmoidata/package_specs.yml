@@ -243,6 +243,8 @@ softwarePackages:
     cask: audacity
   betterdisplay:
     cask: betterdisplay
+  chatgpt:
+    cask: chatgpt
   claude:
     cask: claude
   codex:
