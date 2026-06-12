@@ -8,43 +8,6 @@
 
 
 
-##############################################################################
-#
-# FUNCTION:     getip4
-#
-# DESCRIPTION:  Show a given network interface's ipv4 address
-#
-# PARAMETERS:   1 (r): Network interface device name
-#
-# DEPENDS-ON:   None
-#
-##############################################################################
-#
-# @tags: command canbescript network
-function getip4()
-{
-    local a_interface=${1:?"network interface argument missing"}
-
-    ip -o -f inet addr show "$a_interface"     |
-        awk '{gsub("/.*", "", $4); print $4}'
-}
-##############################################################################
-
-
-# @tags: command canbescript network
-function download()
-{
-    wget --no-use-server-timestamps --no-clobber --directory-prefix="$DDOWN" "$@"
-}
-
-
-# @tags: command canbescript network
-function http_server()
-{
-    python3 -m http.server "${1:-8000}"
-}
-
-
 # @tags: command network
 function ssh-start-agent()
 {

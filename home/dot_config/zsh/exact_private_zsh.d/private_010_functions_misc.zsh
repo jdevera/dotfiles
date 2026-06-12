@@ -24,26 +24,6 @@ function show_parent_dirs()
    }'
 }
 
-# @tags: command canbescript
-function stripe()
-{
-   perl -pe '$_ = "\033[1;34m$_\033[0m" if($. % 2)'
-}
-
-# @tags: command canbescript
-# DEPENDS-ON: is_osx, assert_has_command
-function stripcolor()
-{
-   local sed=sed
-   if is_osx
-   then
-      assert_has_command gsed
-      sed=gsed
-   fi
-
-   $sed "s,\x1B\[[0-9;]*[a-zA-Z],,g" "$@"
-}
-
 # @tags: canbescript
 function zshtimes()
 {
@@ -64,125 +44,6 @@ function zshtimes()
 
    sort -k1 -n -r
 }
-
-
-# @tags: command canbescript
-function hl()
-{
-   local style
-   style=${HL_STYLE:-emacs}
-   local guess_arg='-g'
-   local arg
-   for arg in "$@"
-   do
-      if [[ $arg == '-l' ]]
-      then
-         guess_arg=''
-         break
-      fi
-   done
-   pygmentize "$guess_arg" -f terminal256 -P "style=$style" "$@"
-}
-
-# @tags: command canbescript
-# DEPENDS-ON: hl
-function hless()
-{
-   hl "$@" | less -FiXRM
-}
-
-# Choose the style to use for hl and hless
-# @tags: command
-function hl_style()
-{
-   local file style newstyle
-   file=${1:?Need a file as first argument}
-   style=${HL_STYLE:-emacs}
-   assert_has_command pygmentize || return  1
-   assert_has_command fzf || return  1
-   # shellcheck disable=SC2063
-   newstyle=$(pygmentize -L styles |
-      grep '*' |
-      cut -d' ' -f2 |
-      sed 's/://' |
-      sed "s/$style/$style (current style)/" |
-      fzf --preview "pygmentize -g -f terminal256 -P style=\$(echo {}| cut -d ' ' -f1) '$file'")
-   if [[ -n $newstyle ]]
-   then
-      newstyle=$(echo "$newstyle" | cut -d ' ' -f1)
-      echo "New style is $newstyle"
-      HL_STYLE=$newstyle
-   else
-      echo "No style chosen, $style remains"
-   fi
-}
-
-
-#______________________________________________________________________________
-#
-# Unified way of extracting compressed files.
-#______________________________________________________________________________
-#
-# @tags: command canbescript
-function xf()
-{
-   local file="$1"
-   [[ -f $1 ]] || { echo "$file not a file" >&2; return 1; }
-   case $file in
-      *.tar.xz|*.tar.bz2|*.tar.gz  ) tar xf    "$file"  ;;
-      *.bz2     ) bunzip2    "$file"  ;;
-      *.rar     ) rar x      "$file"  ;;
-      *.gz      ) gunzip     "$file"  ;;
-      *.tar     ) tar xf     "$file"  ;;
-      *.tbz2    ) tar xjf    "$file"  ;;
-      *.tgz     ) tar xzf    "$file"  ;;
-      *.zip     ) unzip      "$file"  ;;
-      *.Z       ) uncompress "$file"  ;;
-      *.7z      ) 7z x       "$file"  ;;
-      *         )
-         echo "Don't know how to extract '$file'" >&2
-         return 1
-         ;;
-    esac
-}
-#______________________________________________________________________________
-
-
-#______________________________________________________________________________
-#
-# A powerful version of touch. Create all the path until it can touch the file.
-#______________________________________________________________________________
-#
-# @tags: command canbescript
-function rtouch()
-{
-   local filepath="$1"
-   mkdir -p "$(dirname "$filepath")"
-   touch "$filepath"
-}
-#______________________________________________________________________________
-
-
-#______________________________________________________________________________
-# Runs locate with all given arguments, and uses the fzf fuzzy finder to choose
-# from the results one file to open in the configured $EDITOR
-#______________________________________________________________________________
-#
-# @tags: command canbescript
-function eloc()
-{
-   local file=
-   file=$(locate "$@" |
-      fzf --exit-0 -select-1 --extended \
-         --preview '[[ -d {} ]] || head -n $LINES {} | less -RMS' \
-         --preview-window hidden \
-         --bind '?:toggle-preview')
-   if [[ -n $file ]]
-   then
-      $EDITOR "$file"
-   fi
-}
-#______________________________________________________________________________
 
 
 #______________________________________________________________________________
@@ -259,47 +120,7 @@ function run_first_of()
 #______________________________________________________________________________
 
 
-# @tags: command canbescript filter
-function ranking()
-{
-   local rev='-r'
-   if [[ $1 == '-r' ]]
-   then
-      rev=''
-      shift
-   fi
-   sort "$@" | uniq -c | sort -k 1 -n "$rev"
-}
-
-
-# @tags: command canbescript
-# DEPENDS-ON: assert_has_command, has_command
-function edot()
-{
-   local dir
-   dir=${1:-~/.dotfiles}
-   assert_has_command fzf
-   assert_has_command fd
-
-   local preview_command
-   if has_command bat
-   then
-      preview_command="bat --color=always --line-range=:500"
-   elif has_command pygmentize
-   then
-      preview_command="pygmentize -g -f terminal256 -P style=emacs"
-   else
-      preview_command='less -r'
-   fi
-
-   (builtin cd "$dir" && fd -I -tl -tf) |
-      fzf \
-      --preview "$preview_command '$dir/{}'" \
-      --bind "enter:execute($EDITOR '$dir/{}' </dev/tty)"
-}
-
-
-# @tags: command canbescript
+# @tags: command
 function run_until_fail()
 {
    local -i times=0
@@ -313,31 +134,4 @@ function run_until_fail()
       "$@" || break
    done
    echo "FAILED in iteration $times"
-}
-
-
-# @tags: command canbescript
-function abspath()
-{
-   python3 -c 'import os, sys; [print(os.path.abspath(path)) for path in sys.argv[1:]]' "$@"
-}
-
-
-# @tags: command canbescript
-function ppm()  # Poor Person's man
-{
-   local command=$1
-   $command --help | less
-}
-
-# @tags: command canbescript
-# DEPENDS-ON: assert_has_command, edot
-function vispanso() {
-   assert_has_command espanso && edot "$(espanso path config)"
-}
-
-# @tags: command canbescript
-# DEPENDS-ON: vispanso
-function espanso-cfg() {
-   vispanso
 }

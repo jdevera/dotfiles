@@ -115,60 +115,9 @@ function myrmlistitems()
 
 
 
-##############################################################################
-# Commodity wrappers
-#
-# @tags: command canbescript filter
-function touppercase() { tr '[:lower:]' '[:upper:]'; }
-# @tags: command canbescript filter
-function tolowercase() { tr '[:upper:]' '[:lower:]'; }
-#
-##############################################################################
-
-
-# @tags: command canbescript filter
-function average()
-{
-    awk '{total+=$0}END{printf("%.2f\n",total/NR);}'
-}
-
-# @tags: command canbescript filter
-function field()
-{
-    local nfield=$1
-    shift
-    awk -v nfield="$nfield" '{print $nfield}' "$@"
-}
-
 # @tags: canbescript
 function echoe()
 {
     echo "$@" 1>&2
 }
 
-##############################################################################
-# Set operations on lines
-#
-# Each function takes two files (or process substitutions) as arguments.
-# Input is sorted and deduplicated automatically.
-#
-# Usage: set-difference <(cmd1) <(cmd2)
-#
-# @tags: canbescript filter
-
-# A ∪ B — all lines from either input, deduplicated
-function set-union()        { sort -u "$1" "$2"; }
-
-# A ∩ B — only lines present in both inputs
-function set-intersection() { comm -12 <(sort -u "$1") <(sort -u "$2"); }
-
-# A \ B — lines in the first input but not in the second
-function set-difference()   { comm -23 <(sort -u "$1") <(sort -u "$2"); }
-
-# A △ B — lines in either input but not in both (symmetric difference)
-# Not using comm -3 directly because it prepends a tab to one column's output.
-function set-symdiff()      { { set-difference "$1" "$2"; set-difference "$2" "$1"; } | sort; }
-
-# A ⊆ B — true (exit 0) if all lines in the first input are also in the second
-function set-is-subset()    { [[ -z $(set-difference "$1" "$2") ]]; }
-##############################################################################

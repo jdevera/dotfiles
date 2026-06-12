@@ -91,24 +91,6 @@ function delfrompath()
 
 #______________________________________________________________________________
 #
-# FUNCTION:     showenv
-#
-# DESCRIPTION:  Show a pretty printed list of environment variables.
-#
-# PARAMETERS:   None
-#______________________________________________________________________________
-#
-# @tags: command canbescript
-# DEPENDS-ON: showaliases
-function showenv()
-{
-   printenv | grep '=' | showaliases -a -
-}
-#______________________________________________________________________________
-
-
-#______________________________________________________________________________
-#
 # FUNCTION:     reloadsh
 #
 # DESCRIPTION:  Reload all ZSH config files after clearing all defined
