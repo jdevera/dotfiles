@@ -1,8 +1,9 @@
 # Configuration for prek (https://prek.j178.dev), a fast Rust pre-commit
 # alternative used to lint this repo:
 #
-#     prek run --all-files        # run every hook
-#     prek install                # install the git pre-commit hook
+#     PREK_HOME="${TMPDIR:-/tmp}/codex-prek-home" prek run --all-files
+#                                  # run every hook inside Codex sandbox
+#     prek install                 # install the git pre-commit hook
 #
 # For now this only guards against expired one-shot scripts; more hooks and a
 # CI job that runs them over all files will follow.

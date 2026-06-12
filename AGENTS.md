@@ -14,6 +14,8 @@ chezmoi diff               # Preview changes (scripts excluded by config)
 chezmoi update             # Pull latest and apply
 chezmoi managed            # List all managed files
 chezmoi data               # Show template data values
+PREK_HOME="${TMPDIR:-/tmp}/codex-prek-home" prek run --all-files
+                           # Run lint hooks inside Codex sandbox
 ```
 
 ## Chezmoi Naming Conventions

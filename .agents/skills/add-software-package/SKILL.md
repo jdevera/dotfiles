@@ -146,7 +146,7 @@ mise ls-remote <aqua:owner/repo | github:owner/repo>
 mise registry <tool>
 
 # Lint:
-prek run --all-files
+PREK_HOME="${TMPDIR:-/tmp}/codex-prek-home" prek run --all-files
 ```
 
 ## Gotchas

@@ -38,6 +38,11 @@ fi
 
 export NPM_PACKAGES="$HOME/.npm-packages"
 
+# Codex sandboxes cannot write to ~/.cache; point prek at writable temp storage.
+if [[ -n ${CODEX_SANDBOX:-} && -z ${PREK_HOME:-} ]]; then
+   export PREK_HOME="${TMPDIR:-/tmp}/codex-prek-home"
+fi
+
 #############################################################################
 
 # }}}
