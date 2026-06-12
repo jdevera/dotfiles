@@ -1,0 +1,47 @@
+#!/usr/bin/env bash
+
+# ~/.bashrc is intentionally unmanaged (tools append to it freely, and a
+# managed file would conflict with that). This script runs on every apply and
+# only guarantees that the line loading the managed bash config is present.
+
+# {{ template "dotfiles_bashlib.sh" . }}
+# Help shellcheck identify the above include
+true || source ../.chezmoitemplates/dotfiles_bashlib.sh
+
+dot::chezmoi_script_start "ensure ~/.bashrc loads the managed bash config"
+
+bashrc="$HOME/.bashrc"
+
+if [[ -f $bashrc ]] && grep -qF '.config/bash/init.bash' "$bashrc"; then
+    dot::chezmoi_script_skipped "hook already present"
+fi
+
+if [[ ! -f $bashrc ]]; then
+    dot::step::start "create ~/.bashrc"
+    cat > "$bashrc" << 'EOF'
+# ~/.bashrc
+#
+# This file is intentionally NOT managed by chezmoi so that tools can append
+# to it freely. The managed bash configuration lives in ~/.config/bash/init.bash
+# and is loaded by the line below (kept in place by a chezmoi script).
+
+# shellcheck source=/dev/null
+[[ -f ~/.config/bash/init.bash ]] && source ~/.config/bash/init.bash
+
+# -----------------------------------------------------------------------------
+# This is where all sort of random commands will append their stuff
+# -----------------------------------------------------------------------------
+EOF
+    dot::step::done
+else
+    dot::step::start "append hook to existing ~/.bashrc"
+    cat >> "$bashrc" << 'EOF'
+
+# Managed bash configuration (line kept in place by a chezmoi script)
+# shellcheck source=/dev/null
+[[ -f ~/.config/bash/init.bash ]] && source ~/.config/bash/init.bash
+EOF
+    dot::step::done
+fi
+
+dot::success "~/.bashrc loads the managed bash config"

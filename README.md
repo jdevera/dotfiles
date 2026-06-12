@@ -38,17 +38,28 @@ That's the spirit of dotfiles repos. Questions? Open an issue.
 
 ## 🐚 Shell
 
-### Bash
+### Zsh
 
-Config lives in `.bash.d/`, loaded in order:
-1. `.bash.d/local/before/*` (machine-specific, untracked)
-2. `.bash.d/*` (the good stuff)
-3. `.bash.d/local/after/*` (machine-specific overrides)
+The interactive shell. Modular config lives in `.config/zsh/zsh.d/`, loaded
+in order:
+1. `zsh.d/local/before/*` (machine-specific, untracked)
+2. `zsh.d/*` (the good stuff)
+3. `zsh.d/local/after/*` (machine-specific overrides)
 
-*"But isn't sourcing multiple files slow?"* I tested concatenating everything
-into one file in 2026. The difference was negligible. Modularity wins.
+Plugins are declared in `.chezmoidata/zsh_plugins.yaml` and pulled as chezmoi
+externals — no framework needed.
 
 To apply changes: `chezmoi apply`, then `rlsh` to reload in the current shell.
+
+### Bash
+
+Retired as an interactive shell, kept usable for emergencies (broken zsh
+config, half-bootstrapped machine). One minimal, self-sufficient file:
+`.config/bash/init.bash`.
+
+`~/.bashrc` itself is deliberately *unmanaged* — every tool under the sun
+appends to it, and they can have it. A chezmoi script just keeps one line in
+there that loads the managed file.
 
 ### Starship Prompt ✨
 

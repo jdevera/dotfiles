@@ -1,0 +1,9 @@
+#!/bin/bash
+# bash_profile vs bashrc:
+# - bash_profile: sourced for LOGIN shells (SSH, Terminal.app on macOS, console login)
+# - bashrc: sourced for INTERACTIVE NON-LOGIN shells (running `bash` from existing shell)
+# This file sources bashrc so all settings work regardless of shell type.
+# (Locale setup lives in ~/.config/bash/init.bash, loaded via .bashrc.)
+
+# shellcheck source=/dev/null
+[[ -s $HOME/.bashrc ]] && source "$HOME/.bashrc"

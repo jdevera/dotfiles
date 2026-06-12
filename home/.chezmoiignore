@@ -2,8 +2,6 @@
 .vim/local/*
 !.vim/local/README
 .vim/spell/*
-.bash.d/local/*
-!.bash.d/local/README.md
 .config/zsh/zsh.d/local/*
 !.config/zsh/zsh.d/local/README.md
 
@@ -16,9 +14,7 @@
 .config/iterm2/
 .bash_profile
 Library/
-.bash.d/050_ssh.sh
 .config/zsh/zsh.d/050_ssh.zsh
-.bash.d/020_dirs_obsidian.sh
 .config/zsh/zsh.d/020_dirs_obsidian.zsh
 {{ end }}
 

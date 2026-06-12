@@ -21,10 +21,6 @@ softwarePackages:
     brew: bash
     apt: bash
     dnf: bash
-  bash-completion:
-    brew: bash-completion@2
-    apt: bash-completion
-    dnf: bash-completion
   bat:
     brew: bat
     apt: bat

@@ -21,7 +21,7 @@ PREK_HOME="${TMPDIR:-/tmp}/codex-prek-home" prek run --all-files
 ## Chezmoi Naming Conventions
 
 Files in `home/` use chezmoi prefixes:
-- `dot_` → `.` (e.g., `dot_bashrc` → `.bashrc`)
+- `dot_` → `.` (e.g., `dot_zshrc` → `.zshrc`)
 - `private_` → file permissions 0600
 - `exact_` → directory is exact (unmanaged files are removed)
 - `.tmpl` suffix → file is a Go template
@@ -55,14 +55,16 @@ Key functions:
 - `dot::has_command "cmd"` - Check if command exists
 - `dot::os::setup` - Set up PATH for current OS
 
-### Bash Configuration (`home/exact_private_dot_bash.d/`)
+### Bash Configuration (`home/dot_config/bash/init.bash`)
 
-Modular bash config loaded by `.bashrc` in order:
-1. `.bash.d/local/before/*` (untracked, machine-specific)
-2. `.bash.d/*` (tracked modules)
-3. `.bash.d/local/after/*` (untracked, machine-specific)
+Bash is not the interactive shell (zsh is); it is kept minimally usable for
+recovery and mid-bootstrap scenarios via a single self-sufficient file,
+`~/.config/bash/init.bash`.
 
-Files are named with numeric prefixes for ordering (e.g., `010_functions_*.sh`).
+`~/.bashrc` is intentionally NOT managed by chezmoi (tools append to it
+freely). The `run_after_ensure-bashrc-hook` script guarantees on every apply
+that `.bashrc` contains the line sourcing `init.bash`. Never add a managed
+`dot_bashrc` back.
 
 ### ZSH Configuration (`home/dot_config/zsh/`)
 

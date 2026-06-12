@@ -7,7 +7,6 @@ install_tools:
 packages:
   - age
   - bash
-  - bash-completion
   - bat
   - claude-code
   - codex

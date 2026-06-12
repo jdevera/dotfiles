@@ -1,0 +1,64 @@
+#!/usr/bin/env bash
+
+# EXPIRES: 2027-06-12
+#
+# One-shot migration: the modular ~/.bash.d configuration is decommissioned
+# in favour of a single minimal file (~/.config/bash/init.bash). This script
+# cleans up machines that still have the old layout:
+#  - rewrites the old chezmoi-managed ~/.bashrc (which sourced the bash.d
+#    bootstrap) into a minimal unmanaged one, preserving anything that tools
+#    appended at the end
+#  - moves ~/.bash.d aside (not deleted: local/ may hold machine-specific
+#    files worth salvaging)
+
+# {{ template "dotfiles_bashlib.sh" . }}
+# Help shellcheck identify the above include
+true || source ../.chezmoitemplates/dotfiles_bashlib.sh
+
+dot::chezmoi_script_start "decommission modular bash configuration"
+
+bashrc="$HOME/.bashrc"
+
+if [[ -f $bashrc ]] && grep -q 'bash\.d/bootstrap\.sh' "$bashrc"; then
+    dot::step::start "rewrite ~/.bashrc, preserving appended content"
+
+    cp "$bashrc" "$HOME/.bashrc.pre-decommission" || dot::step::fatal "could not back up ~/.bashrc"
+
+    # Everything after the dashed line that closes the "random commands will
+    # append their stuff" banner is content appended by tools: keep it.
+    appended=$(awk '
+        p { print }
+        /random commands will append their stuff/ { getline; p = 1 }
+    ' "$bashrc")
+
+    cat > "$bashrc" << 'EOF'
+# ~/.bashrc
+#
+# This file is intentionally NOT managed by chezmoi so that tools can append
+# to it freely. The managed bash configuration lives in ~/.config/bash/init.bash
+# and is loaded by the line below (kept in place by a chezmoi script).
+
+# shellcheck source=/dev/null
+[[ -f ~/.config/bash/init.bash ]] && source ~/.config/bash/init.bash
+
+# -----------------------------------------------------------------------------
+# This is where all sort of random commands will append their stuff
+# -----------------------------------------------------------------------------
+EOF
+    if [[ -n $appended ]]; then
+        printf '%s\n' "$appended" >> "$bashrc"
+    fi
+    dot::step::done
+fi
+
+if [[ -d $HOME/.bash.d ]]; then
+    dot::step::start "move ~/.bash.d aside"
+    if [[ -e $HOME/.bash.d.decommissioned ]]; then
+        dot::step::skipped "~/.bash.d.decommissioned already exists; leaving ~/.bash.d in place"
+    else
+        mv "$HOME/.bash.d" "$HOME/.bash.d.decommissioned" || dot::step::fatal
+        dot::step::done
+    fi
+fi
+
+dot::success "bash configuration decommissioned"
