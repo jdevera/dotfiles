@@ -1,8 +1,16 @@
-#!/usr/bin/env bash
+{{- /*
+~/.bashrc is intentionally unmanaged (tools append to it freely, and a
+managed file would conflict with that). This script only guarantees that the
+line loading the managed bash config is present.
 
-# ~/.bashrc is intentionally unmanaged (tools append to it freely, and a
-# managed file would conflict with that). This script runs on every apply and
-# only guarantees that the line loading the managed bash config is present.
+The check happens here at template level: when the hook is already in place
+the script renders empty and chezmoi does not run it at all, keeping a clean
+apply silent.
+*/ -}}
+{{- $bashrc := joinPath .chezmoi.homeDir ".bashrc" -}}
+{{- $hookPresent := output "sh" "-c" (printf "grep -qsF .config/bash/init.bash %q && echo yes || echo no" $bashrc) | trim -}}
+{{- if eq $hookPresent "no" -}}
+#!/usr/bin/env bash
 
 # {{ template "dotfiles_bashlib.sh" . }}
 # Help shellcheck identify the above include
@@ -11,10 +19,6 @@ true || source ../.chezmoitemplates/dotfiles_bashlib.sh
 dot::chezmoi_script_start "ensure ~/.bashrc loads the managed bash config"
 
 bashrc="$HOME/.bashrc"
-
-if [[ -f $bashrc ]] && grep -qF '.config/bash/init.bash' "$bashrc"; then
-    dot::chezmoi_script_skipped "hook already present"
-fi
 
 if [[ ! -f $bashrc ]]; then
     dot::step::start "create ~/.bashrc"
@@ -45,3 +49,4 @@ EOF
 fi
 
 dot::success "~/.bashrc loads the managed bash config"
+{{ end -}}
