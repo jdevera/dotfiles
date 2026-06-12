@@ -8,10 +8,10 @@ true || source ../.chezmoitemplates/dotfiles_bashlib.sh
 
 dot::chezmoi_script_start "apply custom key bindings (Xmodmap)"
 
-[ -e "~/.Xmodmap" ] || dot::chezmoi_script_skipped "Xmodmap config is not installed"
+[ -e "$HOME/.Xmodmap" ] || dot::chezmoi_script_skipped "Xmodmap config is not installed"
 dot::has_command xmodmap || dot::chezmoi_script_skipped "xmodmap is not installed"
 
-xmodmap ~/.Xmodmap
+xmodmap "$HOME/.Xmodmap"
 
 dot::success "custom key bindings applied"
 {{ end -}}
