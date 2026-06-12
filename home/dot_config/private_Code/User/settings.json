@@ -37,5 +37,8 @@
 
     // Terminal ligatures not working as of VSCode 1.111
     // https://github.com/microsoft/vscode/issues/274296
-    "terminal.integrated.fontLigatures.enabled": true
+    "terminal.integrated.fontLigatures.enabled": true,
+
+    // Run workspace folder-open tasks without prompting
+    "task.allowAutomaticTasks": "on"
 }
