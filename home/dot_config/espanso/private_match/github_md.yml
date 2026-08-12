@@ -9,3 +9,6 @@ matches:
     replace: "> [!WARNING]\n> "
   - trigger: "ghl-caution"
     replace: "> [!CAUTION]\n> "
+
+  - trigger: ",,gb"
+    replace: "🤖 Good bot 👍"
