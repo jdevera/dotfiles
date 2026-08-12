@@ -155,7 +155,10 @@ Examples from the repo:
 - `Starship: Refactor to layered config with separate preset file`
 - `Bash: Add iTerm2 shell integration via chezmoiexternal`
 
-Do not add `Co-Authored-By` lines.
+When an AI assistant materially authors a change, include the matching GitHub trailer:
+`Co-authored-by: Claude (<model-id>) <noreply@anthropic.com>` for Claude, or
+`Co-authored-by: Codex <noreply@openai.com>` for Codex. Omit the trailer when
+there was no AI-authored contribution.
 
 ## Chezmoi Documentation
 
