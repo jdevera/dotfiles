@@ -1,0 +1,40 @@
+#!/usr/bin/env bash
+#
+# EXPIRES: 2027-02-12
+#
+# One-shot migration. Volta used to be configured in shell startup and may
+# still exist on machines from an older setup. Remove the Homebrew formula and
+# default Volta home, without installing a replacement or adding PATH entries.
+#
+# Delete this script after the expiry date — the prek `no-expired-scripts`
+# hook will flag it once that date has passed.
+
+# {{ template "dotfiles_bashlib.sh" . }}
+
+# Help shellcheck identify the above include
+true || source ../.chezmoitemplates/dotfiles_bashlib.sh
+
+dot::chezmoi_script_start "remove Volta"
+
+removed=false
+
+if dot::has_command brew && brew list --formula volta > /dev/null 2>&1; then
+    dot::step::start "uninstall Homebrew Volta"
+    brew uninstall --formula volta || dot::step::fatal
+    removed=true
+    dot::step::done
+fi
+
+VOLTA_DIR="$HOME/.volta"
+if [[ -e $VOLTA_DIR || -L $VOLTA_DIR ]]; then
+    dot::step::start "remove default Volta home"
+    rm -rf "$VOLTA_DIR" || dot::step::fatal
+    removed=true
+    dot::step::done
+fi
+
+if [[ $removed == false ]]; then
+    dot::chezmoi_script_skipped "Volta is not installed"
+fi
+
+dot::success "Volta removed"
