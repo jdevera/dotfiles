@@ -67,6 +67,10 @@ pathprepend "$HOME/.local/share/mise/shims"
 
 [[ -n $NPM_PACKAGES ]] && pathprepend "$NPM_PACKAGES/bin"
 
+# Wrapper scripts that must shadow the real binaries (e.g. chezmoi, which
+# gets a GitHub token injected from gh). Must come after ~/.local/bin.
+pathprepend "$HOME/.local/wrappers"
+
 if has_command brew
 then
    MANPATH="$(brew --prefix)/share/man:$MANPATH"

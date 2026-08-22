@@ -1,0 +1,29 @@
+#!/usr/bin/env bash
+# chezmoi wrapper: inject a GitHub token from gh so the gitHub* template
+# functions make authenticated API calls (60/h unauthenticated vs 5000/h).
+# Lives in ~/.local/wrappers, which is prepended to PATH ahead of the real
+# binary's directory; the token only exists in this process tree.
+set -euo pipefail
+
+real=""
+while IFS= read -r candidate; do
+    # Skip ourselves (and any hardlink/symlink to us) to avoid recursion.
+    [[ "$candidate" -ef "$0" ]] && continue
+    real="$candidate"
+    break
+done < <(type -ap chezmoi)
+
+if [[ -z "$real" ]]; then
+    echo "chezmoi wrapper: real chezmoi binary not found in PATH" >&2
+    exit 1
+fi
+
+if [[ -z "${CHEZMOI_GITHUB_ACCESS_TOKEN:-}" ]]; then
+    if token=$(gh auth token 2>/dev/null); then
+        export CHEZMOI_GITHUB_ACCESS_TOKEN="$token"
+    else
+        echo "chezmoi: no GitHub token (gh not logged in?) — API calls will be rate-limited. Run: gh auth login" >&2
+    fi
+fi
+
+exec "$real" "$@"
