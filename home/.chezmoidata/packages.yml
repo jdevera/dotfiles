@@ -41,6 +41,7 @@ packages:
     only_when: [macos]
   - tig
   - tmux
+  - todoist-cli
   - tox
   - tre-command
   - tree

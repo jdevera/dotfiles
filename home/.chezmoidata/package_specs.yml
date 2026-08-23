@@ -297,6 +297,12 @@ softwarePackages:
     cask: textual
   thaw@beta:
     cask: thaw@beta
+  todoist-cli:
+    description: Command-line interface for Todoist
+    homepage: https://github.com/Doist/todoist-cli
+    check:
+      command: td
+    mise: npm:@doist/todoist-cli
   todoist:
     homepage: https://todoist.com
     mas: 585829637
