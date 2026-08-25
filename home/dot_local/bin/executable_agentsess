@@ -6,42 +6,70 @@ CLAUDE_PROJECTS="${CLAUDE_PROJECTS:-$HOME/.claude/projects}"
 CODEX_SESSIONS="${CODEX_SESSIONS:-$HOME/.codex/sessions}"
 CACHE_DIR="${XDG_CACHE_HOME:-$HOME/.cache}/agentsess"
 CODEX_INDEX="$CACHE_DIR/codex-index.tsv"
+CODEX_INDEX_HEADER="# agentsess-index-v2"
 
 _claude_dir_for() {
     # Claude encodes cwd by replacing both '/' and '.' with '-'.
-    printf '%s/%s' "$CLAUDE_PROJECTS" "$(printf '%s' "$1" | sed 's/[/.]/-/g')"
+    local encoded=${1//\//-}
+    encoded=${encoded//./-}
+    printf '%s/%s' "$CLAUDE_PROJECTS" "$encoded"
 }
 
 _codex_index_stale() {
-    # Stale if the index is missing, or any codex YYYY/MM/DD dir is newer.
+    # Stale if the index is missing/old-format, or a Codex day dir is newer.
     [[ -f $CODEX_INDEX ]] || return 0
     [[ -d $CODEX_SESSIONS ]] || return 1
-    local newest
-    newest=$(find "$CODEX_SESSIONS" -mindepth 3 -maxdepth 3 -type d -newer "$CODEX_INDEX" -print -quit 2>/dev/null)
-    [[ -n $newest ]]
+    local header day_dir
+    IFS= read -r header < "$CODEX_INDEX" || return 0
+    [[ $header == "$CODEX_INDEX_HEADER" ]] || return 0
+    for day_dir in "$CODEX_SESSIONS"/*/*/*; do
+        [[ -d $day_dir && $day_dir -nt $CODEX_INDEX ]] && return 0
+    done
+    return 1
 }
 
 _codex_index_rebuild() {
     mkdir -p "$CACHE_DIR"
-    [[ -d $CODEX_SESSIONS ]] || { : > "$CODEX_INDEX"; return; }
     local tmp; tmp=$(mktemp "$CODEX_INDEX.XXXXXX")
     # Each rollout-*.jsonl: first line is session_meta with cwd + id.
-    # Emit: cwd \t id \t mtime_epoch \t file_path
-    while IFS= read -r -d '' f; do
-        local first cwd id mt
-        first=$(head -n 1 "$f" 2>/dev/null) || continue
-        cwd=$(printf '%s' "$first" | sed -n 's/.*"cwd":"\([^"]*\)".*/\1/p')
-        id=$(printf '%s' "$first" | sed -n 's/.*"id":"\([^"]*\)".*/\1/p')
-        [[ -n $cwd && -n $id ]] || continue
-        mt=$(stat -f '%m' "$f" 2>/dev/null || stat -c '%Y' "$f" 2>/dev/null) || mt=0
-        printf '%s\t%s\t%s\t%s\n' "$cwd" "$id" "$mt" "$f"
-    done < <(find "$CODEX_SESSIONS" -type f -name 'rollout-*.jsonl' -print0 2>/dev/null) > "$tmp"
+    # Emit stable metadata only: cwd \t id \t file_path. One awk process
+    # handles a batch of files instead of spawning head/sed/stat per session.
+    {
+        printf '%s\n' "$CODEX_INDEX_HEADER"
+        if [[ -d $CODEX_SESSIONS ]]; then
+            find "$CODEX_SESSIONS" -type f -name 'rollout-*.jsonl' \
+                -exec awk '
+                    FNR == 1 {
+                        cwd = id = ""
+                        if (match($0, /"cwd":"[^"]*"/))
+                            cwd = substr($0, RSTART + 7, RLENGTH - 8)
+                        if (match($0, /"id":"[^"]*"/))
+                            id = substr($0, RSTART + 6, RLENGTH - 7)
+                        if (cwd != "" && id != "")
+                            print cwd "\t" id "\t" FILENAME
+                        nextfile
+                    }
+                ' {} + 2>/dev/null
+        fi
+    } > "$tmp"
     mv "$tmp" "$CODEX_INDEX"
+}
+
+_codex_index_refresh_async() {
+    # Prompt counts may be one render behind, but must never wait for a scan.
+    (_codex_index_rebuild) </dev/null >/dev/null 2>&1 &
 }
 
 _codex_index_ensure() {
     _codex_index_stale && _codex_index_rebuild
     [[ -f $CODEX_INDEX ]] || : > "$CODEX_INDEX"
+}
+
+_codex_index_ensure_for_count() {
+    if _codex_index_stale; then
+        _codex_index_refresh_async
+    fi
+    return 0
 }
 
 _claude_jsonls_for() {
@@ -55,8 +83,13 @@ _codex_entries_for() {
     # Print TSV rows (id, mtime, path) for given cwd, sorted by mtime desc.
     local cwd="$1"
     _codex_index_ensure
-    # Filter the index by exact cwd match, then sort by mtime desc.
-    awk -F'\t' -v c="$cwd" '$1 == c { print $2 "\t" $3 "\t" $4 }' "$CODEX_INDEX" \
+    # Timestamps are live metadata needed by list/pick, not prompt counts.
+    local id f mt
+    while IFS=$'\t' read -r id f; do
+        [[ -n $id && -n $f ]] || continue
+        mt=$(stat -f '%m' "$f" 2>/dev/null || stat -c '%Y' "$f" 2>/dev/null) || mt=0
+        printf '%s\t%s\t%s\n' "$id" "$mt" "$f"
+    done < <(awk -F'\t' -v c="$cwd" '$1 == c { print $2 "\t" $3 }' "$CODEX_INDEX") \
         | sort -t $'\t' -k2,2nr
 }
 
@@ -102,9 +135,21 @@ _first_user_msg_codex() {
 
 cmd_count() {
     local cwd="${1:-$PWD}" format="${FORMAT:-plain}"
-    local cn xn
-    cn=$(_claude_jsonls_for "$cwd" | wc -l | tr -d ' ')
-    xn=$(_codex_entries_for "$cwd" | wc -l | tr -d ' ')
+    local cn=0 xn claude_dir f
+    claude_dir=$(_claude_dir_for "$cwd")
+    if [[ -d $claude_dir ]]; then
+        for f in "$claude_dir"/*.jsonl; do
+            if [[ -f $f ]]; then
+                cn=$((cn + 1))
+            fi
+        done
+    fi
+    _codex_index_ensure_for_count
+    if [[ -f $CODEX_INDEX ]]; then
+        xn=$(awk -F'\t' -v c="$cwd" '$1 == c { n++ } END { print n + 0 }' "$CODEX_INDEX")
+    else
+        xn=0
+    fi
     # Built-in output modes:
     case "$format" in
         json)  printf '{"claude":%s,"codex":%s}\n' "$cn" "$xn"; return ;;

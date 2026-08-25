@@ -42,8 +42,8 @@ starship:
     agentsess:
       description: "Active coding-agent session counts for cwd"
       when: true
-      command: 'HIDE_ZERO=1 FORMAT="󰯉 {claude} || 󰄄 {codex} " agentsess count'
-      format: "$output"
+      command: 'HIDE_ZERO=1 FORMAT="󰯉 {claude} ||󰄄 {codex}" source "$HOME/.local/bin/agentsess" count'
+      format: "$output "
       shell: ["bash"]
 
   # Character module settings for unicode variant
