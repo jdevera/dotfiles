@@ -8,4 +8,23 @@ is_ai_agent && return
 
 export HISHTORY_SERVER={{ .hishtory_server | quote }}
 
-[[ -f ~/.hishtory/config.zsh ]] && source ~/.hishtory/config.zsh
+if [[ -f ~/.hishtory/config.zsh ]] && (( $+commands[hishtory] )); then
+    # Hishtory invokes itself several times during shell startup and once
+    # synchronously before every command. Bypass mise's relatively slow shim
+    # so neither path adds a noticeable delay.
+    _hishtory_executable=$commands[hishtory]
+    _hishtory_mise_executable="$HOME/.local/share/mise/installs/github-ddworken-hishtory/latest/hishtory"
+
+    if [[ $_hishtory_executable == "$HOME/.local/share/mise/shims/hishtory" \
+        && -x $_hishtory_mise_executable ]]; then
+        _hishtory_executable=$_hishtory_mise_executable
+    fi
+
+    hishtory()
+    {
+        "$_hishtory_executable" "$@"
+    }
+
+    unset _hishtory_mise_executable
+    source ~/.hishtory/config.zsh
+fi
