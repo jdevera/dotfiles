@@ -1,3 +1,4 @@
+{{ $fabioDir := joinPath .chezmoi.homeDir "Library" "Mobile Documents" "iCloud~md~obsidian" "Documents" "PaFabio" -}}
 # Fabiotty Configuration — Personal Claude Code terminal
 #
 # Note: If fonts appear too bold on macOS, run:
@@ -7,11 +8,11 @@
 
 [general]
 live_config_reload = true
-working_directory = "/Users/jdevera/Library/Mobile Documents/iCloud~md~obsidian/Documents/PaFabio"
+working_directory = "{{ $fabioDir }}"
 
 [terminal.shell]
 program = "/bin/zsh"
-args = ["--login", "-i", "-c", "if tmux has-session -t fabio 2>/dev/null; then tmux new-session -t fabio \\; new-window -c \"$HOME/Library/Mobile Documents/iCloud~md~obsidian/Documents/PaFabio\" claude; else tmux new-session -s fabio -c \"$HOME/Library/Mobile Documents/iCloud~md~obsidian/Documents/PaFabio\" claude; fi"]
+args = ["--login", "-i", "-c", "fabio_dir=\"{{ $fabioDir }}\"; if tmux has-session -t fabio 2>/dev/null; then tmux new-session -t fabio \\; new-window -c \"$fabio_dir\" claude; else tmux new-session -s fabio -c \"$fabio_dir\" claude; fi"]
 
 [window]
 title = "Fabio 🦩 - Jacobo's PA"
