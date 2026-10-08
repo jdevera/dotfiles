@@ -38,9 +38,10 @@ tmux:
     net_off_bg: "#f38ba8"          # red — disconnected alert
     net_off_fg: "#1e1e2e"          # base
 
-    # Window list
-    win_current_accent: "#f38ba8"  # red — active window brackets
-    win_current_fg: "#cdd6f4"      # text — active window name
-    win_fg: "#cdd6f4"              # text — inactive window name
+    # Window list (pill-style tabs)
+    win_fg: "#cdd6f4"              # text — window name in the pill
     win_last_fg: "#89dceb"         # sky — last active window
-    win_activity_fg: "#f9e2af"     # yellow — activity/bell alert
+    win_tab_default: "#f9e2af"     # yellow — tab color when @tab_color is unset
+    win_tab_fg: "#1e1e2e"          # base — text on the tab color
+    win_pill_bg: "#45475a"         # surface1 — window-name pill background
+    win_bell_fg: "#ff3b30"         # alert red — unseen-bell dot

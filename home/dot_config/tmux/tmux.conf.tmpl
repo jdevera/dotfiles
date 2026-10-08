@@ -23,15 +23,19 @@ set  -g status-justify centre
 
 set  -g status-style "bg={{ $t.status_bg }} fg={{ $t.status_fg }}"
 
+# Every segment except the prefix indicator and the offline warning
+# is wrapped in #{?@status_collapsed,,...}: unset (the default) shows
+# everything; "Tmux > Status > Toggle" flips the option for more
+# window-tab room. Commas inside wrapped segments are escaped as #,.
 # Status left
 # -----------
 set  -g status-left-length 40
 # Command mode indicator:
-set  -g status-left "#{?client_prefix,#[bg={{ $t.prefix_bg }}#,fg={{ $t.prefix_fg }}#,bold] {{ $g.icon_prefix }} #[bg={{ $t.hostname_bg }}#,fg={{ $t.prefix_bg }}#,nobold]{{ $g.sep_right }} ,}"
+set  -g status-left "#{?client_prefix,#[bg={{ $t.prefix_bg }}#,fg={{ $t.prefix_fg }}#,bold] {{ $g.icon_prefix }} #[bg=#{?@status_collapsed,default,{{ $t.hostname_bg }}}#,fg={{ $t.prefix_bg }}#,nobold]{{ $g.sep_right }} ,}"
 # Hostname:
-set -ag status-left "#[bg={{ $t.hostname_bg }},fg={{ $t.hostname_fg }}] {{ $g.icon_hostname }} #h #[bg={{ $t.session_bg }},fg={{ $t.hostname_bg }}]{{ $g.sep_right }} "
+set -ag status-left "#{?@status_collapsed,,#[bg={{ $t.hostname_bg }}#,fg={{ $t.hostname_fg }}] {{ $g.icon_hostname }} #h #[bg={{ $t.session_bg }}#,fg={{ $t.hostname_bg }}]{{ $g.sep_right }} }"
 # Session name:
-set -ag status-left "#[bg={{ $t.session_bg }},fg={{ $t.session_fg }}] {{ $g.icon_session }} #S #[bg={{ $t.status_bg }},fg={{ $t.session_bg }}]{{ $g.sep_right }}"
+set -ag status-left "#{?@status_collapsed,,#[bg={{ $t.session_bg }}#,fg={{ $t.session_fg }}] {{ $g.icon_session }} #S #[bg={{ $t.status_bg }}#,fg={{ $t.session_bg }}]{{ $g.sep_right }}}"
 
 # Status right
 # ------------
@@ -39,23 +43,32 @@ set  -g status-right-length 55
 set  -g status-right ''
 
 # Percentage of RAM in use
-set -ag status-right "#[bg={{ $t.status_bg }},fg={{ $t.ram_bg }}]{{ $g.sep_left }}#[bg={{ $t.ram_bg }},fg={{ $t.ram_fg }}] {{ $g.icon_ram }} #(~/.tmux_scripts/used_ram_pct) #[bg={{ $t.ram_bg }},fg={{ $t.cpu_bg }}]{{ $g.sep_left }}"
+set -ag status-right "#{?@status_collapsed,,#[bg={{ $t.status_bg }}#,fg={{ $t.ram_bg }}]{{ $g.sep_left }}#[bg={{ $t.ram_bg }}#,fg={{ $t.ram_fg }}] {{ $g.icon_ram }} #(~/.tmux_scripts/used_ram_pct) #[bg={{ $t.ram_bg }}#,fg={{ $t.cpu_bg }}]{{ $g.sep_left }}}"
 # CPU usage
-set -ag status-right "#[bg={{ $t.cpu_bg }},fg={{ $t.cpu_fg }}] {{ $g.icon_cpu }} #(~/.tmux_scripts/cpu_pct) #[bg={{ $t.cpu_bg }},fg={{ $t.time_bg }}]{{ $g.sep_left }}"
+set -ag status-right "#{?@status_collapsed,,#[bg={{ $t.cpu_bg }}#,fg={{ $t.cpu_fg }}] {{ $g.icon_cpu }} #(~/.tmux_scripts/cpu_pct) #[bg={{ $t.cpu_bg }}#,fg={{ $t.time_bg }}]{{ $g.sep_left }}}"
 # Time
-set -ag status-right "#[bg={{ $t.time_bg }},fg={{ $t.time_fg }}] {{ $g.icon_time }} %d/%m %H:%M"
+set -ag status-right "#{?@status_collapsed,,#[bg={{ $t.time_bg }}#,fg={{ $t.time_fg }}] {{ $g.icon_time }} %d/%m %H:%M}"
 # Connectivity warning (only shown when offline)
 set -ag status-right "#(~/.tmux_scripts/net_check)"
 
 # Windows Status
 # --------------
 
-setw -g window-status-current-format '#[fg={{ $t.win_current_accent }},bold](#[fg={{ $t.win_current_fg }},bold]#I:#W#F#[fg={{ $t.win_current_accent }},bold])#[fg=default,default]'
-setw -g window-status-current-style bright
-setw -g window-status-style fg={{ $t.win_fg }}
-setw -g window-status-last-style fg={{ $t.win_last_fg }}
-setw -g window-status-activity-style fg={{ $t.win_activity_fg }},bold
-setw -g window-status-bell-style fg={{ $t.win_activity_fg }},bold
+# Tab-style window labels: rounded pills, filled background, bright
+# current tab. Flags trimmed to the useful ones (zoom, activity, bell).
+#
+# Three extension slots let other tools decorate tabs without editing this
+# file. Each is a user option holding a tmux format, expanded per window, and
+# empty unless something sets it (as a session or window option):
+#   @tab_index_extra  after the window number, inside the coloured pill
+#   @tab_alert        an alert icon with its colour; when it expands to
+#                     anything, it takes the place of the bell dot
+#   @tab_name_prefix  just before the window name
+setw -g window-status-separator ' '
+setw -g window-status-format '#[fg=#{?@tab_color,#{@tab_color},{{ $t.win_tab_default }}},bg=default]{{ $g.sep_tab_left }}#[bg=#{?@tab_color,#{@tab_color},{{ $t.win_tab_default }}},fg={{ $t.win_tab_fg }}]#I#{E:@tab_index_extra} #[bg={{ $t.win_pill_bg }},fg={{ $t.win_fg }}] #{?#{E:@tab_alert},#{E:@tab_alert} #[fg={{ $t.win_fg }}],#{?window_bell_flag,#[fg={{ $t.win_bell_fg }}]{{ $g.icon_bell }} #[fg={{ $t.win_fg }}],}}#{E:@tab_name_prefix}#{?window_last_flag,#[fg={{ $t.win_last_fg }}],}#W#{?window_zoomed_flag, {{ $g.icon_zoom }},}#{?window_activity_flag, !,}#[fg={{ $t.win_pill_bg }},bg=default]{{ $g.sep_tab_right }}'
+setw -g window-status-current-format '#[fg={{ $t.win_pill_bg }},bg=default]{{ $g.sep_tab_left }}#[bg={{ $t.win_pill_bg }},fg=#{?@tab_color,#{@tab_color},{{ $t.win_tab_default }}},bold]#I#{E:@tab_index_extra} #[bg=#{?@tab_color,#{@tab_color},{{ $t.win_tab_default }}},fg={{ $t.win_tab_fg }},bold] #{?#{E:@tab_alert},#{E:@tab_alert} #[fg={{ $t.win_tab_fg }}],}#{E:@tab_name_prefix}#W#{?window_zoomed_flag, {{ $g.icon_zoom }},}#[fg=#{?@tab_color,#{@tab_color},{{ $t.win_tab_default }}},bg=default]{{ $g.sep_tab_right }}'
+setw -g window-status-activity-style none
+setw -g window-status-bell-style none
 
 # }}}
 # Mouse configuration {{ "{{{" }}
@@ -98,6 +111,11 @@ setw -g aggressive-resize on
 # Do not wrap on searches (I added this feature :D )
 setw -g wrap-search off
 
+# Bell monitoring is off by default, so bells from shell completion or vim
+# stay silent. A session that wants the red bell dot in its tabs turns it on
+# for its own windows (setw monitor-bell on).
+setw -g monitor-bell off
+
 # Set the maximum number of lines held in window history.  This setting applies
 # only to new windows - existing window histories are not resized and retain
 # the limit at the point they were created.
@@ -125,6 +143,13 @@ set -s extended-keys-format csi-u
 # Tell tmux that the outer terminal supports extended keys, so tmux knows it
 # can forward CSI u-encoded sequences from the terminal.
 set -as terminal-features 'xterm*:extkeys'
+
+# Tell tmux that Alacritty supports OSC 8 hyperlinks, so markdown-rendered
+# links pass through and Alacritty's hint system can act on them.
+# Pattern is xterm* because Alacritty-based terminals without the alacritty
+# terminfo report TERM=xterm-256color. Verified via:
+# tmux display -p '#{client_termname}'.
+set -as terminal-features 'xterm*:hyperlinks'
 
 # }}}
 # Key Bindings {{ "{{{" }}
@@ -171,8 +196,24 @@ bind-key P command-prompt -p 'save history to filename:' -I '~/.tmux.history' 'c
 # Use b to go to the last active window
 bind-key b last
 
-# Window picker with fzf in a floating popup
-bind-key f display-popup -E -w 60% -h 60% "~/.config/tmux/window-picker.sh"
+# Window picker with fzf in a floating popup. On narrow clients (laptop,
+# ~145 cols) 60% is cramped, so below 180 cols the popup takes 90%x85%.
+bind-key f if-shell -F '#{e|<:#{client_width},180}' \
+    'display-popup -E -w 90% -h 85% "~/.config/tmux/window-picker.sh"' \
+    'display-popup -E -w 60% -h 60% "~/.config/tmux/window-picker.sh"'
+# Same picker, no prefix. Alacritty and Ghostty send CSI-u 102;6u for this
+# combo (explicit keyboard bindings in their configs), which tmux names
+# C-S-f or C-F; iTerm2's
+# CSI u mode sends 70;5u, which tmux names C-S-F. Bind all three spellings.
+bind-key -n C-S-f if-shell -F '#{e|<:#{client_width},180}' \
+    'display-popup -E -w 90% -h 85% "~/.config/tmux/window-picker.sh"' \
+    'display-popup -E -w 60% -h 60% "~/.config/tmux/window-picker.sh"'
+bind-key -n C-F if-shell -F '#{e|<:#{client_width},180}' \
+    'display-popup -E -w 90% -h 85% "~/.config/tmux/window-picker.sh"' \
+    'display-popup -E -w 60% -h 60% "~/.config/tmux/window-picker.sh"'
+bind-key -n C-S-F if-shell -F '#{e|<:#{client_width},180}' \
+    'display-popup -E -w 90% -h 85% "~/.config/tmux/window-picker.sh"' \
+    'display-popup -E -w 60% -h 60% "~/.config/tmux/window-picker.sh"'
 
 # }}}
 # Plugins {{ "{{{" }}

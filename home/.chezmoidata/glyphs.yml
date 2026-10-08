@@ -33,3 +33,9 @@ tmux:
     icon_cpu: "\U000F04C5"         # gauge icon — CPU usage percentage
     icon_time: "\uF017"            # clock icon — date and time
     icon_net_off: "\U000F092E"     # wifi-off icon — shown when no internet
+
+    # Window tab pills — roundhard separators and per-window markers
+    sep_tab_left: ""         # left pill cap
+    sep_tab_right: ""        # right pill cap
+    icon_zoom: "\U000F0349"        # magnifier — zoomed pane
+    icon_bell: "●"            # dot — window with an unseen bell
