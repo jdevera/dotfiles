@@ -33,6 +33,7 @@ cursor-style-blink = false
 # Left Option = Alt (for shortcuts), Right Option = special characters (å, ñ, etc.)
 macos-option-as-alt = left
 keybind = ctrl+shift+f=csi:102;6u
+keybind = ctrl+shift+h=csi:104;6u
 
 # Mouse
 mouse-hide-while-typing = true

@@ -63,7 +63,8 @@ save_to_clipboard = true
 bindings = [
   # Make Shift+Enter send a distinct sequence so Claude Code recognizes it as newline, not submit
   { key = "Return", mods = "Shift", chars = "\u001b[13;2u" },
-  { key = "F", mods = "Control|Shift", chars = "\u001b[102;6u" }
+  { key = "F", mods = "Control|Shift", chars = "\u001b[102;6u" },
+  { key = "H", mods = "Control|Shift", chars = "\u001b[104;6u" }
 ]
 
 [hints]
