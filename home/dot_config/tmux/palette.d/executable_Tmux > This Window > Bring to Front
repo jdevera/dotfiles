@@ -1,0 +1,26 @@
+#!/usr/bin/env bash
+# @name Tmux > This Window > Bring to Front
+# @brief Bring the current window to the front of the list
+# @description
+#     Moves the current window to the front, shifting the rest down. A
+#     session can keep its first N windows in place by setting the
+#     @palette_keep_first option to N: the window then lands right after
+#     them. If the current window is already at the front (or among the
+#     kept windows), this does nothing.
+
+keep=$(tmux display-message -p '#{@palette_keep_first}')
+[[ $keep =~ ^[0-9]+$ ]] || keep=0
+
+cur=$(tmux display-message -p '#{window_id}')
+mapfile -t ids < <(tmux list-windows -F '#{window_id}')
+
+# Already in the kept windows or right after them: nothing to do.
+for ((i = 0; i <= keep && i < ${#ids[@]}; i++)); do
+    [[ ${ids[i]} == "$cur" ]] && exit 0
+done
+
+if ((keep == 0)); then
+    tmux move-window -b -t '{start}'
+else
+    tmux move-window -a -t "${ids[keep - 1]}"
+fi

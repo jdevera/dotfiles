@@ -1,0 +1,14 @@
+#!/usr/bin/env bash
+# @name Tmux > This Window > Rename
+# @brief Rename the current tmux window
+# @description
+#     Prompts for a new name (prefilled with the current one) and renames
+#     the window the palette was opened from. Renaming a window does not
+#     rename the Claude chat inside it; use /rename in the chat to keep
+#     the pair co-named.
+
+current=$(tmux display-message -p '#{window_name}')
+name=$(echo "" | fzf --print-query --query="$current" --prompt="window name > " --no-info --reverse | head -1)
+[[ -z $name || $name == "$current" ]] && exit 0
+
+tmux rename-window "$name"

@@ -1,0 +1,56 @@
+# Tab group colors for the tmux status bar: the personal colors layer.
+# This directory (tab-colors.d/) is read whole, every file, sorted by
+# name; other layers (other tools, work, per-machine) are sibling files.
+# Read by the 'Tmux > Window > Color' palette entry.
+# Format: <name> <value>, one per line; value is either a hex code
+# (#rrggbb, fixed everywhere) or a terminal palette color (colourN,
+# drawn with whatever palette the running terminal has). Lines
+# starting with '#' and blank lines are ignored; file order is
+# picker order. Hex section is sorted by hue.
+
+flamingo           #f2cdcd
+rose               #ea9a97
+rosewater          #f5e0dc
+salmon             #ef9f76
+peach              #fab387
+tan                #d2a06a
+sand               #ddb56a
+gold               #e5c890
+yellow             #f9e2af
+olive              #a9c46c
+lime               #c3e88d
+green              #a6e3a1
+emerald            #7ec9a2
+turquoise          #5fd7c0
+teal               #94e2d5
+sky                #89dceb
+sapphire           #74c7ec
+blue               #89b4fa
+steel              #8caaee
+silver             #b5bfe2
+lavender           #b4befe
+periwinkle         #a5adf6
+violet             #9d7cd8
+mauve              #cba6f7
+magenta            #d67ad2
+pink               #f5c2e7
+red                #f38ba8
+maroon             #eba0ac
+
+# terminal palette (ANSI 0-15): adapts to the terminal's own colors
+term-black         colour0
+term-red           colour1
+term-green         colour2
+term-yellow        colour3
+term-blue          colour4
+term-magenta       colour5
+term-cyan          colour6
+term-white         colour7
+term-gray          colour8
+term-brightred     colour9
+term-brightgreen   colour10
+term-brightyellow  colour11
+term-brightblue    colour12
+term-brightmagenta colour13
+term-brightcyan    colour14
+term-brightwhite   colour15

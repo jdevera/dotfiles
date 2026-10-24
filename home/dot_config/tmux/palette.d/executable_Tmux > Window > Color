@@ -1,0 +1,129 @@
+#!/usr/bin/env bash
+# @name Tmux > Window > Color
+# @brief Color one or more windows' tabs for visual grouping
+# @description
+#     Two steps. First pick the windows (Tab toggles, multi-select; the
+#     current window starts selected, and the preview shows each
+#     window's tab as it looks now). Then pick the color: the side
+#     preview shows every selected window's tab painted in the
+#     highlighted color, plus the active-tab look. Colors set the
+#     @tab_color window option, travel with the window through
+#     reorders, and do not survive a workspace restore. "standard"
+#     removes the color (falls back to yellow).
+
+# Pill cap glyphs as raw bytes (U+E0B6 / U+E0B4); literals get mangled.
+LCAP=$'\xee\x82\xb6'
+RCAP=$'\xee\x82\xb4'
+GRAY="#45475a"; TEXT="#cdd6f4"; DARK="#1e1e2e"; ACC="#f9e2af"
+RST=$'\e[0m'; BOLD=$'\e[1m'
+COLORS_DIR="$HOME/.config/tmux/tab-colors.d"
+
+all_colors() { # every layer, files read in name order (palette.d pattern)
+    cat "$COLORS_DIR"/* 2>/dev/null
+}
+
+color_name() { # value -> its name across the layers (first file wins,
+               # so a topic alias beats a plain color), empty if unlisted
+    [ -z "$1" ] && return
+    all_colors | awk -v v="$1" \
+        '!/^[[:space:]]*#/ && NF==2 && $2==v {print $1; exit}'
+}
+
+# Values are #rrggbb (truecolor) or colourN (terminal ANSI palette).
+fg() {
+    if [[ $1 == \#* ]]; then
+        printf '\e[38;2;%d;%d;%dm' $((16#${1:1:2})) $((16#${1:3:2})) $((16#${1:5:2}))
+    else
+        printf '\e[38;5;%dm' "${1#colour}"
+    fi
+}
+bg() {
+    if [[ $1 == \#* ]]; then
+        printf '\e[48;2;%d;%d;%dm' $((16#${1:1:2})) $((16#${1:3:2})) $((16#${1:5:2}))
+    else
+        printf '\e[48;5;%dm' "${1#colour}"
+    fi
+}
+
+inactive_pill() { # idx name color
+    printf '%s%s%s%s%s ' "$(fg "$3")" "$LCAP" "$(bg "$3")" "$(fg $DARK)" "$1"
+    printf '%s%s %s%s%s%s\n' "$(bg $GRAY)" "$(fg $TEXT)" "$2" "$RST" "$(fg $GRAY)" "$RCAP$RST"
+}
+
+active_pill() { # idx name color
+    printf '%s%s%s%s%s%s ' "$(fg $GRAY)" "$LCAP" "$(bg $GRAY)" "$(fg "$3")" "$BOLD" "$1"
+    printf '%s%s%s %s%s%s%s\n' "$(bg "$3")" "$(fg $DARK)" "$BOLD" "$2" "$RST" "$(fg "$3")" "$RCAP$RST"
+}
+
+# Step-1 preview: one window line "idx\tname\tid\tcolor", as it looks now
+if [[ $1 == "--preview-window" ]]; then
+    IFS=$'\t' read -r idx name _ color <<< "$2"
+    printf 'as it looks now:\n\n'
+    inactive_pill "$idx" "$name" "${color:-$ACC}"
+    if [[ -n $color ]]; then
+        label=$(color_name "$color")
+        printf '\ncolor: %s\n' "${label:-$color}"
+    else
+        printf '\ncolor: standard\n'
+    fi
+    exit 0
+fi
+
+# Step-2 preview: all chosen windows painted in the candidate color.
+# $3 is the ANSI-stripped picker row; the value is its last field.
+if [[ $1 == "--preview-color" ]]; then
+    if [[ $3 == standard* ]]; then color="$ACC"; else color=$(awk '{print $NF}' <<< "$3"); fi
+    printf 'inactive:\n\n'
+    while IFS=$'\t' read -r idx name _ _; do
+        inactive_pill "$idx" "$name" "$color"
+    done < "$2"
+    printf '\nactive:\n\n'
+    IFS=$'\t' read -r idx name _ _ < "$2"
+    active_pill "$idx" "$name" "$color"
+    exit 0
+fi
+
+SELF=$(realpath "$0")
+
+# Step 1: choose windows (current first and preselected, Tab adds more)
+sel_file=$(mktemp)
+trap 'rm -f "$sel_file"' EXIT
+tmux list-windows -F $'#{window_active}\t#{window_index}\t#{window_name}\t#{window_id}\t#{@tab_color}' \
+    | sort -t$'\t' -k1,1r | cut -f2- \
+    | fzf --multi --prompt="color which windows > " --no-info --reverse \
+          --delimiter=$'\t' --with-nth=1,2 \
+          --bind 'start:select' \
+          --marker='✓ ' \
+          --preview="'$SELF' --preview-window {}" \
+          --preview-window=right,45%,nowrap \
+          > "$sel_file"
+[[ -s $sel_file ]] || exit 0
+
+# Step 2: choose the color. Every row is the pill itself (fzf --ansi),
+# so the whole palette is visible at once; the side preview shows the
+# chosen windows in the highlighted color. The palette is every file
+# in ~/.config/tmux/tab-colors.d/, read in name order: 50-colors is the
+# personal layer; other layers (other tools, work, ...) are sibling files.
+color_rows() {
+    echo "standard  (remove group color)"
+    local i=1 name value
+    while read -r name value; do
+        [[ $name == \#* || -z $name ]] && continue
+        printf '%s%s%s%s%s ' "$(fg "$value")" "$LCAP" "$(bg "$value")" "$(fg $DARK)" "$i"
+        printf '%s%s %-18s%s%s%s %s\n' "$(bg $GRAY)" "$(fg $TEXT)" "$name" "$RST" "$(fg $GRAY)" "$RCAP$RST" "$value"
+        i=$((i+1))
+    done < <(all_colors | awk '!/^[[:space:]]*#/ && NF==2')
+}
+sel=$(color_rows | fzf --ansi --prompt="group color > " --no-info --reverse \
+          --preview="'$SELF' --preview-color '$sel_file' {}" \
+          --preview-window=right,45%,nowrap)
+[[ -z $sel ]] && exit 0
+
+if [[ $sel == standard* ]]; then color=""; else color=$(awk '{print $NF}' <<< "$sel"); fi
+while IFS=$'\t' read -r _ _ wid _; do
+    if [[ -z $color ]]; then
+        tmux set-option -w -t "$wid" -u @tab_color
+    else
+        tmux set-option -w -t "$wid" @tab_color "$color"
+    fi
+done < "$sel_file"

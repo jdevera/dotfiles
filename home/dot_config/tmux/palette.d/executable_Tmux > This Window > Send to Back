@@ -1,0 +1,12 @@
+#!/usr/bin/env bash
+# @name Tmux > This Window > Send to Back
+# @brief Send the current window to the back of the list
+# @description
+#     Moves the current window after the last one. If it is already
+#     last, this does nothing.
+
+cur=$(tmux display-message -p '#{window_id}')
+end=$(tmux display-message -pt '{end}' '#{window_id}')
+[[ $cur == "$end" ]] && exit 0
+
+tmux move-window -a -t '{end}'

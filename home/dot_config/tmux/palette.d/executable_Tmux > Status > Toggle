@@ -1,0 +1,15 @@
+#!/usr/bin/env bash
+# @name Tmux > Status > Toggle
+# @brief Collapse or expand the status bar around the window tabs
+# @description
+#     Flips the @status_collapsed option. Collapsed hides hostname,
+#     session name, RAM, CPU and the clock, leaving the full width to
+#     the window tabs; the prefix-mode indicator and the offline
+#     warning stay in both states. Expanded is the default on every
+#     tmux start.
+
+if [[ -n $(tmux show-options -gqv @status_collapsed) ]]; then
+    tmux set-option -gu @status_collapsed
+else
+    tmux set-option -g @status_collapsed 1
+fi
