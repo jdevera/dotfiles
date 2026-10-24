@@ -1,0 +1,8 @@
+{{- includeTemplate "mise_install.sh.tmpl" (dict
+    "title" "install mise tools"
+    "conf" (includeTemplate "dot_config/mise/conf.d/dotfiles.toml.tmpl" .)
+    "packages" (includeTemplate "mise_packages.tmpl" (dict "list" .packages "dot" .) | fromJson)
+    "chezmoi" .chezmoi
+    "is_macos" .is_macos
+    "is_linux" .is_linux
+) -}}

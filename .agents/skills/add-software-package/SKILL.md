@@ -30,8 +30,12 @@ another, and the existing templates generate the install scripts.
    methods (see below).
 
 That's it. `run_onchange_after_035-install-packages.sh.tmpl` (and `030` for
-install_tools) render from these via `install_packages.sh.tmpl`. A name listed
-in `packages.yml` with no matching spec fails validation at step 005.
+install_tools) render from these via `install_packages.sh.tmpl`. Packages that
+resolve to mise are not installed there: they are rendered into
+`~/.config/mise/conf.d/dotfiles.toml` and installed by
+`run_onchange_after_036-mise-install.sh.tmpl` (see "The mise tier" below). A
+name listed in `packages.yml` with no matching spec fails validation at step
+005. `package_method.tmpl` is the one place that decides a package's method.
 
 Only touch **`home/.chezmoidata/.package_specs.schema.yml`** if you introduce a
 brand-new install *method* (rare).
@@ -62,16 +66,40 @@ cross-platform coverage.
    `uv: { name: tool, with: [extra] }`. uv owns Python; do not use mise for it.
 6. **Runtime you develop against (e.g. node) → `mise`, no native package.** Omit
    brew/apt/dnf entirely and use only `mise: node@lts` so it lives in `$HOME` and
-   global installs (`npm i -g`) don't need sudo. Omit `check` for these so
-   `mise use --global` always asserts ownership even if a stray system copy is on
-   PATH.
+   global installs (`npm i -g`) don't need sudo.
 7. **macOS GUI app → `cask`.** Mac App Store app → `mas: <numeric-id>` (preferred
    over brew/cask when available).
 8. **Last resort → `script`.** An inline shell one-liner. Pair with `check`.
 
-Add **`check: { command: <bin> }`** to any spec so the install is skipped when
-the command is already present (skip this for node — see #6). Required for
-`mise`/`script` methods to be idempotent.
+Add **`check: { command: <bin> }`** to a `script` spec so the install is skipped
+when the command is already present. The mise tier ignores `check`: it is
+declarative, so a mise package is always declared in conf.d.
+
+### The mise tier
+
+A spec's `mise:` is either a string or a table:
+
+```yaml
+node:
+  mise: node@lts            # tool "node", version "lts"
+codex:
+  mise: npm:@openai/codex   # version defaults to "latest"
+qmd:
+  mise:
+    tool: npm:@tobilu/qmd   # required
+    version: latest         # optional, default "latest"
+    allow_low_downloads: true          # any other key is a mise per-tool
+    allow_builds: [better-sqlite3]     # option, passed through as-is
+    post_install:           # optional shell commands, run after mise install
+      - qmd --version
+```
+
+Every listed package that resolves to mise on this machine is rendered into
+the `[tools]` table of `~/.config/mise/conf.d/dotfiles.toml`, with full option
+tables. `run_onchange_after_036-mise-install` reruns whenever that file
+changes: it runs `mise install`, then each `post_install` command with mise's
+tools on PATH (so post_install commands must be idempotent). Nothing writes
+`~/.config/mise/config.toml`.
 
 ### Tier resolution order (what wins)
 
@@ -94,21 +122,24 @@ bat:
 # GitHub-release CLI not in distro repos — native on mac, mise elsewhere:
 sops:
   brew: sops
-  check: { command: sops }
   mise: aqua:getsops/sops
 
 # Personal repo not in the aqua registry — github backend:
 shdoc-ng:
   brew: jdevera/tap/shdoc-ng
   dnf: { package: shdoc-ng, copr: jdevera/shdoc-ng }
-  check: { command: shdoc-ng }
   mise: github:jdevera/shdoc-ng
 
 # npm-distributed CLI via mise:
 codex:
   cask: codex
-  check: { command: codex }
   mise: npm:@openai/codex
+
+# npm CLI that needs mise per-tool options:
+ccline:
+  mise:
+    tool: npm:@cometix/ccline
+    allow_low_downloads: true
 
 # Tool with its own RPM repo:
 mise:
@@ -136,7 +167,10 @@ raycast:
 # See the generated install step for your package:
 chezmoi execute-template < home/.chezmoiscripts/run_onchange_after_035-install-packages.sh.tmpl | grep -A3 <name>
 
-# Validate every listed package has a spec (empty output = OK):
+# For a mise package, see the rendered conf.d [tools] table instead:
+chezmoi cat ~/.config/mise/conf.d/dotfiles.toml
+
+# Validate the package data (empty output = OK):
 chezmoi execute-template < home/.chezmoiscripts/run_before_005_validate_data_packages.sh.tmpl
 
 # For mise backends, confirm the spec resolves:
@@ -151,12 +185,12 @@ PREK_HOME="${TMPDIR:-/tmp}/codex-prek-home" prek run --all-files
 
 ## Gotchas
 
-- **mise state is not tracked.** `mise use --global` writes tool versions to
-  `~/.config/mise/config.toml`, which is **gitignored** — that file is realized
-  machine state. The declarative mise config (settings, baseline tools) lives in
-  the tracked `home/dot_config/mise/conf.d/dotfiles.toml`.
+- **`~/.config/mise/config.toml` is not tracked.** It is mise's scratchpad for
+  ad-hoc `mise use --global` installs. The declared mise config (settings and
+  the generated `[tools]`) is `home/dot_config/mise/conf.d/dotfiles.toml.tmpl`.
 - **Which tools mise installs is declared here**, in `package_specs.yml` via the
-  `mise:` tier — not in mise's config.
+  `mise:` tier — not in mise's config. A tool worth keeping that only lives in
+  config.toml belongs in `package_specs.yml`.
 - **One-shot cleanup on existing machines?** If your change needs to undo old
   state (e.g. remove a stale binary), add a `run_once_after_NNN-*.sh.tmpl` with a
   `# EXPIRES: YYYY-MM-DD` marker. The prek `no-expired-scripts` hook fails once

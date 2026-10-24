@@ -54,18 +54,14 @@ properties:
         uv:
           $ref: "#/$defs/uvDef"
         mise:
-          type: string
-          description: |-
-            mise tool spec installed globally via `mise use --global`. Carries the
-            backend in its prefix, e.g. node@lts (core), aqua:getsops/sops,
-            github:owner/repo, optionally pinned with @version.
+          $ref: "#/$defs/miseDef"
         script:
           type: string
           description: |-
             Shell script to install the package.
         check:
           type: object
-          description: How to check if the package is already installed (used by mise and script methods)
+          description: How to check if the package is already installed (used by the script method)
           properties:
             command:
               type: string
@@ -75,6 +71,37 @@ properties:
 additionalProperties: false
 
 $defs:
+  miseDef:
+    description: |-
+      mise tool, declared in a ~/.config/mise/conf.d/ file and installed with
+      `mise install`. Either a tool spec string, carrying the backend in its
+      prefix and optionally a version after @ (node@lts, aqua:getsops/sops,
+      github:owner/repo, npm:@scope/pkg; the version defaults to "latest"),
+      or a table.
+    oneOf:
+      - type: string
+      - type: object
+        required: [tool]
+        properties:
+          tool:
+            type: string
+            description: mise tool id, with its backend prefix (e.g. npm:@scope/pkg)
+          version:
+            type: string
+            description: Version or dist-tag to declare (default "latest")
+          post_install:
+            type: array
+            items:
+              type: string
+            description: |-
+              Shell commands to run after `mise install`, with mise's tools
+              on PATH. They rerun whenever the conf.d file changes, so they
+              must be idempotent.
+        additionalProperties:
+          description: |-
+            Any other key is a mise per-tool option, passed through as-is
+            (e.g. minimum_release_age, allow_low_downloads, allow_builds,
+            trust_policy_excludes).
   uvDef:
     description: |
       UV package spec: either a string name or an object with name and optional

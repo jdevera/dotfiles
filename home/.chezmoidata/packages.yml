@@ -8,6 +8,7 @@ packages:
   - age
   - bash
   - bat
+  - ccline
   - claude-code
   - codex
   - colout
@@ -29,22 +30,24 @@ packages:
   - node
   - ondir
   - prek
+  - qmd
   - ripgrep
   - rsync
   - sevenzip
   - shdoc-ng
   - shellcheck
   - shfmt
+  - skills
   - sops
   - starship
   - name: tag
     only_when: [macos]
   - tig
   - tmux
-  - todoist-cli
   - tox
   - tre-command
   - tree
+  - usage
   - uv
   - wget
   - yq

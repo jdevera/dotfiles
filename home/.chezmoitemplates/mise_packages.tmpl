@@ -1,0 +1,47 @@
+{{- /* mise_packages.tmpl
+     Input: dict "list" <a packages list, as in packages.yml> "dot" <root context>
+     Output: a JSON list with one object per selected package that resolves
+     to the mise method on this machine (see package_method.tmpl):
+       {"name": ..., "tool": ..., "version": ..., "options": {...},
+        "post_install": [...]}
+
+     A spec's mise value is either a string or a table:
+       mise: node@lts                  tool "node", version "lts"
+       mise: npm:@openai/codex         tool "npm:@openai/codex", version "latest"
+       mise:
+         tool: npm:@tobilu/qmd         mise tool id (required)
+         version: latest               optional, defaults to "latest"
+         allow_low_downloads: true     any other key is a mise per-tool
+         allow_builds: [better-sqlite3]  option, passed through as-is
+         post_install:                 optional shell commands to run after
+           - qmd --version             `mise install`
+*/ -}}
+{{- $dot := .dot -}}
+{{- $result := list -}}
+{{- $names := splitList " " (includeTemplate "resolve_packages.tmpl" (dict "list" .list "dot" $dot)) -}}
+{{- range $name := $names -}}
+{{-   if not $name -}}{{- continue -}}{{- end -}}
+{{-   $spec := get $dot.softwarePackages $name -}}
+{{-   if ne (includeTemplate "package_method.tmpl" (dict "spec" $spec "os" $dot.chezmoi.os)) "mise" -}}{{- continue -}}{{- end -}}
+{{-   $m := $spec.mise -}}
+{{-   $tool := "" -}}
+{{-   $version := "latest" -}}
+{{-   $options := dict -}}
+{{-   $post := list -}}
+{{-   if kindIs "string" $m -}}
+{{-     $tool = $m -}}
+{{- /*  A trailing @version, but not the @ of an npm scope (npm:@scope/pkg) */ -}}
+{{-     $re := "^(.*[^:])@([^@/]+)$" -}}
+{{-     if regexMatch $re $m -}}
+{{-       $tool = regexReplaceAll $re $m "${1}" -}}
+{{-       $version = regexReplaceAll $re $m "${2}" -}}
+{{-     end -}}
+{{-   else -}}
+{{-     $tool = $m.tool -}}
+{{-     if hasKey $m "version" -}}{{- $version = toString $m.version -}}{{- end -}}
+{{-     if hasKey $m "post_install" -}}{{- $post = $m.post_install -}}{{- end -}}
+{{-     $options = omit $m "tool" "version" "post_install" -}}
+{{-   end -}}
+{{-   $result = append $result (dict "name" $name "tool" $tool "version" $version "options" $options "post_install" $post) -}}
+{{- end -}}
+{{- $result | toJson -}}

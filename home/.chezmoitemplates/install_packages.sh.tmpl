@@ -14,12 +14,6 @@
 {{- $title := .title -}}
 {{- $names := .package_names -}}
 
-{{- /* Pre-compute tool availability */ -}}
-{{- $hasUV := lookPath "uv" -}}
-{{- $hasMise := lookPath "mise" -}}
-{{- $hasAPT := lookPath "apt" -}}
-{{- $hasDNF := lookPath "dnf" -}}
-
 {{- /* Method collections */ -}}
 {{- $brew := list -}}
 {{- $mas := dict -}}
@@ -28,53 +22,39 @@
 {{- $copr := list -}}
 {{- $dnfrepo := list -}}
 {{- $uv := dict -}}
-{{- $mise := dict -}}
 {{- $script := dict -}}
 {{- $checks := dict -}}
 
-{{- /* Resolve each package to an install method */ -}}
+{{- /* Collect each package under the install method package_method.tmpl
+       resolves it to. Packages resolving to mise are not installed here:
+       they are declared in a ~/.config/mise/conf.d/ file and installed by
+       the mise install script (see mise_install.sh.tmpl). */ -}}
 {{- range $name := $names -}}
+{{-   if not $name -}}{{- continue -}}{{- end -}}
 {{-   $spec := get $specs $name -}}
-{{-   $ok := false -}}
-
-{{- /* Tier 1: OS package manager */ -}}
-{{-   if eq $chezmoi.os "darwin" -}}
-{{-     if and (not $ok) (hasKey $spec "mas") -}}
-{{-       $mas = set $mas $name (toString $spec.mas) -}}
-{{-       $ok = true -}}
-{{-     end -}}
-{{-     if and (not $ok) (hasKey $spec "brew") -}}
-{{-       $brew = append $brew (printf "brew %s" ($spec.brew | quote)) -}}
-{{-       $ok = true -}}
-{{-     end -}}
-{{-     if and (not $ok) (hasKey $spec "cask") -}}
-{{-       $brew = append $brew (printf "cask %s" ($spec.cask | quote)) -}}
-{{-       $ok = true -}}
-{{-     end -}}
-{{-   else if eq $chezmoi.os "linux" -}}
-{{-     if and (not $ok) $hasAPT (hasKey $spec "apt") -}}
-{{-       $apt = append $apt $spec.apt -}}
-{{-       $ok = true -}}
-{{-     end -}}
-{{-     if and (not $ok) $hasDNF (hasKey $spec "dnf") -}}
-{{-       $val := $spec.dnf -}}
-{{-       if kindIs "string" $val -}}
-{{-         $dnf = append $dnf $val -}}
-{{-       else -}}
-{{-         $dnf = append $dnf $val.package -}}
-{{-         if hasKey $val "copr" -}}
-{{-           $copr = append $copr $val.copr -}}
-{{-         end -}}
-{{-         if hasKey $val "repo" -}}
-{{-           $dnfrepo = append $dnfrepo $val.repo -}}
-{{-         end -}}
+{{-   $method := includeTemplate "package_method.tmpl" (dict "spec" $spec "os" $chezmoi.os) -}}
+{{-   if eq $method "mas" -}}
+{{-     $mas = set $mas $name (toString $spec.mas) -}}
+{{-   else if eq $method "brew" -}}
+{{-     $brew = append $brew (printf "brew %s" ($spec.brew | quote)) -}}
+{{-   else if eq $method "cask" -}}
+{{-     $brew = append $brew (printf "cask %s" ($spec.cask | quote)) -}}
+{{-   else if eq $method "apt" -}}
+{{-     $apt = append $apt $spec.apt -}}
+{{-   else if eq $method "dnf" -}}
+{{-     $val := $spec.dnf -}}
+{{-     if kindIs "string" $val -}}
+{{-       $dnf = append $dnf $val -}}
+{{-     else -}}
+{{-       $dnf = append $dnf $val.package -}}
+{{-       if hasKey $val "copr" -}}
+{{-         $copr = append $copr $val.copr -}}
 {{-       end -}}
-{{-       $ok = true -}}
+{{-       if hasKey $val "repo" -}}
+{{-         $dnfrepo = append $dnfrepo $val.repo -}}
+{{-       end -}}
 {{-     end -}}
-{{-   end -}}
-
-{{- /* Tier 2: Cross-platform fallbacks (uv > mise > script) */ -}}
-{{-   if and (not $ok) $hasUV (hasKey $spec "uv") -}}
+{{-   else if eq $method "uv" -}}
 {{-     $u := $spec.uv -}}
 {{-     if kindIs "string" $u -}}
 {{-       $uv = set $uv $name (dict "name" $u "with" list) -}}
@@ -89,25 +69,15 @@
 {{-       end -}}
 {{-       $uv = set $uv $name (dict "name" $u.name "with" $w) -}}
 {{-     end -}}
-{{-     $ok = true -}}
-{{-   end -}}
-{{-   if and (not $ok) $hasMise (hasKey $spec "mise") -}}
-{{-     $mise = set $mise $name $spec.mise -}}
-{{-     if hasKey $spec "check" -}}{{- $checks = set $checks $name $spec.check -}}{{- end -}}
-{{-     $ok = true -}}
-{{-   end -}}
-{{-   if and (not $ok) (hasKey $spec "script") -}}
+{{-   else if eq $method "script" -}}
 {{-     $script = set $script $name $spec.script -}}
 {{-     if hasKey $spec "check" -}}{{- $checks = set $checks $name $spec.check -}}{{- end -}}
-{{-     $ok = true -}}
-{{-   end -}}
-
-{{-   if not $ok -}}
+{{-   else if not $method -}}
 {{-     warnf "Package %s: no install method for %s" $name $chezmoi.os -}}
 {{-   end -}}
 {{- end -}}
 
-{{- $hasAny := or (len $brew) (len $mas) (len $apt) (len $dnf) (len $uv) (len $mise) (len $script) -}}
+{{- $hasAny := or (len $brew) (len $mas) (len $apt) (len $dnf) (len $uv) (len $script) -}}
 {{- if $hasAny -}}
 #!/usr/bin/env bash
 {{ if eq $chezmoi.os "darwin" -}}
@@ -215,23 +185,6 @@ then
     uv tool install {{ range $pkg.with }}--with {{ . | quote }} {{ end }}{{ $pkg.name | quote }}
     dot::step::done
 fi
-{{ end -}}
-{{ end -}}
-{{ if $mise }}
-{{ range $name, $tool := $mise -}}
-{{ if hasKey $checks $name -}}
-dot::step::start "install {{ $name }} with mise"
-if dot::has_command {{ (get $checks $name).command | quote }}; then
-    dot::step::skipped "already installed"
-else
-    mise use --global {{ $tool | quote }}
-    dot::step::done
-fi
-{{ else -}}
-dot::step::start "install {{ $name }} with mise"
-mise use --global {{ $tool | quote }}
-dot::step::done
-{{ end -}}
 {{ end -}}
 {{ end -}}
 {{ if $script }}

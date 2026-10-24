@@ -1,0 +1,20 @@
+# mise configuration managed by these dotfiles. Do not edit: chezmoi renders
+# it from home/dot_config/mise/conf.d/dotfiles.toml.tmpl.
+#
+# mise reads every ~/.config/mise/conf.d/*.toml as global config, alongside
+# ~/.config/mise/config.toml.
+#
+# [tools] is generated: it declares every package from packages.yml whose
+# install method on this machine is mise, with the version and options
+# package_specs.yml gives it. The run_onchange_after_036-mise-install script
+# runs `mise install` and the declared post_install commands whenever this
+# file changes.
+#
+# ~/.config/mise/config.toml is intentionally NOT tracked (see
+# .chezmoiignore): it is mise's scratchpad for ad-hoc `mise use --global`
+# installs. Anything worth keeping belongs in package_specs.yml instead.
+
+[settings]
+idiomatic_version_file_enable_tools = ["python"]
+
+{{ includeTemplate "mise_tools.toml.tmpl" (dict "list" .packages "dot" .) | trim }}

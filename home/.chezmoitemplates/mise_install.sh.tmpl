@@ -1,0 +1,55 @@
+{{- /*
+    mise_install.sh.tmpl — Shared mise install script template.
+    Expects a dict with keys:
+      title     — script banner text
+      conf      — the rendered conf.d file this script installs from; its
+                  hash is embedded so the run_onchange_ script reruns
+                  whenever that file changes
+      packages  — the output of mise_packages.tmpl for that file's packages
+      chezmoi, is_macos, is_linux — for the bash library
+*/ -}}
+#!/usr/bin/env bash
+#
+# Installs every tool mise has declared (`mise install` reads all of
+# ~/.config/mise/config.toml and conf.d/), then runs the post_install
+# commands that package_specs.yml declares for this layer's mise packages.
+# Reruns whenever the rendered conf.d file changes.
+#
+# conf.d sha256: {{ .conf | sha256sum }}
+
+# {{- includeTemplate "dotfiles_bashlib.sh" . }}
+# Help shellcheck identify the above include
+true || source ../.chezmoitemplates/dotfiles_bashlib.sh
+
+dot::chezmoi_script_start {{ .title | quote }}
+
+if ! dot::has_command mise; then
+    dot::chezmoi_script_skipped "mise is not installed"
+fi
+
+dot::step::start "install the tools declared in mise's config"
+mise install || dot::step::fatal
+dot::step::done
+
+failed=0
+{{ range $p := .packages -}}
+{{ range $cmd := $p.post_install }}
+cmd=$(cat <<'POSTINSTALL'
+{{ $cmd }}
+POSTINSTALL
+)
+dot::step::start "run {{ $p.name }} post-install: $cmd"
+# mise exec puts every tool from mise's config on PATH for the command.
+if mise exec -- bash -c "$cmd"; then
+    dot::step::done
+else
+    dot::step::error "exit status $?"
+    failed=1
+fi
+{{ end -}}
+{{ end }}
+if [[ $failed -ne 0 ]]; then
+    dot::die "some post-install commands failed; this script will run again on the next apply"
+fi
+
+dot::success "mise tools installed"

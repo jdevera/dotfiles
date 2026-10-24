@@ -195,6 +195,27 @@ softwarePackages:
     description: Node.js runtime, managed in $HOME via mise (no system package)
     homepage: https://nodejs.org
     mise: node@lts
+  usage:
+    description: CLI spec tool; mise uses it for task arguments and completions
+    homepage: https://usage.jdx.dev
+    mise: usage
+  ccline:
+    description: Claude Code status line
+    homepage: https://github.com/Haleclipse/CCometixLine
+    mise:
+      tool: npm:@cometix/ccline
+      allow_low_downloads: true
+  qmd:
+    description: On-device hybrid search for markdown files
+    homepage: https://github.com/tobi/qmd
+    mise:
+      tool: npm:@tobilu/qmd
+      allow_low_downloads: true
+      allow_builds: [better-sqlite3]
+  skills:
+    description: Installer for the open agent skills ecosystem
+    homepage: https://github.com/vercel-labs/skills
+    mise: npm:skills
   ondir:
     brew: ondir
     apt: ondir
@@ -297,12 +318,6 @@ softwarePackages:
     cask: textual
   thaw@beta:
     cask: thaw@beta
-  todoist-cli:
-    description: Command-line interface for Todoist
-    homepage: https://github.com/Doist/todoist-cli
-    check:
-      command: td
-    mise: npm:@doist/todoist-cli
   todoist:
     homepage: https://todoist.com
     mas: 585829637

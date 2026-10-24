@@ -1,0 +1,17 @@
+{{- /* mise_tools.toml.tmpl
+     Input: dict "list" <a packages list, as in packages.yml> "dot" <root context>
+     Output: a TOML [tools] table for a ~/.config/mise/conf.d/ file, declaring
+     every package of the list that resolves to the mise method on this
+     machine (see mise_packages.tmpl). A tool with no options is a plain
+     version string; one with options gets its own [tools."<id>"] table.
+     post_install is not a mise option: the install script runs it.
+*/ -}}
+{{- $tools := dict -}}
+{{- range $p := (includeTemplate "mise_packages.tmpl" . | fromJson) -}}
+{{-   if $p.options -}}
+{{-     $tools = set $tools $p.tool (merge (dict "version" $p.version) $p.options) -}}
+{{-   else -}}
+{{-     $tools = set $tools $p.tool $p.version -}}
+{{-   end -}}
+{{- end -}}
+{{- dict "tools" $tools | toToml -}}

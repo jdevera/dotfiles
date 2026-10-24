@@ -1,38 +1,68 @@
 {{- /*
-    This script validates that the packages listed in packages.yml are present
-    in the softwarePackages registry.
-    It is run early so that the chezmoi run can be aborted early if the packages
-    are not found in the registry.
+    This script validates the package data:
+      - every package listed in packages.yml is present in the
+        softwarePackages registry;
+      - every mise spec written as a table has a string `tool`, and its
+        `post_install`, when present, is a list of strings.
+    It is run early so that the chezmoi run can be aborted early if the data
+    is wrong.
     In successfull chezmoi runs, the packages are validated in the template code
     and no output is generated for the script to run.
-    In case of missing packages, the script only runs to report the missing
-    packages.
+    In case of errors, the script only runs to report them.
     From this point on, other scripts do not need to check this again.
 */ -}}
 {{- $packages := splitList " " (includeTemplate "resolve_packages.tmpl" (dict "list" .packages "dot" .)) -}}
 {{- if hasKey . "install_tools" -}}
 {{-     $packages = concat $packages (splitList " " (includeTemplate "resolve_packages.tmpl" (dict "list" .install_tools "dot" .))) -}}
 {{- end -}}
-{{- $missing_packages := list -}}
+{{- $errors := list -}}
 {{- range $package_name := $packages -}}
+{{-     if not $package_name -}}{{- continue -}}{{- end -}}
 {{- /* Check if the package is in the registry */}}
 {{-     if not (hasKey $.softwarePackages $package_name) }}
-{{-         $missing_packages = append $missing_packages $package_name -}}
+{{-         $errors = append $errors (printf "%s: listed in packages.yml but not found in softwarePackages" $package_name) -}}
 {{-     end }}
 {{- end -}}
-{{- if $missing_packages -}}
+{{- range $name, $spec := .softwarePackages -}}
+{{-     if and (hasKey $spec "mise") (not (kindIs "string" $spec.mise)) -}}
+{{-         $m := $spec.mise -}}
+{{-         if not (kindIs "map" $m) -}}
+{{-             $errors = append $errors (printf "%s: mise must be a string or a table" $name) -}}
+{{-             continue -}}
+{{-         end -}}
+{{-         $tool := get $m "tool" -}}
+{{-         if not (and (kindIs "string" $tool) $tool) -}}
+{{-             $errors = append $errors (printf "%s: a mise table needs a non-empty string tool" $name) -}}
+{{-         end -}}
+{{-         if hasKey $m "post_install" -}}
+{{-             $ok := kindIs "slice" $m.post_install -}}
+{{-             if $ok -}}
+{{-                 range $cmd := $m.post_install -}}
+{{-                     if not (kindIs "string" $cmd) -}}{{- $ok = false -}}{{- end -}}
+{{-                 end -}}
+{{-             end -}}
+{{-             if not $ok -}}
+{{-                 $errors = append $errors (printf "%s: mise post_install must be a list of strings" $name) -}}
+{{-             end -}}
+{{-         end -}}
+{{-     end -}}
+{{- end -}}
+{{- if $errors -}}
 #!/usr/bin/env bash
 
 # {{ template "dotfiles_bashlib.sh" . }}
 # Help shellcheck identify the above include
 true || source ../.chezmoitemplates/dotfiles_bashlib.sh
 
-MISSING_PACKAGES=(
-{{ range $package_name := $missing_packages }}
-{{- $package_name | quote }}
+ERRORS=(
+{{ range $error := $errors }}
+{{- $error | quote }}
 {{ end -}}
 )
 
-dot::die "Packages from packages.yml not found in softwarePackages: ${MISSING_PACKAGES[*]}"
+for error in "${ERRORS[@]}"; do
+    dot::error "$error"
+done
+dot::die "Invalid package data: see the errors above"
 
 {{- end -}}
