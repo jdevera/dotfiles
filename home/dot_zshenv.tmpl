@@ -34,5 +34,12 @@ if [[ -n "$GHOSTTY_BIN_DIR" && ! -x "$GHOSTTY_BIN_DIR/ghostty" ]]; then
 fi
 
 {{ end -}}
+# mise installs tools that scripts need too, so its shims go first on PATH here,
+# the one file every zsh reads (login or not, interactive or not). BASH_ENV
+# makes non-interactive bash started from here read the same file.
+source "$HOME/.config/shell/mise-shims.sh"
+export BASH_ENV="$HOME/.config/shell/mise-shims.sh"
+
 # Keep .zshenv minimal — it runs for ALL zsh invocations (scripts, subshells, etc.)
-# Everything else goes in .zshrc (interactive shells only).
+# Only things every shell and script must have belong here (locale, PATH for
+# mise). Everything else goes in .zshrc (interactive shells only).

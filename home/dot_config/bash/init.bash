@@ -9,6 +9,11 @@
 # to it freely without creating conflicts. It sources this file via a line
 # that a chezmoi script keeps in place.
 
+# mise's shims first on PATH, before the interactive-only part below, so a
+# non-interactive bash that reads this file gets mise's tools too.
+# shellcheck source=/dev/null
+[[ -f $HOME/.config/shell/mise-shims.sh ]] && source "$HOME/.config/shell/mise-shims.sh"
+
 # Interactive shells only
 [[ $- != *i* ]] && return
 

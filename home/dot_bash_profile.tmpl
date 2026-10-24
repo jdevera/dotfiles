@@ -37,5 +37,11 @@ export LANG=en_IE.UTF-8
 export LC_ALL=en_IE.UTF-8
 
 {{ end -}}
+# mise's shims first on PATH for every bash too, scripts included (BASH_ENV
+# covers non-interactive bash started from a login shell).
+# shellcheck source=/dev/null
+source "$HOME/.config/shell/mise-shims.sh"
+export BASH_ENV="$HOME/.config/shell/mise-shims.sh"
+
 # shellcheck source=/dev/null
 [[ -s $HOME/.bashrc ]] && source "$HOME/.bashrc"
