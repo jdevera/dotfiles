@@ -1,0 +1,57 @@
+#!/usr/bin/env bash
+#
+# EXPIRES: 2027-10-24
+#
+# One-shot migration. The tmux palette entries used to be named after their
+# display names ("Tmux > Window > Color"); the picker now reads the display
+# name from each entry's "# @name" line, and the files have plain names
+# (tmux-window-color). chezmoi does not remove files it stops managing in
+# palette.d (it is not an exact directory, other tools write entries there),
+# so drop the old copies. A file is removed only when its "# @name" line is
+# still the one this repo shipped under that name; anything else was edited
+# or replaced locally and is left alone.
+#
+# Delete this script after the expiry date — the prek `no-expired-scripts`
+# hook will flag it once that date has passed.
+
+# {{ template "dotfiles_bashlib.sh" . }}
+
+# Help shellcheck identify the above include
+true || source ../.chezmoitemplates/dotfiles_bashlib.sh
+
+dot::chezmoi_script_start "rename tmux palette entries"
+
+palette_dir="$HOME/.config/tmux/palette.d"
+
+if [[ ! -d $palette_dir ]]; then
+    dot::chezmoi_script_skipped "$palette_dir does not exist"
+fi
+
+# Old file names. Each was named after its display name, so the "# @name"
+# it carried is the file name itself. (A plain list, not an associative
+# array: this may run under macOS's bash 3.2.)
+old_entries=(
+    "New Claude"
+    "Claude > New Chat"
+    "Tmux > Status > Toggle"
+    "Tmux > This Window > Bring to Front"
+    "Tmux > This Window > Rename"
+    "Tmux > This Window > Send to Back"
+    "Tmux > Window > Color"
+)
+
+for old in "${old_entries[@]}"; do
+    path="$palette_dir/$old"
+    [[ -f $path ]] || continue
+    dot::step::start "remove old palette entry '$old'"
+    name=$(sed -n 's/^# @name //p' "$path")
+    name=${name%%$'\n'*}
+    if [[ $name != "$old" ]]; then
+        dot::step::skipped "its @name is '$name', not '$old'"
+        continue
+    fi
+    rm -f "$path" || dot::step::fatal
+    dot::step::done
+done
+
+dot::success "tmux palette entries renamed"
