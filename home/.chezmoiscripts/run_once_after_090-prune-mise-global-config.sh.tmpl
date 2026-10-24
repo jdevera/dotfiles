@@ -1,0 +1,85 @@
+#!/usr/bin/env bash
+#
+# EXPIRES: 2027-10-24
+#
+# One-shot migration. The mise tier used to install with `mise use --global`,
+# which wrote every tool into ~/.config/mise/config.toml. Those tools are now
+# declared in ~/.config/mise/conf.d/ (rendered from package_specs.yml), so
+# config.toml keeps duplicates that would shadow any later change to the
+# declared version or options. Drop from config.toml's [tools] every entry a
+# conf.d file declares, and its idiomatic_version_file_enable_tools setting,
+# which conf.d/dotfiles.toml now carries. Entries nothing declares (ad-hoc
+# installs) stay. config.toml is backed up beside itself first.
+#
+# The edits go through mise itself (`mise unuse --global --no-prune` and
+# `mise settings unset`), which parses and rewrites the TOML, so no tool is
+# uninstalled and nothing else in the file changes.
+#
+# Delete this script after the expiry date — the prek `no-expired-scripts`
+# hook will flag it once that date has passed.
+
+# {{ template "dotfiles_bashlib.sh" . }}
+
+# Help shellcheck identify the above include
+true || source ../.chezmoitemplates/dotfiles_bashlib.sh
+
+dot::chezmoi_script_start "prune declared tools from mise's global config"
+
+if ! dot::has_command mise; then
+    dot::chezmoi_script_skipped "mise is not installed"
+fi
+dot::assert_has_commands jq
+
+config_dir="${MISE_CONFIG_DIR:-${XDG_CONFIG_HOME:-$HOME/.config}/mise}"
+global_config="${MISE_GLOBAL_CONFIG_FILE:-$config_dir/config.toml}"
+confd="$config_dir/conf.d"
+
+if [[ ! -f $global_config ]]; then
+    dot::chezmoi_script_skipped "$global_config does not exist"
+fi
+
+dot::step::start "find the tools both config.toml and conf.d declare"
+config_json="$(mise config ls --json)" || dot::step::fatal
+duplicate_lines="$(
+    jq -r --arg global "$global_config" --arg confd "$confd/" '
+        (map(select(.path == $global) | .tools[]) | unique) as $in_global
+        | (map(select(.path | startswith($confd)) | .tools[]) | unique) as $declared
+        | $in_global - ($in_global - $declared) | .[]
+    ' <<<"$config_json"
+)" || dot::step::fatal
+# A plain while-read loop, not mapfile: this may run under macOS's bash 3.2.
+duplicates=()
+while IFS= read -r tool; do
+    [[ -n $tool ]] && duplicates+=("$tool")
+done <<<"$duplicate_lines"
+dot::step::done "${#duplicates[@]} found"
+
+has_setting=false
+if mise config get --file "$global_config" settings.idiomatic_version_file_enable_tools >/dev/null 2>&1; then
+    has_setting=true
+fi
+
+if [[ ${#duplicates[@]} -eq 0 && $has_setting == false ]]; then
+    dot::chezmoi_script_skipped "nothing to prune from $global_config"
+fi
+
+dot::step::start "back up $global_config"
+backup="$global_config.bak-$(date +%Y%m%d-%H%M%S)"
+cp -p "$global_config" "$backup" || dot::step::fatal
+dot::step::done "$backup"
+
+export MISE_GLOBAL_CONFIG_FILE="$global_config"
+
+if [[ ${#duplicates[@]} -gt 0 ]]; then
+    dot::step::start "remove ${duplicates[*]} from config.toml"
+    mise unuse --global --no-prune "${duplicates[@]}" || dot::step::fatal
+    dot::step::done
+fi
+
+if [[ $has_setting == true ]]; then
+    dot::step::start "remove idiomatic_version_file_enable_tools from config.toml"
+    mise settings unset idiomatic_version_file_enable_tools || dot::step::fatal
+    dot::step::done
+fi
+
+dot::success "mise's global config pruned"
