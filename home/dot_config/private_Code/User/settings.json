@@ -15,7 +15,19 @@
     "editor.fontLigatures": true,
 
     // Editor color theme
-    "workbench.colorTheme": "Catppuccin Frappé",
+    "workbench.colorTheme": "Catppuccin Latte",
+
+    // Window title: branch first, then folder and repository
+    "window.title": "${activeRepositoryBranchName}${separator}${separator}${rootName}${separator}${repositoryName}",
+
+    // Don't ask before opening local file links from other apps
+    "security.promptForLocalFileProtocolHandling": false,
+
+    // --- Git ---
+
+    // Inline blame on the current line; none in the status bar
+    "git.blame.editorDecoration.enabled": true,
+    "git.blame.statusBarItem.enabled": false,
 
     // Show/hide whitespace changes in the diff editor
     "diffEditor.ignoreTrimWhitespace": false,
@@ -40,5 +52,17 @@
     "terminal.integrated.fontLigatures.enabled": true,
 
     // Run workspace folder-open tasks without prompting
-    "task.allowAutomaticTasks": "on"
+    "task.allowAutomaticTasks": "on",
+
+    // --- YAML ---
+
+    // No schema guessing for CI workflow files (GitHub, Gitea, Forgejo)
+    "yaml.disableSchemaDetection": [
+        "**/.github/workflows/*.yml",
+        "**/.github/workflows/*.yaml",
+        "**/.gitea/workflows/*.yml",
+        "**/.gitea/workflows/*.yaml",
+        "**/.forgejo/workflows/*.yml",
+        "**/.forgejo/workflows/*.yaml"
+    ]
 }
