@@ -1,0 +1,12 @@
+#!/usr/bin/env bash
+# @name Claude > New Chat
+# @brief Open a new tmux window running a named Claude chat
+# @description
+#     Prompts for a chat name, then creates a new tmux window with that
+#     name and starts a Claude chat with the same name in it. Works in
+#     any tmux session and inherits its directory.
+
+name=$(echo "" | fzf --print-query --prompt="chat name > " --no-info --reverse | head -1)
+[[ -z $name ]] && exit 0
+
+tmux new-window -n "$name" "claude -n \"$name\""
