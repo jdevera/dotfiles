@@ -6,6 +6,12 @@ line loading the managed bash config is present.
 The check happens here at template level: when the hook is already in place
 the script renders empty and chezmoi does not run it at all, keeping a clean
 apply silent.
+
+The script checks again at run time, because chezmoi renders every template
+before running any script: another script in the same apply (the bash
+decommission migration, which rewrites ~/.bashrc with the hook in it) can
+add the line after this template decided it was missing. Without the second
+check the hook would be appended twice.
 */ -}}
 {{- $bashrc := joinPath .chezmoi.homeDir ".bashrc" -}}
 {{- $hookPresent := output "sh" "-c" (printf "grep -qsF .config/bash/init.bash %q && echo yes || echo no" $bashrc) | trim -}}
@@ -37,6 +43,9 @@ if [[ ! -f $bashrc ]]; then
 # -----------------------------------------------------------------------------
 EOF
     dot::step::done
+elif grep -qsF .config/bash/init.bash "$bashrc"; then
+    dot::step::start "append hook to existing ~/.bashrc"
+    dot::step::skipped "already in place (added earlier in this apply)"
 else
     dot::step::start "append hook to existing ~/.bashrc"
     cat >> "$bashrc" << 'EOF'
