@@ -22,6 +22,15 @@ fi
 # last, hidden field with the tags of the window's indicators (possibly
 # empty). Only the display is shown; the search covers display and tags.
 
+# A command's display name is its first "# @name <name>" line, or the file
+# name when it has none, so file names can stay plain.
+command_name() {
+    local name
+    name=$(sed -n 's/^# @name //p' "$1")
+    name=${name%%$'\n'*}
+    printf '%s\n' "${name:-$(basename "$1")}"
+}
+
 # When called with --filter QUERY LIST, print the rows of LIST matching
 # QUERY, best first. fzf never searches fields that --with-nth hides, so
 # the picker runs fzf with --disabled and every keystroke reloads the list
@@ -77,7 +86,7 @@ if [[ $1 == "--preview" ]]; then
             tmux list-windows -t "$value" -F "  #{window_index}: #{window_name} (#{window_panes} panes)" 2>/dev/null
             ;;
         command)
-            echo "Command: $(basename "$value")"
+            echo "Command: $(command_name "$value")"
             echo
             if command -v shdoc-ng &>/dev/null; then
                 if command -v lowdown &>/dev/null; then
@@ -151,11 +160,18 @@ while IFS=$'\t' read -r name; do
     entries+=("${SESSION_ICON}  S: ${name}${SEP}session${SEP}${name}")
 done < <(tmux list-sessions -F "#S")
 
-# Commands from palette directory
+# Commands from palette directory, sorted by display name with the
+# locale's collation (the order a glob over files named after their
+# display names would give)
+commands=()
 if [[ -d $PALETTE_DIR ]]; then
     for cmd_file in "$PALETTE_DIR"/*; do
         [[ -f $cmd_file && -x $cmd_file ]] || continue
-        cmd_name=$(basename "$cmd_file")
+        commands+=("$(command_name "$cmd_file")${SEP}${cmd_file}")
+    done
+fi
+if (( ${#commands[@]} )); then
+    while IFS=$SEP read -r cmd_name cmd_file; do
         label="${CMD_ICON}  C: ${cmd_name}"
         cond=$(sed -n 's/^# @enabled-if //p' "$cmd_file")
         cond=${cond%%$'\n'*}
@@ -163,7 +179,7 @@ if [[ -d $PALETTE_DIR ]]; then
             label="${DIM}${label}${UNDIM}"
         fi
         entries+=("${label}${SEP}command${SEP}${cmd_file}")
-    done
+    done < <(printf '%s\n' "${commands[@]}" | sort -t "$SEP" -k1,1)
 fi
 
 # Run fzf. TRIAL: tags are shown dimmed in the display, so fzf searches
