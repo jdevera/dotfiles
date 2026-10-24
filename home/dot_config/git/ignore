@@ -36,3 +36,8 @@ Temporary Items
 
 # Local Claude Code files
 **/.claude/settings.local.json
+
+# Claude Code writes files atomically: it stages each new version in a
+# .cc-writes directory next to the target, then renames it into place. The
+# directory is transient temp space and never belongs in a repo.
+**/.claude/.cc-writes/
