@@ -1,0 +1,45 @@
+{{- /* package_method.tmpl
+     Input: dict "spec" <one softwarePackages entry> "os" <.chezmoi.os>
+     Output: the install method this package resolves to on this machine, one
+     of mas, brew, cask, apt, dnf, uv, mise, script, or empty when none applies.
+
+     This is the single place that decides the method. The install scripts,
+     the mise conf.d render and chezmoi-list-packages all call it, so they
+     always agree on what goes where.
+
+     Tier 1, the OS package manager, first match wins:
+       macOS: mas > brew > cask
+       Linux: apt > dnf, each only when that manager is on PATH
+     Tier 2, cross-platform fallbacks: uv (only when on PATH) > mise > script.
+
+     The mise tier does not need mise on PATH: it is a declaration rendered
+     into ~/.config/mise/conf.d/ and installed by a later script, which skips
+     cleanly when mise is absent.
+*/ -}}
+{{- $spec := .spec -}}
+{{- $method := "" -}}
+{{- if eq .os "darwin" -}}
+{{-   if hasKey $spec "mas" -}}
+{{-     $method = "mas" -}}
+{{-   else if hasKey $spec "brew" -}}
+{{-     $method = "brew" -}}
+{{-   else if hasKey $spec "cask" -}}
+{{-     $method = "cask" -}}
+{{-   end -}}
+{{- else if eq .os "linux" -}}
+{{-   if and (hasKey $spec "apt") (lookPath "apt") -}}
+{{-     $method = "apt" -}}
+{{-   else if and (hasKey $spec "dnf") (lookPath "dnf") -}}
+{{-     $method = "dnf" -}}
+{{-   end -}}
+{{- end -}}
+{{- if not $method -}}
+{{-   if and (hasKey $spec "uv") (lookPath "uv") -}}
+{{-     $method = "uv" -}}
+{{-   else if hasKey $spec "mise" -}}
+{{-     $method = "mise" -}}
+{{-   else if hasKey $spec "script" -}}
+{{-     $method = "script" -}}
+{{-   end -}}
+{{- end -}}
+{{- $method -}}

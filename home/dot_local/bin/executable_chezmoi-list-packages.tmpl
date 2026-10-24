@@ -1,9 +1,5 @@
 {{- $chezmoi := .chezmoi -}}
 {{- $specs := .softwarePackages -}}
-{{- $hasUV := lookPath "uv" -}}
-{{- $hasMise := lookPath "mise" -}}
-{{- $hasAPT := lookPath "apt" -}}
-{{- $hasDNF := lookPath "dnf" -}}
 
 {{- /* Build the packages list */ -}}
 {{- $pkg_names := splitList " " (includeTemplate "resolve_packages.tmpl" (dict "list" .packages "dot" .)) -}}
@@ -28,42 +24,28 @@
 {{- $tool_lines := list -}}
 {{- range $entry := $all -}}
 {{-   $name := $entry.name -}}
+{{-   if not $name -}}{{- continue -}}{{- end -}}
 {{-   $spec := get $specs $name -}}
-{{-   $method := "" -}}
-{{-   $detail := "" -}}
-{{- /* Tier 1: OS package manager */ -}}
-{{-   if eq $chezmoi.os "darwin" -}}
-{{-     if and (not $method) (hasKey $spec "brew") -}}
-{{-       $method = "brew" -}}
-{{-       $detail = $spec.brew -}}
+{{-   $method := includeTemplate "package_method.tmpl" (dict "spec" $spec "os" $chezmoi.os) -}}
+{{-   $detail := "-" -}}
+{{-   if eq $method "mas" -}}
+{{-     $detail = toString $spec.mas -}}
+{{-   else if eq $method "brew" -}}
+{{-     $detail = $spec.brew -}}
+{{-   else if eq $method "cask" -}}
+{{-     $detail = $spec.cask -}}
+{{-   else if eq $method "apt" -}}
+{{-     $detail = $spec.apt -}}
+{{-   else if eq $method "dnf" -}}
+{{-     $val := $spec.dnf -}}
+{{-     if kindIs "string" $val -}}
+{{-       $detail = $val -}}
+{{-     else if hasKey $val "copr" -}}
+{{-       $detail = printf "%s (copr: %s)" $val.package $val.copr -}}
+{{-     else -}}
+{{-       $detail = $val.package -}}
 {{-     end -}}
-{{-     if and (not $method) (hasKey $spec "cask") -}}
-{{-       $method = "cask" -}}
-{{-       $detail = $spec.cask -}}
-{{-     end -}}
-{{-   else if eq $chezmoi.os "linux" -}}
-{{-     if and (not $method) $hasAPT (hasKey $spec "apt") -}}
-{{-       $method = "apt" -}}
-{{-       $detail = $spec.apt -}}
-{{-     end -}}
-{{-     if and (not $method) $hasDNF (hasKey $spec "dnf") -}}
-{{-       $val := $spec.dnf -}}
-{{-       if kindIs "string" $val -}}
-{{-         $method = "dnf" -}}
-{{-         $detail = $val -}}
-{{-       else -}}
-{{-         $method = "dnf" -}}
-{{-         if hasKey $val "copr" -}}
-{{-           $detail = printf "%s (copr: %s)" $val.package $val.copr -}}
-{{-         else -}}
-{{-           $detail = $val.package -}}
-{{-         end -}}
-{{-       end -}}
-{{-     end -}}
-{{-   end -}}
-{{- /* Tier 2: Cross-platform fallbacks */ -}}
-{{-   if and (not $method) $hasUV (hasKey $spec "uv") -}}
-{{-     $method = "uv" -}}
+{{-   else if eq $method "uv" -}}
 {{-     $u := $spec.uv -}}
 {{-     if kindIs "string" $u -}}
 {{-       $detail = $u -}}
@@ -77,18 +59,17 @@
 {{-         end -}}
 {{-       end -}}
 {{-     end -}}
-{{-   end -}}
-{{-   if and (not $method) $hasMise (hasKey $spec "mise") -}}
-{{-     $method = "mise" -}}
-{{-     $detail = $spec.mise -}}
-{{-   end -}}
-{{-   if and (not $method) (hasKey $spec "script") -}}
-{{-     $method = "script" -}}
+{{-   else if eq $method "mise" -}}
+{{-     $m := $spec.mise -}}
+{{-     if kindIs "string" $m -}}
+{{-       $detail = $m -}}
+{{-     else -}}
+{{-       $detail = printf "%s@%s" $m.tool (toString (get $m "version" | default "latest")) -}}
+{{-     end -}}
+{{-   else if eq $method "script" -}}
 {{-     $detail = "(inline)" -}}
-{{-   end -}}
-{{-   if not $method -}}
+{{-   else -}}
 {{-     $method = "none" -}}
-{{-     $detail = "-" -}}
 {{-   end -}}
 {{-   $line := printf "  %-28s %-8s %s" $name $method $detail -}}
 {{-   if eq $entry.list "packages" -}}
@@ -138,7 +119,7 @@ case "$list" in
         show_packages
         ;;
     *)
-        echo "Usage: chezmoi-list-packages [packages|install_tools|all]" >&2
+        echo "Usage: ${0##*/} [packages|install_tools|all]" >&2
         exit 1
         ;;
 esac
