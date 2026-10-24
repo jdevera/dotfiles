@@ -1,10 +1,22 @@
 #!/usr/bin/env bash
 # tmux command palette — windows, sessions, and custom commands via fzf
+#
+# Settings come from the drop-in directory ~/.config/tmux/palette-settings.d:
+# every regular *.sh file in it is sourced as bash, in name order (LC_ALL=C),
+# so a numeric prefix sets the order and each file sees what earlier ones
+# left. A file only sets variables: it may append to, insert into or
+# reorder the INDICATORS array (window indicators; the entry format is
+# documented in 10-indicators.sh), must print nothing and must not exit.
+# A missing or empty directory means no indicators.
 
 # Window indicator registry (INDICATORS), used by the list and the preview
 INDICATORS=()
-FLAG_ICONS_FILE=~/.config/tmux/palette-flag-icons.sh
-[[ -r $FLAG_ICONS_FILE ]] && source "$FLAG_ICONS_FILE"
+SETTINGS_DIR=~/.config/tmux/palette-settings.d
+if [[ -d $SETTINGS_DIR ]]; then
+    while IFS= read -r settings_file; do
+        [[ -f $settings_file && -r $settings_file ]] && source "$settings_file"
+    done < <(printf '%s\n' "$SETTINGS_DIR"/*.sh | LC_ALL=C sort)
+fi
 
 # Entry lines are TAB-separated: display, type, value, and for windows a
 # last, hidden field with the tags of the window's indicators (possibly
