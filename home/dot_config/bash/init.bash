@@ -48,6 +48,11 @@ case ":$PATH:" in
     *) PATH="$HOME/.local/bin:$PATH" ;;
 esac
 
+# brew shellenv just put Homebrew in front of PATH; put mise's shims back
+# ahead of it, as every other shell has them.
+# shellcheck source=/dev/null
+[[ -f $HOME/.config/shell/mise-shims.sh ]] && source "$HOME/.config/shell/mise-shims.sh"
+
 # ------------------------------------------------------------------------------
 # History and shell options
 # ------------------------------------------------------------------------------
