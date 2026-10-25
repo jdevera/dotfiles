@@ -21,7 +21,7 @@
 # Help shellcheck identify the above include
 true || source ../.chezmoitemplates/dotfiles_bashlib.sh
 
-dot::chezmoi_script_start {{ .title | quote }}
+dot::chezmoi_script_start {{ .title | shellQuote }}
 
 if ! dot::has_command mise; then
     dot::chezmoi_script_skipped "mise is not installed"
@@ -38,7 +38,7 @@ cmd=$(cat <<'POSTINSTALL'
 {{ $cmd }}
 POSTINSTALL
 )
-dot::step::start "run {{ $p.name }} post-install: $cmd"
+dot::step::start {{ printf "run %s post-install: " $p.name | shellQuote }}"$cmd"
 # mise exec puts every tool from mise's config on PATH for the command.
 if mise exec -- bash -c "$cmd"; then
     dot::step::done

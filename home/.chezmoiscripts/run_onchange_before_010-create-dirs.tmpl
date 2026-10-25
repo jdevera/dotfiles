@@ -14,8 +14,8 @@ dot::chezmoi_script_start "create directories at home"
 #{{ range $dir := $dirs }}
 #{{- $path := (joinPath $.chezmoi.homeDir $dir) }}
 #{{  if not (stat $path) }}
-dot::step::start "create directory: {{ $path }}"
-mkdir -p {{ $path | quote }} || dot::step::fatal
+dot::step::start {{ printf "create directory: %s" $path | shellQuote }}
+mkdir -p {{ $path | shellQuote }} || dot::step::fatal
 dot::step::done
 dirs_created=$((dirs_created + 1))
 #{{ end }}

@@ -9,21 +9,21 @@ true || source ../.chezmoitemplates/dotfiles_bashlib.sh
 
 # version: {{ $version }}
 
-dot::chezmoi_script_start "install shdoc-ng VSCode extension {{ $version }}"
+dot::chezmoi_script_start {{ printf "install shdoc-ng VSCode extension %s" $version | shellQuote }}
 
 if ! dot::has_command code; then
     dot::chezmoi_script_skipped "code command not found"
 fi
 
-VSIX="$HOME/.local/share/shdoc-ng-vscode/shdoc-ng-{{ $version }}.vsix"
+VSIX="$HOME/.local/share/shdoc-ng-vscode/"{{ printf "shdoc-ng-%s.vsix" $version | shellQuote }}
 
 if [[ ! -f "$VSIX" ]]; then
     dot::chezmoi_script_skipped "VSIX file not found: $VSIX"
 fi
 
-dot::step::start "installing shdoc-ng {{ $version }}"
+dot::step::start {{ printf "installing shdoc-ng %s" $version | shellQuote }}
 code --install-extension "$VSIX" > /dev/null || dot::step::fatal
 dot::step::done
 
-dot::success "shdoc-ng VSCode extension {{ $version }} installed"
+dot::success {{ printf "shdoc-ng VSCode extension %s installed" $version | shellQuote }}
 {{- end -}}

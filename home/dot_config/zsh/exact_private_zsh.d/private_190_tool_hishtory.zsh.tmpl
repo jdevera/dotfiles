@@ -6,7 +6,7 @@
 # Skip in AI agent shells to avoid recording auto-generated commands
 is_ai_agent && return
 
-export HISHTORY_SERVER={{ .hishtory_server | quote }}
+export HISHTORY_SERVER={{ .hishtory_server | shellQuote }}
 
 if [[ -f ~/.hishtory/config.zsh ]] && (( $+commands[hishtory] )); then
     # Hishtory invokes itself several times during shell startup and once

@@ -10,7 +10,7 @@ true || source ../.chezmoitemplates/dotfiles_bashlib.sh
 
 dot::chezmoi_script_start "extract Google Cloud SDK"
 
-TARBALL={{ $tarball | quote }}
+TARBALL={{ $tarball | shellQuote }}
 GCLOUD_DIR="$HOME/.local/share/google-cloud-sdk"
 
 if [[ ! -f "$TARBALL" ]]; then

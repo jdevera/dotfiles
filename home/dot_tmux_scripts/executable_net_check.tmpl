@@ -6,5 +6,5 @@
 # 2-second timeout. No DNS resolution involved — pure connectivity test.
 
 if ! ping -c1 -W2 1.1.1.1 >/dev/null 2>&1; then
-    echo "#[fg={{ .tmux.theme.net_off_bg }},bg={{ .tmux.theme.time_bg }}]{{ .tmux.glyphs.sep_left }}#[bg={{ .tmux.theme.net_off_bg }},fg={{ .tmux.theme.net_off_fg }},bold] {{ .tmux.glyphs.icon_net_off }} #[default]"
+    printf '%s\n' {{ printf "#[fg=%s,bg=%s]%s#[bg=%s,fg=%s,bold] %s #[default]" .tmux.theme.net_off_bg .tmux.theme.time_bg .tmux.glyphs.sep_left .tmux.theme.net_off_bg .tmux.theme.net_off_fg .tmux.glyphs.icon_net_off | shellQuote }}
 fi

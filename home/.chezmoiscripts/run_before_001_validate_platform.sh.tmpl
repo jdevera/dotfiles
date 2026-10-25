@@ -6,5 +6,5 @@
 # Help shellcheck identify the above include
 true || source ../.chezmoitemplates/dotfiles_bashlib.sh
 
-dot::die "Unsupported OS: {{ .chezmoi.os }}"
+dot::die {{ printf "Unsupported OS: %s" .chezmoi.os | shellQuote }}
 {{- end -}}

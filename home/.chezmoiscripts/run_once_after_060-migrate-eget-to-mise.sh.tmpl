@@ -24,10 +24,10 @@ fi
 {{ range $name, $spec := .softwarePackages }}
 {{- if and (hasKey $spec "mise") (hasKey $spec "check") (hasKey $spec.check "command") }}
 {{- $cmd := $spec.check.command }}
-_stale="$HOME/.local/bin/{{ $cmd }}"
+_stale="$HOME/.local/bin/"{{ $cmd | shellQuote }}
 if [[ -f $_stale && ! -L $_stale ]]; then
-    dot::step::start "hand {{ $name }} off to mise"
-    if mise use --global {{ $spec.mise | quote }}; then
+    dot::step::start {{ printf "hand %s off to mise" $name | shellQuote }}
+    if mise use --global {{ $spec.mise | shellQuote }}; then
         rm -f "$_stale"
         dot::step::done
     else

@@ -1,5 +1,5 @@
 {{ if lookPath "cursor" -}}
-__SHELL_INTEGRATION_PATH={{ output "cursor" "--locate-shell-integration-path" "zsh" | trim | quote }}
+__SHELL_INTEGRATION_PATH={{ output "cursor" "--locate-shell-integration-path" "zsh" | trim | shellQuote }}
 if [[ -f "$__SHELL_INTEGRATION_PATH" && -n $VSCODE_PID ]]; then
     source "$__SHELL_INTEGRATION_PATH"
 fi

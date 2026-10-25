@@ -42,7 +42,7 @@ vscode::install_extension() {
 
 {{ range .vscode_extensions -}}
 # {{ .name }}: {{ .description }}
-vscode::install_extension {{ .id | quote }} {{ .name | quote }}
+vscode::install_extension {{ .id | shellQuote }} {{ .name | shellQuote }}
 {{ end -}}
 
 # Fail loudly if anything could not be installed: a non-zero exit keeps this

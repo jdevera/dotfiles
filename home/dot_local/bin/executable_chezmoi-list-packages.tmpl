@@ -91,14 +91,14 @@ show_header() {
 show_packages() {
     echo
     echo "Packages ({{ len $pkg_lines }}):"
-{{ range $line := $pkg_lines }}    echo {{ $line | squote }}
+{{ range $line := $pkg_lines }}    printf '%s\n' {{ $line | shellQuote }}
 {{ end -}}
 }
 
 show_install_tools() {
     echo
     echo "Install tools ({{ len $tool_lines }}):"
-{{ range $line := $tool_lines }}    echo {{ $line | squote }}
+{{ range $line := $tool_lines }}    printf '%s\n' {{ $line | shellQuote }}
 {{ end -}}
 }
 

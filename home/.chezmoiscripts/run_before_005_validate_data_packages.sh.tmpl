@@ -56,7 +56,7 @@ true || source ../.chezmoitemplates/dotfiles_bashlib.sh
 
 ERRORS=(
 {{ range $error := $errors }}
-{{- $error | quote }}
+{{- $error | shellQuote }}
 {{ end -}}
 )
 

@@ -14,7 +14,7 @@ add the line after this template decided it was missing. Without the second
 check the hook would be appended twice.
 */ -}}
 {{- $bashrc := joinPath .chezmoi.homeDir ".bashrc" -}}
-{{- $hookPresent := output "sh" "-c" (printf "grep -qsF .config/bash/init.bash %q && echo yes || echo no" $bashrc) | trim -}}
+{{- $hookPresent := output "sh" "-c" (printf "grep -qsF .config/bash/init.bash %s && echo yes || echo no" (shellQuote $bashrc)) | trim -}}
 {{- if eq $hookPresent "no" -}}
 #!/usr/bin/env bash
 

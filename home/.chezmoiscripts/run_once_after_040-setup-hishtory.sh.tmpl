@@ -40,7 +40,7 @@ _hishtory_tmp="$(mktemp)"
 cp "$_hishtory_bin" "$_hishtory_tmp"
 chmod +x "$_hishtory_tmp"
 {{ if .hishtory_server -}}
-HISHTORY_SERVER={{ .hishtory_server | quote }} "$_hishtory_tmp" install --skip-config-modification || dot::step::fatal
+HISHTORY_SERVER={{ .hishtory_server | shellQuote }} "$_hishtory_tmp" install --skip-config-modification || dot::step::fatal
 {{- else -}}
 "$_hishtory_tmp" install --skip-config-modification --offline || dot::step::fatal
 {{- end }}

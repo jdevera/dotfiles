@@ -8,12 +8,12 @@
 {{   range .plugins -}}
 {{     $name := default (base .path) (index . "name") -}}
 {{     $source := default (printf "%s.plugin.zsh" $name) (index . "source") -}}
-_plug_source[{{ $name }}]=~/.config/zsh/plugins/{{ $repo_name }}/{{ .path }}/{{ $source }}
+_plug_source+=( {{ $name | shellQuote }} ~/.config/zsh/plugins/{{ joinPath $repo_name .path $source | shellQuote }} )
 {{ end -}}
 {{ else -}}
 {{   $name := default (base .repo) (index . "name") -}}
 {{   $source := default (printf "%s.plugin.zsh" $name) (index . "source") -}}
-_plug_source[{{ $name }}]=~/.config/zsh/plugins/{{ $name }}/{{ $source }}
+_plug_source+=( {{ $name | shellQuote }} ~/.config/zsh/plugins/{{ joinPath $name $source | shellQuote }} )
 {{ end -}}
 {{ end }}
 # Load plugins
@@ -21,10 +21,10 @@ _plug_source[{{ $name }}]=~/.config/zsh/plugins/{{ $name }}/{{ $source }}
 {{ if hasKey . "plugins" -}}
 {{   range .plugins -}}
 {{     $name := default (base .path) (index . "name") -}}
-plug::load {{ $name }}
+plug::load {{ $name | shellQuote }}
 {{ end -}}
 {{ else -}}
 {{   $name := default (base .repo) (index . "name") -}}
-plug::load {{ $name }}
+plug::load {{ $name | shellQuote }}
 {{ end -}}
 {{ end -}}

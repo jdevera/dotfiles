@@ -35,7 +35,7 @@ fi
 {{ $fullpath = joinPath $.chezmoi.homeDir .path -}}
 {{ end -}}
 {{ if stat $fullpath -}}
-zoxide add "{{ $fullpath }}"
+zoxide add {{ $fullpath | shellQuote }}
 {{ end -}}
 {{ end -}}
 {{ end }}
