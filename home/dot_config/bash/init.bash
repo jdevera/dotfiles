@@ -12,7 +12,8 @@
 # mise's shims first on PATH, before the interactive-only part below, so a
 # non-interactive bash that reads this file gets mise's tools too.
 # shellcheck source=/dev/null
-[[ -f $HOME/.config/shell/mise-shims.sh ]] && source "$HOME/.config/shell/mise-shims.sh"
+[[ -f $HOME/.config/bash/mise-shims.bash ]] && source "$HOME/.config/bash/mise-shims.bash"
+export BASH_ENV="$HOME/.config/bash/mise-shims.bash"
 
 # Interactive shells only
 [[ $- != *i* ]] && return
@@ -51,7 +52,7 @@ esac
 # brew shellenv just put Homebrew in front of PATH; put mise's shims back
 # ahead of it, as every other shell has them.
 # shellcheck source=/dev/null
-[[ -f $HOME/.config/shell/mise-shims.sh ]] && source "$HOME/.config/shell/mise-shims.sh"
+[[ -f $HOME/.config/bash/mise-shims.bash ]] && source "$HOME/.config/bash/mise-shims.bash"
 
 # ------------------------------------------------------------------------------
 # History and shell options

@@ -4,4 +4,4 @@ source ~/.orbstack/shell/init.zsh 2>/dev/null || :
 
 # mise's shims first on PATH for login shells too. /etc/zprofile's path_helper
 # runs after ~/.zshenv and reorders PATH, so this re-asserts the order after it.
-source "$HOME/.config/shell/mise-shims.sh"
+source "$HOME/.config/zsh/mise-shims.zsh"

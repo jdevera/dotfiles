@@ -60,7 +60,7 @@ pathprepend "$HOME/.gem/ruby/2.3.0/bin"
 pathprepend "$HOME/.cargo/bin"
 
 # mise-managed tool shims (static; no shell-startup eval).
-pathprepend "$HOME/.local/share/mise/shims"
+source "$HOME/.config/zsh/mise-shims.zsh"
 
 [[ -n $NPM_PACKAGES ]] && pathprepend "$NPM_PACKAGES/bin"
 
