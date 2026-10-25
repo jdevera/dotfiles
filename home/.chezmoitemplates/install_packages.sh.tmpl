@@ -107,7 +107,7 @@ dot::step::done
 dot::assert_has_commands mas
 {{ range $name, $id := $mas }}
 dot::step::start {{ printf "install %s from the App Store" $name | shellQuote }}
-if mas list 2>/dev/null | grep -q {{ printf "^%s[[:space:]]" $id | shellQuote }}; then
+if mas list 2>/dev/null | grep -q {{ printf "^[[:space:]]*%s[[:space:]]" $id | shellQuote }}; then
     dot::step::skipped "already installed"
 else
     mas install {{ $id | shellQuote }} || dot::step::fatal
