@@ -15,13 +15,18 @@ if ! dot::has_command code; then
     dot::chezmoi_script_skipped "code command not found"
 fi
 
+installed_extensions=$(code --list-extensions --show-versions) || dot::die "could not list installed VSCode extensions"
+if grep -Fxiq -- {{ printf "shdoc-ng.shdoc-ng@%s" $version | shellQuote }} <<< "$installed_extensions"; then
+    dot::chezmoi_script_skipped {{ printf "shdoc-ng %s already installed" $version | shellQuote }}
+fi
+
 VSIX="$HOME/.local/share/shdoc-ng-vscode/"{{ printf "shdoc-ng-%s.vsix" $version | shellQuote }}
 
 if [[ ! -f "$VSIX" ]]; then
     dot::chezmoi_script_skipped "VSIX file not found: $VSIX"
 fi
 
-dot::step::start {{ printf "installing shdoc-ng %s" $version | shellQuote }}
+dot::step::start {{ printf "install shdoc-ng %s" $version | shellQuote }}
 code --install-extension "$VSIX" > /dev/null || dot::step::fatal
 dot::step::done
 
